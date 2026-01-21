@@ -1,13 +1,27 @@
+%code requires {
+enum token_kind {
+    TOK_LPAREN = 1,
+    TOK_RPAREN,
+    TOK_LBRACKET,
+    TOK_RBRACKET,
+    TOK_COMMA,
+    TOK_SEMI,
+    TOK_ASSIGN,
+    TOK_BLOCK,
+    TOK_OTHER
+};
+
+void process_identifier(const char *name);
+void process_token(enum token_kind kind);
+}
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 
 int yylex(void);
 void yyerror(const char *s);
-void record_function(const char *name);
 %}
-
-%define parse.error verbose
 
 %union {
     char *str;
@@ -26,273 +40,61 @@ void record_function(const char *name);
 %token BLOCK
 %token OTHER
 
-%type <str> declarator direct_declarator
-
 %destructor { free($$); } <str>
 
 %%
 
 translation_unit
     : /* empty */
-    | translation_unit external_declaration
+    | translation_unit token
     ;
 
-external_declaration
-    : function_definition
-    | declaration
-    | ';'
-    | error ';' { yyerrok; }
-    | error BLOCK { yyerrok; }
-    ;
-
-function_definition
-    : declaration_specifiers declarator declaration_list_opt BLOCK
-        { if ($2) record_function($2); }
-    | declarator declaration_list_opt BLOCK
-        { if ($1) record_function($1); }
-    ;
-
-declaration_list_opt
-    : /* empty */
-    | declaration_list
-    ;
-
-declaration_list
-    : declaration
-    | declaration_list declaration
-    ;
-
-declaration
-    : declaration_specifiers init_declarator_list_opt ';'
-    | error ';' { yyerrok; }
-    ;
-
-init_declarator_list_opt
-    : /* empty */
-    | init_declarator_list
-    ;
-
-init_declarator_list
-    : init_declarator
-    | init_declarator_list ',' init_declarator
-    ;
-
-init_declarator
-    : declarator
-    | declarator '=' initializer
-    ;
-
-initializer
-    : assignment_expression
-    | BLOCK
-    | initializer_list
-    ;
-
-initializer_list
-    : initializer
-    | initializer_list ',' initializer
-    | initializer_list ','
-    ;
-
-declaration_specifiers
-    : declaration_specifier
-    | declaration_specifiers declaration_specifier
-    ;
-
-declaration_specifier
-    : storage_class_specifier
-    | type_specifier
-    | type_qualifier
-    | function_specifier
-    | alignment_specifier
-    | attribute_specifier
-    ;
-
-storage_class_specifier
-    : TYPEDEF
-    | EXTERN
-    | STATIC
-    | AUTO
-    | REGISTER
-    | THREAD_LOCAL
-    ;
-
-type_specifier
-    : VOID
-    | CHAR
-    | SHORT
-    | INT
-    | LONG
-    | FLOAT
-    | DOUBLE
-    | SIGNED
-    | UNSIGNED
-    | BOOL
-    | COMPLEX
-    | IMAGINARY
-    | struct_or_union_specifier
-    | enum_specifier
-    | TYPEOF '(' assignment_expression_opt ')'
-    | IDENTIFIER
-    ;
-
-type_qualifier
-    : CONST
-    | VOLATILE
-    | RESTRICT
-    | ATOMIC
-    ;
-
-function_specifier
-    : INLINE
-    | NORETURN
-    ;
-
-alignment_specifier
-    : ALIGNAS '(' assignment_expression_opt ')'
-    ;
-
-attribute_specifier_sequence
-    : attribute_specifier
-    | attribute_specifier_sequence attribute_specifier
-    ;
-
-attribute_specifier
-    : ATTRIBUTE '(' assignment_expression_opt ')'
-    | DECLSPEC '(' assignment_expression_opt ')'
-    | ASM '(' assignment_expression_opt ')'
-    ;
-
-asm_label
-    : ASM '(' assignment_expression_opt ')'
-    ;
-
-struct_or_union_specifier
-    : struct_or_union IDENTIFIER BLOCK
-    | struct_or_union BLOCK
-    | struct_or_union IDENTIFIER
-    ;
-
-struct_or_union
-    : STRUCT
-    | UNION
-    ;
-
-enum_specifier
-    : ENUM IDENTIFIER BLOCK
-    | ENUM BLOCK
-    | ENUM IDENTIFIER
-    ;
-
-declarator
-    : pointer_opt direct_declarator { $$ = $2; }
-    ;
-
-pointer_opt
-    : /* empty */
-    | pointer
-    ;
-
-pointer
-    : '*' type_qualifier_list_opt pointer_opt
-    | '*' type_qualifier_list_opt attribute_specifier_sequence pointer_opt
-    ;
-
-type_qualifier_list_opt
-    : /* empty */
-    | type_qualifier_list
-    ;
-
-type_qualifier_list
-    : type_qualifier
-    | type_qualifier_list type_qualifier
-    | type_qualifier_list attribute_specifier
-    | attribute_specifier
-    ;
-
-direct_declarator
-    : IDENTIFIER { $$ = $1; }
-    | '(' declarator ')' { $$ = $2; }
-    | direct_declarator '[' assignment_expression_opt ']' { $$ = $1; }
-    | direct_declarator '(' parameter_type_list_opt ')' { $$ = $1; }
-    | direct_declarator '(' identifier_list_opt ')' { $$ = $1; }
-    | direct_declarator attribute_specifier_sequence { $$ = $1; }
-    | direct_declarator asm_label { $$ = $1; }
-    ;
-
-parameter_type_list_opt
-    : /* empty */
-    | parameter_type_list
-    ;
-
-parameter_type_list
-    : parameter_list
-    | parameter_list ',' ELLIPSIS
-    ;
-
-parameter_list
-    : parameter_declaration
-    | parameter_list ',' parameter_declaration
-    ;
-
-parameter_declaration
-    : declaration_specifiers declarator
-    | declaration_specifiers abstract_declarator
-    | declaration_specifiers
-    ;
-
-identifier_list_opt
-    : /* empty */
-    | identifier_list
-    ;
-
-identifier_list
-    : IDENTIFIER
-    | identifier_list ',' IDENTIFIER
-    ;
-
-abstract_declarator
-    : pointer
-    | pointer_opt direct_abstract_declarator
-    ;
-
-direct_abstract_declarator
-    : '(' abstract_declarator ')'
-    | direct_abstract_declarator_opt '[' assignment_expression_opt ']'
-    | direct_abstract_declarator_opt '(' parameter_type_list_opt ')'
-    ;
-
-direct_abstract_declarator_opt
-    : /* empty */
-    | direct_abstract_declarator
-    ;
-
-assignment_expression_opt
-    : /* empty */
-    | assignment_expression
-    ;
-
-assignment_expression
-    : expression
-    ;
-
-expression
-    : expression expression_atom
-    | expression_atom
-    ;
-
-expression_atom
-    : IDENTIFIER
-    | CONSTANT
-    | STRING_LITERAL
-    | '(' assignment_expression_opt ')'
-    | '[' assignment_expression_opt ']'
-    | BLOCK
-    | ELLIPSIS
-    | OTHER
-    | '*'
-    | ','
-    | '='
+token
+    : IDENTIFIER { process_identifier($1); }
+    | CONSTANT { process_token(TOK_OTHER); }
+    | STRING_LITERAL { process_token(TOK_OTHER); }
+    | TYPEDEF { process_token(TOK_OTHER); }
+    | EXTERN { process_token(TOK_OTHER); }
+    | STATIC { process_token(TOK_OTHER); }
+    | AUTO { process_token(TOK_OTHER); }
+    | REGISTER { process_token(TOK_OTHER); }
+    | THREAD_LOCAL { process_token(TOK_OTHER); }
+    | VOID { process_token(TOK_OTHER); }
+    | CHAR { process_token(TOK_OTHER); }
+    | SHORT { process_token(TOK_OTHER); }
+    | INT { process_token(TOK_OTHER); }
+    | LONG { process_token(TOK_OTHER); }
+    | FLOAT { process_token(TOK_OTHER); }
+    | DOUBLE { process_token(TOK_OTHER); }
+    | SIGNED { process_token(TOK_OTHER); }
+    | UNSIGNED { process_token(TOK_OTHER); }
+    | BOOL { process_token(TOK_OTHER); }
+    | COMPLEX { process_token(TOK_OTHER); }
+    | IMAGINARY { process_token(TOK_OTHER); }
+    | STRUCT { process_token(TOK_OTHER); }
+    | UNION { process_token(TOK_OTHER); }
+    | ENUM { process_token(TOK_OTHER); }
+    | CONST { process_token(TOK_OTHER); }
+    | VOLATILE { process_token(TOK_OTHER); }
+    | RESTRICT { process_token(TOK_OTHER); }
+    | ATOMIC { process_token(TOK_OTHER); }
+    | INLINE { process_token(TOK_OTHER); }
+    | NORETURN { process_token(TOK_OTHER); }
+    | ALIGNAS { process_token(TOK_OTHER); }
+    | TYPEOF { process_token(TOK_OTHER); }
+    | ATTRIBUTE { process_token(TOK_OTHER); }
+    | DECLSPEC { process_token(TOK_OTHER); }
+    | ASM { process_token(TOK_OTHER); }
+    | ELLIPSIS { process_token(TOK_OTHER); }
+    | '(' { process_token(TOK_LPAREN); }
+    | ')' { process_token(TOK_RPAREN); }
+    | '[' { process_token(TOK_LBRACKET); }
+    | ']' { process_token(TOK_RBRACKET); }
+    | ',' { process_token(TOK_COMMA); }
+    | ';' { process_token(TOK_SEMI); }
+    | '=' { process_token(TOK_ASSIGN); }
+    | BLOCK { process_token(TOK_BLOCK); }
+    | OTHER { process_token(TOK_OTHER); }
     ;
 
 %%

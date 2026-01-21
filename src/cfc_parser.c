@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "parser.tab.h"
+
 extern int yyparse(void);
 extern FILE *yyin;
 
@@ -14,6 +16,12 @@ struct function_list {
 };
 
 static struct function_list g_functions;
+
+static char *last_identifier = NULL;
+static char *paren_candidate = NULL;
+static char *pending_name = NULL;
+static int paren_depth = 0;
+static int bracket_depth = 0;
 
 static char *xstrdup(const char *s) {
     size_t len = 0;
@@ -30,6 +38,13 @@ static char *xstrdup(const char *s) {
     }
     memcpy(out, s, len + 1);
     return out;
+}
+
+static void clear_string(char **ptr) {
+    if (*ptr) {
+        free(*ptr);
+        *ptr = NULL;
+    }
 }
 
 static void add_function(const char *name) {
@@ -61,6 +76,70 @@ static void add_function(const char *name) {
 
 void record_function(const char *name) {
     add_function(name);
+}
+
+void process_identifier(const char *name) {
+    clear_string(&last_identifier);
+    if (name) {
+        last_identifier = xstrdup(name);
+    }
+}
+
+static void reset_candidate_state(void) {
+    clear_string(&last_identifier);
+    clear_string(&paren_candidate);
+    clear_string(&pending_name);
+    paren_depth = 0;
+    bracket_depth = 0;
+}
+
+void process_token(enum token_kind kind) {
+    switch (kind) {
+    case TOK_LPAREN:
+        if (!pending_name && paren_depth == 0) {
+            clear_string(&paren_candidate);
+            if (last_identifier) {
+                paren_candidate = xstrdup(last_identifier);
+            }
+        }
+        paren_depth++;
+        break;
+    case TOK_RPAREN:
+        if (paren_depth > 0) {
+            paren_depth--;
+            if (paren_depth == 0 && !pending_name && paren_candidate) {
+                pending_name = paren_candidate;
+                paren_candidate = NULL;
+            }
+        }
+        break;
+    case TOK_LBRACKET:
+        bracket_depth++;
+        break;
+    case TOK_RBRACKET:
+        if (bracket_depth > 0) {
+            bracket_depth--;
+        }
+        break;
+    case TOK_BLOCK:
+        if (paren_depth == 0 && bracket_depth == 0) {
+            if (pending_name) {
+                record_function(pending_name);
+            }
+            reset_candidate_state();
+        }
+        break;
+    case TOK_SEMI:
+    case TOK_COMMA:
+    case TOK_ASSIGN:
+        if (paren_depth == 0 && bracket_depth == 0) {
+            reset_candidate_state();
+        }
+        break;
+    case TOK_OTHER:
+    default:
+        break;
+    }
 }
 
 void yyerror(const char *s) {
@@ -148,6 +227,7 @@ int main(int argc, char **argv) {
 
     fclose(yyin);
     print_json_array();
+    reset_candidate_state();
     free_functions();
 
     if (parse_error_count > 0) {

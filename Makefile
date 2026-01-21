@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 CC ?= gcc
-CFLAGS ?= -O2 -Wall -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L
+CFLAGS ?= -O2 -Wall -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L -Ibuild
 LEX := flex
 YACC := bison
 
