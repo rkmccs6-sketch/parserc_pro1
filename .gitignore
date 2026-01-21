@@ -1,8 +1,6 @@
 /build/
 /bin/
 /test/in/FFmpeg/
-/test/out/*
-!/test/out/.gitkeep
 *.o
 *.a
 *.so
