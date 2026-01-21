@@ -129,6 +129,7 @@ static char *dup_text(const char *text) {
 ";"                  { return ';'; }
 ","                  { return ','; }
 "*"                  { return '*'; }
+"="                  { return '='; }
 "("                  { return '('; }
 ")"                  { return ')'; }
 "["                  { return '['; }

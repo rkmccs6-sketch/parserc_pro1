@@ -46,7 +46,7 @@ external_declaration
     ;
 
 function_definition
-    : decl_specifiers declarator declaration_list_opt BLOCK
+    : declaration_specifiers declarator declaration_list_opt BLOCK
         { if ($2) record_function($2); }
     | declarator declaration_list_opt BLOCK
         { if ($1) record_function($1); }
@@ -63,69 +63,43 @@ declaration_list
     ;
 
 declaration
-    : decl_tokens ';'
+    : declaration_specifiers init_declarator_list_opt ';'
+    | error ';' { yyerrok; }
     ;
 
-decl_tokens
-    : decl_token
-    | decl_tokens decl_token
+init_declarator_list_opt
+    : /* empty */
+    | init_declarator_list
     ;
 
-decl_token
-    : decl_token_atom
-    | paren_group
-    | bracket_group
+init_declarator_list
+    : init_declarator
+    | init_declarator_list ',' init_declarator
+    ;
+
+init_declarator
+    : declarator
+    | declarator '=' initializer
+    ;
+
+initializer
+    : assignment_expression
     | BLOCK
+    | initializer_list
     ;
 
-decl_token_atom
-    : IDENTIFIER
-    | CONSTANT
-    | STRING_LITERAL
-    | TYPEDEF
-    | EXTERN
-    | STATIC
-    | AUTO
-    | REGISTER
-    | THREAD_LOCAL
-    | VOID
-    | CHAR
-    | SHORT
-    | INT
-    | LONG
-    | FLOAT
-    | DOUBLE
-    | SIGNED
-    | UNSIGNED
-    | BOOL
-    | COMPLEX
-    | IMAGINARY
-    | STRUCT
-    | UNION
-    | ENUM
-    | CONST
-    | VOLATILE
-    | RESTRICT
-    | ATOMIC
-    | INLINE
-    | NORETURN
-    | ALIGNAS
-    | TYPEOF
-    | ATTRIBUTE
-    | DECLSPEC
-    | ASM
-    | ELLIPSIS
-    | OTHER
-    | '*'
-    | ','
+initializer_list
+    : initializer
+    | initializer_list ',' initializer
+    | initializer_list ','
     ;
 
-decl_specifiers
-    : decl_specifier
-    | decl_specifiers decl_specifier
+declaration_specifiers
+    : declaration_specifier
+    | declaration_specifiers declaration_specifier
     ;
 
-decl_specifier
+declaration_specifier
     : storage_class_specifier
     | type_specifier
     | type_qualifier
@@ -158,7 +132,7 @@ type_specifier
     | IMAGINARY
     | struct_or_union_specifier
     | enum_specifier
-    | TYPEOF paren_group
+    | TYPEOF '(' assignment_expression_opt ')'
     | IDENTIFIER
     ;
 
@@ -175,7 +149,7 @@ function_specifier
     ;
 
 alignment_specifier
-    : ALIGNAS paren_group
+    : ALIGNAS '(' assignment_expression_opt ')'
     ;
 
 attribute_specifier_sequence
@@ -184,13 +158,13 @@ attribute_specifier_sequence
     ;
 
 attribute_specifier
-    : ATTRIBUTE paren_group
-    | DECLSPEC paren_group
-    | ASM paren_group
+    : ATTRIBUTE '(' assignment_expression_opt ')'
+    | DECLSPEC '(' assignment_expression_opt ')'
+    | ASM '(' assignment_expression_opt ')'
     ;
 
 asm_label
-    : ASM paren_group
+    : ASM '(' assignment_expression_opt ')'
     ;
 
 struct_or_union_specifier
@@ -239,52 +213,86 @@ type_qualifier_list
 direct_declarator
     : IDENTIFIER { $$ = $1; }
     | '(' declarator ')' { $$ = $2; }
-    | direct_declarator paren_group { $$ = $1; }
-    | direct_declarator bracket_group { $$ = $1; }
+    | direct_declarator '[' assignment_expression_opt ']' { $$ = $1; }
+    | direct_declarator '(' parameter_type_list_opt ')' { $$ = $1; }
+    | direct_declarator '(' identifier_list_opt ')' { $$ = $1; }
     | direct_declarator attribute_specifier_sequence { $$ = $1; }
     | direct_declarator asm_label { $$ = $1; }
     ;
 
-paren_group
-    : '(' paren_items_opt ')'
-    ;
-
-paren_items_opt
+parameter_type_list_opt
     : /* empty */
-    | paren_items
+    | parameter_type_list
     ;
 
-paren_items
-    : paren_items paren_item
-    | paren_item
+parameter_type_list
+    : parameter_list
+    | parameter_list ',' ELLIPSIS
     ;
 
-paren_item
-    : paren_group
-    | bracket_group
-    | BLOCK
-    | decl_token_atom
+parameter_list
+    : parameter_declaration
+    | parameter_list ',' parameter_declaration
     ;
 
-bracket_group
-    : '[' bracket_items_opt ']'
+parameter_declaration
+    : declaration_specifiers declarator
+    | declaration_specifiers abstract_declarator
+    | declaration_specifiers
     ;
 
-bracket_items_opt
+identifier_list_opt
     : /* empty */
-    | bracket_items
+    | identifier_list
     ;
 
-bracket_items
-    : bracket_items bracket_item
-    | bracket_item
+identifier_list
+    : IDENTIFIER
+    | identifier_list ',' IDENTIFIER
     ;
 
-bracket_item
-    : paren_group
-    | bracket_group
+abstract_declarator
+    : pointer
+    | pointer_opt direct_abstract_declarator
+    ;
+
+direct_abstract_declarator
+    : '(' abstract_declarator ')'
+    | direct_abstract_declarator_opt '[' assignment_expression_opt ']'
+    | direct_abstract_declarator_opt '(' parameter_type_list_opt ')'
+    ;
+
+direct_abstract_declarator_opt
+    : /* empty */
+    | direct_abstract_declarator
+    ;
+
+assignment_expression_opt
+    : /* empty */
+    | assignment_expression
+    ;
+
+assignment_expression
+    : expression
+    ;
+
+expression
+    : expression expression_atom
+    | expression_atom
+    ;
+
+expression_atom
+    : IDENTIFIER
+    | CONSTANT
+    | STRING_LITERAL
+    | '(' assignment_expression_opt ')'
+    | '[' assignment_expression_opt ']'
     | BLOCK
-    | decl_token_atom
+    | ELLIPSIS
+    | OTHER
+    | '*'
+    | ','
+    | '='
     ;
 
 %%

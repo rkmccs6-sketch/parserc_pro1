@@ -15,6 +15,23 @@ struct function_list {
 
 static struct function_list g_functions;
 
+static char *xstrdup(const char *s) {
+    size_t len = 0;
+    char *out = NULL;
+
+    if (!s) {
+        return NULL;
+    }
+
+    len = strlen(s);
+    out = (char *)malloc(len + 1);
+    if (!out) {
+        return NULL;
+    }
+    memcpy(out, s, len + 1);
+    return out;
+}
+
 static void add_function(const char *name) {
     char *copy = NULL;
     size_t new_cap = 0;
@@ -23,7 +40,7 @@ static void add_function(const char *name) {
         return;
     }
 
-    copy = strdup(name);
+    copy = xstrdup(name);
     if (!copy) {
         return;
     }
