@@ -93,6 +93,7 @@ token
     | ',' { process_token(TOK_COMMA); }
     | ';' { process_token(TOK_SEMI); }
     | '=' { process_token(TOK_ASSIGN); }
+    | '*' { process_token(TOK_OTHER); }
     | BLOCK { process_token(TOK_BLOCK); }
     | OTHER { process_token(TOK_OTHER); }
     ;
