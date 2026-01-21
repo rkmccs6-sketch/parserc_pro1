@@ -2,8 +2,8 @@
 
 CC ?= gcc
 CFLAGS ?= -O2 -Wall -Wextra -std=c11
-LEX ?= flex
-YACC ?= bison
+LEX := flex
+YACC := bison
 
 SRC_DIR := src
 BUILD_DIR := build
