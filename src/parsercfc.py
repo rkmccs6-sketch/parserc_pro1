@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import os
+import subprocess
+import sys
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from pathlib import Path
+
+
+def default_workers():
+    count = os.cpu_count() or 1
+    return max(count - 1, 1)
+
+
+def find_c_files(root_dir):
+    root = Path(root_dir)
+    files = []
+    for path in root.rglob("*.c"):
+        if path.is_file():
+            files.append(path.resolve())
+    files.sort()
+    return files
+
+
+def parse_one_file(args):
+    parser_bin, path = args
+    try:
+        result = subprocess.run(
+            [parser_bin, str(path)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        return (str(path), [], f"spawn failed: {exc}")
+
+    if result.returncode != 0:
+        err = result.stderr.strip() or f"exit code {result.returncode}"
+        return (str(path), [], err)
+
+    output = result.stdout.strip() or "[]"
+    try:
+        names = json.loads(output)
+        if not isinstance(names, list):
+            raise ValueError("output is not a list")
+        return (str(path), names, None)
+    except Exception as exc:
+        return (str(path), [], f"invalid output: {exc}")
+
+
+def ensure_parent(path):
+    parent = Path(path).resolve().parent
+    parent.mkdir(parents=True, exist_ok=True)
+
+
+def main():
+    default_w = default_workers()
+    parser = argparse.ArgumentParser(
+        prog="parsercfc",
+        usage="parsercfc [-h] [-w WORKERS] [-o-fc OUTPUT_FC] [-o-null_fc OUTPUT_NULL_FC] dir",
+        description=(
+            "获取指定文件夹路径下的所有.c文件定义的函数名，将每个.c文件中定义的函数声明保存到fc.json，"
+            "没有C语言函数定义的.c文件路径保存到null_fc.json"
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    parser.add_argument("dir", help="[必选] 要解析的源代码目录路径")
+    parser.add_argument(
+        "-w",
+        "--workers",
+        type=int,
+        default=default_w,
+        help=f"使用的线程数 (默认为 CPU核心数-1: {default_w})",
+    )
+    parser.add_argument(
+        "-o-fc",
+        dest="output_fc",
+        default="fc.json",
+        help="fc.json 的生成路径 (默认: 当前目录下 fc.json)",
+    )
+    parser.add_argument(
+        "-o-null_fc",
+        dest="output_null_fc",
+        default="null_fc.json",
+        help="null_fc.json 的生成路径 (默认: 当前目录下 null_fc.json)",
+    )
+
+    args = parser.parse_args()
+
+    workers = args.workers
+    if workers < 1:
+        workers = 1
+
+    target_dir = Path(args.dir).resolve()
+    if not target_dir.exists():
+        print(f"error: dir not found: {target_dir}", file=sys.stderr)
+        return 2
+
+    script_path = Path(__file__).resolve()
+    if script_path.parent.name in ("bin", "src"):
+        root_dir = script_path.parent.parent
+    else:
+        root_dir = script_path.parent
+
+    parser_bin = (root_dir / "build" / "cfc_parser").resolve()
+    if not parser_bin.exists():
+        print("error: parser binary not found, run `make` first.", file=sys.stderr)
+        return 2
+
+    files = find_c_files(target_dir)
+    total_files = len(files)
+
+    print(f"Scan dir: {target_dir}")
+    print(f"Workers: {workers}")
+    print(f"Found {total_files} .c files")
+    print(f"Output fc.json: {args.output_fc}")
+    print(f"Output null_fc.json: {args.output_null_fc}")
+
+    results = {}
+    null_files = []
+    errors = []
+
+    if total_files == 0:
+        ensure_parent(args.output_fc)
+        ensure_parent(args.output_null_fc)
+        with open(args.output_fc, "w", encoding="utf-8") as fc_fp:
+            json.dump(results, fc_fp, ensure_ascii=True, indent=2)
+        with open(args.output_null_fc, "w", encoding="utf-8") as null_fp:
+            json.dump(null_files, null_fp, ensure_ascii=True, indent=2)
+        print("No .c files found, outputs created.")
+        return 0
+
+    start_time = time.time()
+    report_every = max(1, total_files // 20)
+    processed = 0
+
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(parse_one_file, (str(parser_bin), path)): path
+            for path in files
+        }
+        for future in as_completed(futures):
+            file_path, names, err = future.result()
+            results[file_path] = {"fc": names}
+            if not names:
+                null_files.append(file_path)
+            if err:
+                errors.append((file_path, err))
+
+            processed += 1
+            if processed % report_every == 0 or processed == total_files:
+                percent = (processed / total_files) * 100.0
+                elapsed = time.time() - start_time
+                print(f"[{processed}/{total_files}] {percent:.1f}% elapsed {elapsed:.1f}s")
+
+    total_functions = sum(len(v["fc"]) for v in results.values())
+    elapsed = time.time() - start_time
+
+    ensure_parent(args.output_fc)
+    ensure_parent(args.output_null_fc)
+    with open(args.output_fc, "w", encoding="utf-8") as fc_fp:
+        json.dump(results, fc_fp, ensure_ascii=True, indent=2)
+    with open(args.output_null_fc, "w", encoding="utf-8") as null_fp:
+        json.dump(null_files, null_fp, ensure_ascii=True, indent=2)
+
+    print("Done.")
+    print(f"Elapsed: {elapsed:.2f}s")
+    print(f"Total files: {total_files}")
+    print(f"Total functions: {total_functions}")
+    print(f"Files with no functions: {len(null_files)}")
+    if errors:
+        print(f"Parser errors: {len(errors)}", file=sys.stderr)
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

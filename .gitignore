@@ -1,0 +1,11 @@
+/build/
+/bin/
+/test/in/FFmpeg/
+/test/out/*
+!/test/out/.gitkeep
+*.o
+*.a
+*.so
+*.tab.c
+*.tab.h
+lex.yy.c
