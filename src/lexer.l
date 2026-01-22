@@ -65,6 +65,8 @@ static char *dup_text(const char *text) {
 <BRACE_CHAR>.|\n      { /* skip */ }
 
 "typedef"             { return TYPEDEF; }
+"FUN"                 { return FUN_MACRO; }
+"DEFINE_OPT_SHOW_SECTION" { return DEFINE_OPT_SHOW_SECTION; }
 "extern"              { return EXTERN; }
 "static"              { return STATIC; }
 "auto"                { return AUTO; }

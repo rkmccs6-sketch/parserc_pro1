@@ -220,6 +220,7 @@ static void check_and_record(char *full_sig) {
 
 %token <str> IDENTIFIER
 %token <str> CONSTANT STRING_LITERAL PP_DEFINE
+%token FUN_MACRO DEFINE_OPT_SHOW_SECTION
 %token TYPEDEF EXTERN STATIC AUTO REGISTER THREAD_LOCAL
 %token VOID CHAR SHORT INT LONG FLOAT DOUBLE SIGNED UNSIGNED BOOL COMPLEX IMAGINARY
 %token STRUCT UNION ENUM
@@ -265,25 +266,23 @@ func_definition:
     ;
 
 macro_fun
-    : IDENTIFIER '(' macro_arg ',' macro_skip ',' macro_skip ')' {
-        if ($1 && strcmp($1, "FUN") == 0 && $3) {
+    : FUN_MACRO '(' macro_arg ',' macro_skip ',' macro_skip ')' {
+        if ($3) {
             record_function($3);
         }
-        free($1);
         free($3);
     }
     ;
 
 macro_define_opt_show
-    : IDENTIFIER '(' macro_arg ',' macro_skip ')' {
-        if ($1 && strcmp($1, "DEFINE_OPT_SHOW_SECTION") == 0 && $3) {
+    : DEFINE_OPT_SHOW_SECTION '(' macro_arg ',' macro_skip ')' {
+        if ($3) {
             char *name = concat("opt_show_", $3);
             if (name) {
                 record_function(name);
                 free(name);
             }
         }
-        free($1);
         free($3);
     }
     ;
