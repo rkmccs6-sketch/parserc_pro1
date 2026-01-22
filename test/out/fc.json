@@ -1453,10 +1453,6 @@
       "put_pce",
       "put_audio_specific_config",
       "ff_quantize_band_cost_cache_init",
-      "WINDOW_FUNC",
-      "WINDOW_FUNC",
-      "WINDOW_FUNC",
-      "WINDOW_FUNC",
       "apply_window_and_mdct",
       "put_ics_info",
       "encode_ms_info",
@@ -1711,15 +1707,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/aarch64/neontest.c": {
-    "fc": [
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/aarch64/opusdsp_init.c": {
     "fc": [
@@ -1784,7 +1772,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/aarch64/vp9dsp_init_aarch64.c": {
     "fc": [
-      "vp9dsp_mc_init_aarch64",
       "vp9dsp_itxfm_init_aarch64",
       "vp9dsp_loopfilter_init_aarch64",
       "ff_vp9dsp_init_aarch64"
@@ -1800,9 +1787,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/aarch64/vvc/dsp_init.c": {
-    "fc": [
-      "ff_vvc_dsp_init_aarch64"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/aasc.c": {
     "fc": [
@@ -2699,7 +2684,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/arm/mlpdsp_init_arm.c": {
     "fc": [
-      "int32_t",
       "ff_mlpdsp_init_arm"
     ]
   },
@@ -2727,15 +2711,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/arm/neontest.c": {
-    "fc": [
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/arm/pixblockdsp_init_arm.c": {
     "fc": [
@@ -2833,7 +2809,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/arm/vp9dsp_init_arm.c": {
     "fc": [
-      "vp9dsp_mc_init_arm",
       "vp9dsp_itxfm_init_arm",
       "vp9dsp_loopfilter_init_arm",
       "ff_vp9dsp_init_arm"
@@ -4149,14 +4124,7 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "SEI_FUNC",
       "FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
       "FUNC",
       "FUNC",
       "FUNC",
@@ -4196,17 +4164,6 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
       "FUNC",
       "FUNC"
     ]
@@ -4313,18 +4270,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/cbs_sei_syntax_template.c": {
     "fc": [
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
       "FUNC",
       "FUNC"
     ]
@@ -5452,10 +5397,7 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/diracdsp.c": {
     "fc": [
-      "dirac_hpel_filter",
-      "put_signed_rect_clamped_8bit_c",
-      "add_rect_clamped_c",
-      "ff_diracdsp_init"
+      "dirac_hpel_filter"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/diractab.c": {
@@ -5736,9 +5678,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/dv_tablegen.c": {
-    "fc": [
-      "main"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/dvaudio_parser.c": {
     "fc": [
@@ -7630,7 +7570,6 @@
       "FUNCC",
       "FUNCC",
       "FUNCC",
-      "FUNCC",
       "FUNCC"
     ]
   },
@@ -8018,7 +7957,6 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "FUNC",
       "FUNC"
     ]
   },
@@ -8142,8 +8080,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/hevc/pred_template.c": {
     "fc": [
-      "FUNC",
-      "FUNC",
       "FUNC",
       "FUNC",
       "FUNC",
@@ -8883,20 +8819,14 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/jfdctfst.c": {
-    "fc": [
-      "row_fdct",
-      "GLOBAL",
-      "GLOBAL"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/jfdctint.c": {
     "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/jfdctint_template.c": {
     "fc": [
-      "FUNC",
-      "GLOBAL",
-      "GLOBAL"
+      "FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/jni.c": {
@@ -9143,7 +9073,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/jrevdct.c": {
     "fc": [
-      "ff_j_rev_dct",
       "ff_j_rev_dct4",
       "ff_j_rev_dct2",
       "ff_j_rev_dct1",
@@ -10729,8 +10658,7 @@
       "dct_max8x8_c",
       "quant_psnr8x8_c",
       "rd8x8_c",
-      "bit8x8_c",
-      "ff_me_cmp_init"
+      "bit8x8_c"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mediacodec.c": {
@@ -10827,7 +10755,6 @@
       "ndk_codec_create",
       "mediacodec_ndk_delete",
       "mediacodec_ndk_configure",
-      "mediacodec_ndk_getInputBuffer",
       "mediacodec_ndk_getOutputBuffer",
       "mediacodec_ndk_dequeueInputBuffer",
       "mediacodec_ndk_queueInputBuffer",
@@ -12636,7 +12563,6 @@
       "ff_avg_vc1_mspel_mc00_mmi",
       "ff_avg_vc1_mspel_mc00_16_mmi",
       "vc1_put_ver_16b_shift2_mmi",
-      "ff_put_no_rnd_vc1_chroma_mc8_mmi",
       "ff_put_no_rnd_vc1_chroma_mc4_mmi",
       "ff_avg_no_rnd_vc1_chroma_mc8_mmi",
       "ff_avg_no_rnd_vc1_chroma_mc4_mmi"
@@ -14012,7 +13938,6 @@
       "mpeg_motion",
       "mpeg_motion_field",
       "put_obmc",
-      "obmc_motion",
       "qpel_motion",
       "chroma_4mv_motion",
       "prefetch_motion",
@@ -14194,10 +14119,8 @@
   "/workspace/test/in/FFmpeg/libavcodec/mss1.c": {
     "fc": [
       "arith_normalise",
-      "arith_get_bits",
       "arith_get_number",
       "arith_get_prob",
-      "arith_init",
       "decode_pal",
       "mss1_decode_frame",
       "mss1_decode_init",
@@ -14232,11 +14155,9 @@
   "/workspace/test/in/FFmpeg/libavcodec/mss2.c": {
     "fc": [
       "arith2_normalise",
-      "arith2_get_scaled_value",
       "arith2_rescale_interval",
       "arith2_get_number",
       "arith2_get_prob",
-      "arith2_get_consumed_bytes",
       "arith2_init",
       "decode_pal_v2",
       "decode_555",
@@ -15299,8 +15220,7 @@
       "h264_v_loop_filter_luma_altivec",
       "h264_h_loop_filter_luma_altivec",
       "weight_h264_W_altivec",
-      "biweight_h264_W_altivec",
-      "ff_h264dsp_init_ppc"
+      "biweight_h264_W_altivec"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/ppc/h264qpel.c": {
@@ -15783,8 +15703,7 @@
       "ff_avg_pixels8x8_c",
       "ff_put_pixels16x16_c",
       "ff_avg_pixels16x16_c",
-      "ff_put_pixels8_l2_8",
-      "ff_qpeldsp_init"
+      "ff_put_pixels8_l2_8"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/qsv.c": {
@@ -17428,7 +17347,7 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/srtenc.c": {
     "fc": [
-      "srt_print",
+      "av_printf_format",
       "srt_stack_push",
       "srt_stack_pop",
       "srt_stack_find",
@@ -19320,7 +19239,7 @@
       "vp3_idct_dc_add_c",
       "vp3_v_loop_filter_c",
       "vp3_h_loop_filter_c",
-      "put_no_rnd_pixels_l2",
+      "LOOP_FILTER",
       "ff_vp3dsp_init",
       "ff_vp3dsp_set_bounding_values"
     ]
@@ -19501,20 +19420,14 @@
       "vp7_luma_dc_wht_dc_c",
       "vp7_idct_add_c",
       "vp7_idct_dc_add_c",
-      "vp8_luma_dc_wht_c",
       "vp8_luma_dc_wht_dc_c",
       "vp8_idct_add_c",
       "vp8_idct_dc_add_c",
-      "filter_common",
       "vp7_filter_common",
       "vp8_filter_common",
       "vp7_simple_limit",
       "vp8_simple_limit",
-      "hev",
-      "filter_mbedge",
-      "ff_vp78dsp_init",
-      "ff_vp7dsp_init",
-      "ff_vp8dsp_init"
+      "filter_mbedge"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/vp9.c": {
@@ -19632,11 +19545,6 @@
       "dc_129_32x32_c",
       "memset_bpc",
       "diag_downleft_4x4_c",
-      "diag_downright_4x4_c",
-      "vert_right_4x4_c",
-      "hor_down_4x4_c",
-      "vert_left_4x4_c",
-      "hor_up_4x4_c",
       "FUNC",
       "idct4_1d",
       "iadst4_1d",
@@ -19648,10 +19556,8 @@
       "iwht4_1d",
       "vp9dsp_itxfm_init",
       "loop_filter",
-      "vp9dsp_loopfilter_init",
       "copy_c",
       "avg_c",
-      "do_8tap_1d_c",
       "do_8tap_2d_c",
       "do_bilin_1d_c",
       "do_bilin_2d_c",
@@ -20534,9 +20440,7 @@
       "ff_vvc_inv_dct2_32",
       "ff_vvc_inv_dct2_64",
       "matrix_mul",
-      "inv_dct8",
-      "inv_dst7",
-      "ff_vvc_inv_lfnst_1d"
+      "inv_dct8"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/vvc/mvs.c": {
@@ -21037,7 +20941,7 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/webvttenc.c": {
     "fc": [
-      "webvtt_print",
+      "av_printf_format",
       "webvtt_stack_push",
       "webvtt_stack_pop",
       "webvtt_stack_find",
@@ -21271,8 +21175,7 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/ac3dsp_init.c": {
     "fc": [
-      "ff_ac3dsp_init_x86",
-      "ff_ac3dsp_set_downmix_x86"
+      "ff_ac3dsp_init_x86"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/alacdsp_init.c": {
@@ -21302,8 +21205,7 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/cavsdsp.c": {
     "fc": [
-      "cavs_idct8_add_sse2",
-      "ff_cavsdsp_init_x86"
+      "cavs_idct8_add_sse2"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/celt_pvq_init.c": {
@@ -21325,9 +21227,7 @@
     "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/dcadsp_init.c": {
-    "fc": [
-      "ff_dcadsp_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/dirac_dwt_init.c": {
     "fc": [
@@ -21409,17 +21309,13 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/h264dsp_init.c": {
-    "fc": [
-      "ff_h264dsp_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/h26x/h2656dsp.c": {
     "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/hevc/dsp_init.c": {
-    "fc": [
-      "ff_hevc_dsp_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/hpeldsp_init.c": {
     "fc": [
@@ -21473,7 +21369,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/me_cmp_init.c": {
     "fc": [
-      "nsse16_ssse3",
       "nsse8_ssse3",
       "ff_me_cmp_init_x86"
     ]
@@ -21557,9 +21452,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/rv40dsp_init.c": {
-    "fc": [
-      "ff_rv40dsp_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/sbcdsp_init.c": {
     "fc": [
@@ -21592,9 +21485,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/synth_filter_init.c": {
-    "fc": [
-      "ff_synth_filter_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/takdsp_init.c": {
     "fc": [
@@ -21663,7 +21554,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/vp8dsp_init.c": {
     "fc": [
-      "ff_vp78dsp_init_x86",
       "ff_vp8dsp_init_x86"
     ]
   },
@@ -21694,15 +21584,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/w64xmmtest.c": {
-    "fc": [
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap",
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/xvididct_init.c": {
     "fc": [
@@ -21949,7 +21831,6 @@
   "/workspace/test/in/FFmpeg/libavdevice/alsa.c": {
     "fc": [
       "codec_id_to_pcm_format",
-      "find_reorder_func",
       "ff_alsa_open",
       "ff_alsa_close",
       "ff_alsa_xrun_recover",
@@ -22080,7 +21961,6 @@
   },
   "/workspace/test/in/FFmpeg/libavdevice/dshow_enummediatypes.c": {
     "fc": [
-      "ff_dshow_enummediatypes_Next",
       "ff_dshow_enummediatypes_Skip",
       "ff_dshow_enummediatypes_Reset",
       "ff_dshow_enummediatypes_Clone",
@@ -22089,7 +21969,6 @@
   },
   "/workspace/test/in/FFmpeg/libavdevice/dshow_enumpins.c": {
     "fc": [
-      "ff_dshow_enumpins_Next",
       "ff_dshow_enumpins_Skip",
       "ff_dshow_enumpins_Reset",
       "ff_dshow_enumpins_Clone",
@@ -22099,7 +21978,6 @@
   },
   "/workspace/test/in/FFmpeg/libavdevice/dshow_filter.c": {
     "fc": [
-      "ff_dshow_filter_GetClassID",
       "ff_dshow_filter_Stop",
       "ff_dshow_filter_Pause",
       "ff_dshow_filter_Run",
@@ -22117,7 +21995,6 @@
   },
   "/workspace/test/in/FFmpeg/libavdevice/dshow_pin.c": {
     "fc": [
-      "ff_dshow_pin_Connect",
       "ff_dshow_pin_ReceiveConnection",
       "ff_dshow_pin_Disconnect",
       "ff_dshow_pin_ConnectedTo",
@@ -24410,7 +24287,6 @@
       "activate",
       "config_input_audio",
       "av_buffersink_set_frame_size",
-      "MAKE_AVFILTERLINK_ACCESSOR",
       "av_buffersink_get_hw_frames_ctx",
       "av_buffersink_get_channels",
       "av_buffersink_get_ch_layout",
@@ -24659,11 +24535,9 @@
       "init_histogram",
       "ff_ebur128_init",
       "ff_ebur128_destroy",
-      "ebur128_energy_to_loudness",
       "find_histogram_index",
       "ebur128_calc_gating_block",
       "ff_ebur128_set_channel",
-      "ebur128_calc_relative_threshold",
       "ebur128_gated_loudness",
       "ff_ebur128_relative_threshold",
       "ff_ebur128_loudness_global",
@@ -24908,11 +24782,10 @@
       "merge_generic_internal",
       "can_merge_generic",
       "merge_generic",
-      "print_channel_layout_desc",
       "print_sample_rate",
       "ff_filter_get_negotiation",
       "ff_fmt_is_in",
-      "MAKE_FORMAT_LIST_TYPE",
+      "ff_make_channel_layout_list",
       "ff_add_format",
       "ff_add_channel_layout",
       "ff_make_formats_list_singleton",
@@ -25390,9 +25263,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/transform.c": {
     "fc": [
-      "INTERPOLATE_METHOD",
-      "INTERPOLATE_METHOD",
-      "INTERPOLATE_METHOD",
       "ff_get_matrix",
       "ff_affine_transform"
     ]
@@ -25609,7 +25479,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_blend.c": {
     "fc": [
-      "filter_slice",
       "blend_frame",
       "blend_frame_for_dualinput",
       "init",
@@ -26249,7 +26118,6 @@
       "idct8_1d",
       "fdct16_1d",
       "idct16_1d",
-      "color_decorrelation",
       "color_correlation",
       "color_decorrelation_gbrp",
       "color_correlation_gbrp",
@@ -26505,7 +26373,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_drawtext.c": {
     "fc": [
       "drand",
-      "glyph_cmp",
       "set_fontsize",
       "parse_fontsize",
       "update_fontsize",
@@ -26550,7 +26417,7 @@
       "color_reset",
       "vgs_token_is_string",
       "vgs_token_span",
-      "vgs_log_invalid_token",
+      "av_printf_format",
       "vgs_parser_next_token",
       "vgs_statement_free",
       "vgs_free",
@@ -26889,7 +26756,6 @@
       "process_work_frame",
       "init",
       "uninit",
-      "ff_framerate_init",
       "config_input",
       "activate",
       "config_output"
@@ -27099,7 +26965,6 @@
       "hq3x_interp_2x1",
       "hq4x_interp_2x2",
       "hqx_filter",
-      "config_output",
       "filter_frame",
       "init"
     ]
@@ -27575,9 +27440,7 @@
     "fc": [
       "config_props",
       "uninit",
-      "filter_frame",
-      "for",
-      "if"
+      "filter_frame"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_median.c": {
@@ -28568,7 +28431,6 @@
     "fc": [
       "get_rgb_scale",
       "get_cmy_scale",
-      "register_range",
       "parse_psfile",
       "config_input",
       "comp_adjust",
@@ -29304,7 +29166,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_varblur.c": {
     "fc": [
       "lerpf",
-      "blur_planes",
       "blur_frame",
       "activate",
       "varblur_frame",
@@ -29538,7 +29399,6 @@
     "fc": [
       "pixel_diff",
       "xbr_filter",
-      "config_output",
       "filter_frame",
       "init"
     ]
@@ -29940,7 +29800,7 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/x86/scene_sad_init.c": {
     "fc": [
-      "SCENE_SAD_FUNC"
+      "ff_scene_sad_get_fn_x86"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/x86/vf_atadenoise_init.c": {
@@ -30898,7 +30758,7 @@
       "ff_read_line_to_bprint_overwrite",
       "ff_read_string_to_bprint_overwrite",
       "avio_get_str",
-      "GET_STR16",
+      "avio_rb64",
       "ffio_read_varlen",
       "ffio_read_leb",
       "ffio_write_leb",
@@ -35881,7 +35741,7 @@
       "ff_rtp_set_remote_url",
       "get_port",
       "set_port",
-      "url_add_option",
+      "av_printf_format",
       "build_udp_url",
       "rtp_open",
       "rtp_read",
@@ -37843,7 +37703,6 @@
       "av_csp_trc_func_inv_from_id",
       "eotf_linear",
       "eotf_linear_inv",
-      "eotf_bt1886",
       "eotf_bt1886_inv",
       "eotf_smpte_st2084",
       "eotf_smpte_st2084_inv",
@@ -38110,7 +37969,6 @@
   },
   "/workspace/test/in/FFmpeg/libavutil/hmac.c": {
     "fc": [
-      "DEFINE_ALGO_INIT",
       "av_hmac_free",
       "av_hmac_init",
       "av_hmac_update",
@@ -38708,7 +38566,6 @@
   },
   "/workspace/test/in/FFmpeg/libavutil/macos_kperf.c": {
     "fc": [
-      "kperf_init",
       "ff_kperf_init",
       "ff_kperf_cycles"
     ]
@@ -38846,7 +38703,6 @@
       "opt_set_elem",
       "opt_set_array",
       "av_opt_set",
-      "set_number",
       "av_opt_set_int",
       "av_opt_set_double",
       "av_opt_set_q",
@@ -39085,7 +38941,7 @@
   },
   "/workspace/test/in/FFmpeg/libavutil/riscv/cpu_common.c": {
     "fc": [
-      "probe_zbb"
+      "__attribute__"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/riscv/fixed_dsp_init.c": {
@@ -39689,9 +39545,6 @@
       "TX_NAME",
       "TX_NAME",
       "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
       "TX_TAB"
     ]
   },
@@ -39896,14 +39749,10 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/aarch64/neontest.c": {
-    "fc": [
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswresample/aarch64/resample_init.c": {
-    "fc": [
-      "swri_resample_dsp_aarch64_init"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswresample/arm/audio_convert_init.c": {
     "fc": [
@@ -39914,14 +39763,10 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/arm/neontest.c": {
-    "fc": [
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswresample/arm/resample_init.c": {
-    "fc": [
-      "swri_resample_dsp_arm_init"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswresample/audioconvert.c": {
     "fc": [
@@ -40073,14 +39918,10 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/x86/audio_convert_init.c": {
-    "fc": [
-      "swri_audio_convert_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswresample/x86/rematrix_init.c": {
-    "fc": [
-      "swri_rematrix_init_x86"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswresample/x86/resample_init.c": {
     "fc": [
@@ -40088,9 +39929,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/x86/w64xmmtest.c": {
-    "fc": [
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/aarch64/rgb2rgb.c": {
     "fc": [
@@ -40116,7 +39955,6 @@
   "/workspace/test/in/FFmpeg/libswscale/aarch64/swscale_unscaled.c": {
     "fc": [
       "nv24_to_yuv420p_neon_wrapper",
-      "get_unscaled_swscale_neon",
       "ff_get_unscaled_swscale_aarch64"
     ]
   },
@@ -40134,7 +39972,6 @@
     "fc": [
       "rgbx_to_nv12_neon_32_wrapper",
       "rgbx_to_nv12_neon_16_wrapper",
-      "get_unscaled_swscale_neon",
       "ff_get_unscaled_swscale_arm",
       "ff_get_unscaled_swscale_arm"
     ]
@@ -40359,7 +40196,6 @@
       "nvXXtoUV_c",
       "nv12ToUV_c",
       "nv21ToUV_c",
-      "bgr24ToY_c",
       "bgr24ToUV_c",
       "bgr24ToUV_half_c",
       "rgb24ToY_c",
@@ -40368,7 +40204,6 @@
       "planar_rgb_to_y",
       "planar_rgb_to_a",
       "planar_rgb_to_uv",
-      "planar_rgbf32_to_a",
       "planar_rgbf32_to_uv",
       "planar_rgbf32_to_y",
       "rgbf32_to_uv_c",
@@ -40376,7 +40211,6 @@
       "grayf32ToY16_c",
       "read_yaf32_gray_c",
       "read_yaf32_alpha_c",
-      "planar_rgbf16_to_a",
       "planar_rgbf16_to_uv",
       "planar_rgbf16_to_y",
       "grayf16ToY16_c",
@@ -40558,38 +40392,13 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_tmpl_common.c": {
-    "fc": [
-      "WRAP_CONVERT_UINT",
-      "WRAP_CLEAR",
-      "DECL_PATTERN",
-      "DECL_PATTERN"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_tmpl_float.c": {
-    "fc": [
-      "DECL_SETUP",
-      "DECL_FUNC",
-      "DECL_SETUP",
-      "DECL_FUNC"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_tmpl_int.c": {
-    "fc": [
-      "DECL_READ",
-      "DECL_READ",
-      "DECL_WRITE",
-      "DECL_WRITE",
-      "WRAP_READ",
-      "DECL_READ",
-      "WRAP_READ",
-      "DECL_WRITE",
-      "WRAP_WRITE",
-      "DECL_PATTERN",
-      "DECL_PATTERN",
-      "WRAP_PACK_UNPACK",
-      "DECL_PATTERN",
-      "DECL_PATTERN"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/options.c": {
     "fc": [
@@ -40654,7 +40463,6 @@
       "yuv2ayuv_1_c_template",
       "yuv2ayuv_2_c_template",
       "yuv2ayuv_X_c_template",
-      "yuv2y216le_X_c",
       "yuv2vyu444_1_c",
       "yuv2vyu444_2_c",
       "yuv2vyu444_X_c",
@@ -41086,8 +40894,7 @@
       "uyvytoyuv420_mmxext",
       "uyvytoyuv422_mmxext",
       "rgb2rgb_init_mmxext",
-      "interleave_bytes_sse2",
-      "rgb2rgb_init_x86"
+      "interleave_bytes_sse2"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/x86/swscale.c": {
@@ -41124,9 +40931,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/x86/w64xmmtest.c": {
-    "fc": [
-      "wrap"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/x86/yuv2rgb.c": {
     "fc": [
@@ -41582,7 +41387,6 @@
     "fc": [
       "fill_random",
       "test_motion",
-      "check_motion",
       "checkasm_check_motion"
     ]
   },
@@ -41724,7 +41528,6 @@
   "/workspace/test/in/FFmpeg/tests/checkasm/sw_scale.c": {
     "fc": [
       "yuv2planeX_8_ref",
-      "check_yuv2yuv1",
       "check_yuv2yuvX",
       "check_yuv2nv12cX",
       "check_hscale",
@@ -42053,7 +41856,6 @@
       "run_crypto_cast128",
       "run_crypto_des",
       "run_crypto_rc4",
-      "run_mbedcrypto_blowfish",
       "run_mbedcrypto_des",
       "run_mbedcrypto_rc4",
       "run_mbedcrypto_xtea",
