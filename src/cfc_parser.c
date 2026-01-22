@@ -2,168 +2,66 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "parser.tab.h"
-
 extern int yyparse(void);
 extern FILE *yyin;
 extern void yyrestart(FILE *input_file);
 extern void lexer_reset(void);
+extern void parser_reset_state(void);
 
-static int parse_error_count = 0;
-
-struct function_list {
+typedef struct {
     char **items;
     size_t count;
     size_t capacity;
-};
+} FunctionList;
 
-static struct function_list g_functions;
+static FunctionList g_functions;
 
-static char *last_identifier = NULL;
-static char *paren_candidate = NULL;
-static char *pending_name = NULL;
-static int paren_depth = 0;
-static int bracket_depth = 0;
-
-static char *xstrdup(const char *s) {
-    size_t len = 0;
-    char *out = NULL;
-
-    if (!s) {
-        return NULL;
-    }
-
-    len = strlen(s);
-    out = (char *)malloc(len + 1);
-    if (!out) {
-        return NULL;
-    }
-    memcpy(out, s, len + 1);
-    return out;
+static void list_init(FunctionList *list) {
+    list->items = NULL;
+    list->count = 0;
+    list->capacity = 0;
 }
 
-static void clear_string(char **ptr) {
-    if (*ptr) {
-        free(*ptr);
-        *ptr = NULL;
+static void list_free(FunctionList *list) {
+    size_t i = 0;
+    for (i = 0; i < list->count; i++) {
+        free(list->items[i]);
     }
+    free(list->items);
+    list->items = NULL;
+    list->count = 0;
+    list->capacity = 0;
 }
 
-static void add_function(const char *name) {
-    char *copy = NULL;
+static void list_add(FunctionList *list, const char *name) {
     size_t new_cap = 0;
+    char *copy = NULL;
 
     if (!name) {
         return;
     }
 
-    copy = xstrdup(name);
+    copy = strdup(name);
     if (!copy) {
         return;
     }
 
-    if (g_functions.count == g_functions.capacity) {
-        new_cap = g_functions.capacity == 0 ? 16 : g_functions.capacity * 2;
-        char **new_items = (char **)realloc(g_functions.items, new_cap * sizeof(char *));
+    if (list->count == list->capacity) {
+        new_cap = list->capacity == 0 ? 16 : list->capacity * 2;
+        char **new_items = (char **)realloc(list->items, new_cap * sizeof(char *));
         if (!new_items) {
             free(copy);
             return;
         }
-        g_functions.items = new_items;
-        g_functions.capacity = new_cap;
+        list->items = new_items;
+        list->capacity = new_cap;
     }
 
-    g_functions.items[g_functions.count++] = copy;
+    list->items[list->count++] = copy;
 }
 
 void record_function(const char *name) {
-    add_function(name);
-}
-
-void process_identifier(const char *name) {
-    clear_string(&last_identifier);
-    if (name) {
-        last_identifier = xstrdup(name);
-    }
-}
-
-static void reset_candidate_state(void) {
-    clear_string(&last_identifier);
-    clear_string(&paren_candidate);
-    clear_string(&pending_name);
-    paren_depth = 0;
-    bracket_depth = 0;
-}
-
-void process_token(enum token_kind kind) {
-    switch (kind) {
-    case TOK_DECL:
-        if (paren_depth == 0 && bracket_depth == 0) {
-            clear_string(&paren_candidate);
-            clear_string(&pending_name);
-        }
-        break;
-    case TOK_LPAREN:
-        if (!pending_name && paren_depth == 0) {
-            clear_string(&paren_candidate);
-            if (last_identifier) {
-                paren_candidate = xstrdup(last_identifier);
-            }
-        }
-        paren_depth++;
-        break;
-    case TOK_RPAREN:
-        if (paren_depth > 0) {
-            paren_depth--;
-            if (paren_depth == 0 && !pending_name && paren_candidate) {
-                pending_name = paren_candidate;
-                paren_candidate = NULL;
-            }
-        }
-        break;
-    case TOK_LBRACKET:
-        bracket_depth++;
-        break;
-    case TOK_RBRACKET:
-        if (bracket_depth > 0) {
-            bracket_depth--;
-        }
-        break;
-    case TOK_BLOCK:
-        if (paren_depth == 0 && bracket_depth == 0) {
-            if (pending_name) {
-                record_function(pending_name);
-            }
-            reset_candidate_state();
-        }
-        break;
-    case TOK_SEMI:
-    case TOK_COMMA:
-    case TOK_ASSIGN:
-        if (paren_depth == 0 && bracket_depth == 0) {
-            reset_candidate_state();
-        }
-        break;
-    case TOK_OTHER:
-    default:
-        break;
-    }
-}
-
-void yyerror(const char *s) {
-    (void)s;
-    parse_error_count++;
-}
-
-static void free_functions(void) {
-    size_t i = 0;
-    for (i = 0; i < g_functions.count; i++) {
-        free(g_functions.items[i]);
-    }
-    free(g_functions.items);
-    g_functions.items = NULL;
-    g_functions.count = 0;
-    g_functions.capacity = 0;
+    list_add(&g_functions, name);
 }
 
 static void json_escape_and_print(const char *s) {
@@ -205,14 +103,14 @@ static void json_escape_and_print(const char *s) {
     putchar('"');
 }
 
-static void print_json_array(int newline) {
+static void print_json_array(const FunctionList *list, int newline) {
     size_t i = 0;
     putchar('[');
-    for (i = 0; i < g_functions.count; i++) {
+    for (i = 0; i < list->count; i++) {
         if (i > 0) {
             putchar(',');
         }
-        json_escape_and_print(g_functions.items[i]);
+        json_escape_and_print(list->items[i]);
     }
     putchar(']');
     if (newline) {
@@ -220,54 +118,46 @@ static void print_json_array(int newline) {
     }
 }
 
-static void print_json_record(const char *path) {
+static void print_json_record(const char *path, const FunctionList *list) {
     fputs("{\"path\":", stdout);
     json_escape_and_print(path);
     fputs(",\"fc\":", stdout);
-    print_json_array(0);
+    print_json_array(list, 0);
     putchar('}');
     putchar('\n');
-}
-
-static void reset_parser_state(void) {
-    parse_error_count = 0;
-    reset_candidate_state();
-    free_functions();
 }
 
 static int parse_file(const char *path, int batch_mode) {
     int rc = 0;
 
-    reset_parser_state();
+    list_free(&g_functions);
+    list_init(&g_functions);
 
     yyin = fopen(path, "r");
     if (!yyin) {
         fprintf(stderr, "error: cannot open file: %s\n", path);
         if (batch_mode) {
-            print_json_record(path);
+            print_json_record(path, &g_functions);
         } else {
-            print_json_array(1);
+            print_json_array(&g_functions, 1);
         }
-        reset_parser_state();
         return 2;
     }
 
     lexer_reset();
+    parser_reset_state();
     yyrestart(yyin);
     if (yyparse() != 0) {
-        parse_error_count++;
         rc = 1;
     }
 
     fclose(yyin);
 
     if (batch_mode) {
-        print_json_record(path);
+        print_json_record(path, &g_functions);
     } else {
-        print_json_array(1);
+        print_json_array(&g_functions, 1);
     }
-
-    reset_parser_state();
 
     return rc;
 }
@@ -276,6 +166,8 @@ int main(int argc, char **argv) {
     int batch_mode = 0;
     int start_idx = 1;
     int rc = 0;
+
+    list_init(&g_functions);
 
     if (argc < 2) {
         fprintf(stderr, "usage: cfc_parser [--batch] <file.c> [file2.c ...]\n");
@@ -299,5 +191,6 @@ int main(int argc, char **argv) {
         }
     }
 
+    list_free(&g_functions);
     return rc;
 }

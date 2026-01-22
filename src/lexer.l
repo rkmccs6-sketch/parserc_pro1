@@ -22,6 +22,8 @@ static char *dup_text(const char *text) {
 
 %%
 
+^[ \t]*#[ \t]*define[^\n]*\\\n { BEGIN(PREPROC); }
+^[ \t]*#[ \t]*define[^\n]*\n { yylval.str = dup_text(yytext); return PP_DEFINE; }
 ^[ \t]*#[^\n]*\\\n    { BEGIN(PREPROC); }
 ^[ \t]*#[^\n]*\n      { /* skip preprocessor line */ }
 <PREPROC>.*\\\n       { /* skip continued preprocessor line */ }
