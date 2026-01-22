@@ -22,11 +22,6 @@ static char *dup_text(const char *text) {
 
 %%
 
-void lexer_reset(void) {
-    brace_depth = 0;
-    BEGIN(INITIAL);
-}
-
 ^[ \t]*#[^\n]*\\\n    { BEGIN(PREPROC); }
 ^[ \t]*#[^\n]*\n      { /* skip preprocessor line */ }
 <PREPROC>.*\\\n       { /* skip continued preprocessor line */ }
@@ -147,3 +142,8 @@ void lexer_reset(void) {
 .                    { return OTHER; }
 
 %%
+
+void lexer_reset(void) {
+    brace_depth = 0;
+    BEGIN(INITIAL);
+}
