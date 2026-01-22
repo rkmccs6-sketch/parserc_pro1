@@ -7,6 +7,7 @@ void parser_reset_state(void);
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 int yylex(void);
 void yyerror(const char *s);
@@ -30,6 +31,13 @@ static char *concat(const char *s1, const char *s2) {
     return result;
 }
 
+static char *concat_with_space(const char *s1, const char *s2) {
+    char *temp = concat(s1, " ");
+    char *out = concat(temp, s2);
+    free(temp);
+    return out;
+}
+
 static void set_array_rename_prefix(const char *line) {
     if (!line) {
         return;
@@ -44,6 +52,86 @@ static void set_array_rename_prefix(const char *line) {
     }
 }
 
+static char *trim_spaces(const char *s) {
+    size_t len = strlen(s);
+    char *out = malloc(len + 1);
+    size_t i = 0;
+    size_t j = 0;
+    int space_flag = 0;
+    if (!out) {
+        return NULL;
+    }
+    for (i = 0; i < len; i++) {
+        unsigned char c = (unsigned char)s[i];
+        if (isspace(c)) {
+            if (!space_flag && j > 0) {
+                out[j++] = ' ';
+                space_flag = 1;
+            }
+        } else {
+            out[j++] = (char)c;
+            space_flag = 0;
+        }
+    }
+    if (j > 0 && out[j - 1] == ' ') {
+        j--;
+    }
+    out[j] = '\0';
+    return out;
+}
+
+static void check_and_record(char *full_sig) {
+    if (!full_sig) {
+        return;
+    }
+
+    char *clean = trim_spaces(full_sig);
+    if (!clean) {
+        return;
+    }
+
+    char *p = strchr(clean, '(');
+    if (!p) {
+        free(clean);
+        return;
+    }
+
+    char *end = p - 1;
+    while (end >= clean && isspace((unsigned char)*end)) {
+        end--;
+    }
+    char *start = end;
+    while (start >= clean && (isalnum((unsigned char)*start) || *start == '_')) {
+        start--;
+    }
+    start++;
+
+    if (start > end) {
+        free(clean);
+        return;
+    }
+
+    size_t word_len = (size_t)(end - start + 1);
+    if ((word_len == 2 && strncmp(start, "if", 2) == 0) ||
+        (word_len == 3 && strncmp(start, "for", 3) == 0) ||
+        (word_len == 5 && strncmp(start, "while", 5) == 0) ||
+        (word_len == 6 && strncmp(start, "switch", 6) == 0) ||
+        (word_len == 6 && strncmp(start, "return", 6) == 0) ||
+        (word_len == 4 && strncmp(start, "else", 4) == 0)) {
+        free(clean);
+        return;
+    }
+
+    char *name = strndup(start, word_len);
+    if (!name) {
+        free(clean);
+        return;
+    }
+
+    record_function(name);
+    free(name);
+    free(clean);
+}
 %}
 
 %union {
@@ -64,45 +152,37 @@ static void set_array_rename_prefix(const char *line) {
 %token BLOCK
 %token OTHER
 
-%type <str> declarator direct_declarator array_rename_invocation
-%type <str> macro_arg macro_arg_tokens macro_arg_token
+%type <str> signature sig_element token_chunk nested_parentheses any_token_in_paren array_index
+%type <str> macro_arg macro_arg_tokens macro_arg_token macro_skip macro_skip_token
+%type <str> array_rename_invocation
 
 %destructor { free($$); } <str>
 
 %%
 
-translation_unit:
+program:
     /* empty */
-    | translation_unit external_declaration
+    | program element
     ;
 
-external_declaration:
-    function_definition
+element:
+    func_definition
     | macro_fun
     | macro_define_opt_show
-    | pp_define
-    | declaration
-    | ';'
+    | macro_definition
+    | global_statement
     | error ';' { yyerrok; }
     | error BLOCK { yyerrok; }
     ;
 
-pp_define:
+macro_definition:
     PP_DEFINE { set_array_rename_prefix($1); free($1); }
     ;
 
-function_definition:
-    decl_specifiers declarator BLOCK {
-        if ($2) {
-            record_function($2);
-            free($2);
-        }
-    }
-    | declarator BLOCK {
-        if ($1) {
-            record_function($1);
-            free($1);
-        }
+func_definition:
+    signature BLOCK {
+        check_and_record($1);
+        free($1);
     }
     ;
 
@@ -128,243 +208,115 @@ macro_define_opt_show
     }
     ;
 
-declaration:
-    decl_specifiers init_declarator_list_opt ';'
-    | decl_specifiers ';'
-    | non_function_tokens ';'
+global_statement:
+    signature ';' { free($1); }
+    | signature '=' initializer ';' { free($1); }
+    | ';' { }
     ;
 
-init_declarator_list_opt:
-    /* empty */
-    | init_declarator_list
+signature:
+    sig_element { $$ = $1; }
+    | signature sig_element {
+        $$ = concat_with_space($1, $2);
+        free($1);
+        free($2);
+    }
+    | signature '(' nested_parentheses ')' {
+        char *temp = concat($1, "(");
+        char *temp2 = concat(temp, $3);
+        $$ = concat(temp2, ")");
+        free($1);
+        free($3);
+        free(temp);
+        free(temp2);
+    }
+    | signature '[' array_index ']' {
+        char *temp = concat($1, "[");
+        char *temp2 = concat(temp, $3);
+        $$ = concat(temp2, "]");
+        free($1);
+        free($3);
+        free(temp);
+        free(temp2);
+    }
     ;
 
-init_declarator_list:
-    init_declarator
-    | init_declarator_list ',' init_declarator
-    ;
-
-init_declarator:
-    declarator
-    | declarator '=' initializer
-    ;
-
-declarator:
-    pointer_opt direct_declarator { $$ = $2; }
-    ;
-
-pointer_opt:
-    /* empty */
-    | pointer
-    ;
-
-pointer:
-    '*' type_qualifier_list_opt
-    | '*' type_qualifier_list_opt pointer
-    ;
-
-type_qualifier_list_opt:
-    /* empty */
-    | type_qualifier_list
-    ;
-
-type_qualifier_list:
-    type_qualifier
-    | type_qualifier_list type_qualifier
-    ;
-
-direct_declarator:
-    IDENTIFIER { $$ = $1; }
+sig_element:
+    token_chunk { $$ = $1; }
     | array_rename_invocation { $$ = $1; }
-    | '(' declarator ')' { $$ = $2; }
-    | direct_declarator '(' param_tokens_opt ')' { $$ = $1; }
-    | direct_declarator '[' param_tokens_opt ']' { $$ = $1; }
+    | '*' { $$ = strdup("*"); }
     ;
 
-array_rename_invocation:
-    ARRAY_RENAME '(' macro_arg ')' {
+array_index:
+    /* empty */ { $$ = strdup(""); }
+    | array_index token_chunk {
+        $$ = concat($1, $2);
+        free($1);
+        free($2);
+    }
+    | array_index '*' {
+        $$ = concat($1, "*");
+        free($1);
+    }
+    | array_index '+' {
+        $$ = concat($1, "+");
+        free($1);
+    }
+    | array_index '-' {
+        $$ = concat($1, "-");
+        free($1);
+    }
+    ;
+
+array_rename_invocation
+    : ARRAY_RENAME '(' macro_arg ')' {
         $$ = concat(array_rename_prefix, $3);
         free($3);
     }
     ;
 
-decl_specifiers:
-    decl_specifier
-    | decl_specifiers decl_specifier
+nested_parentheses:
+    /* empty */ { $$ = strdup(""); }
+    | nested_parentheses any_token_in_paren {
+        $$ = concat_with_space($1, $2);
+        free($1);
+        free($2);
+    }
     ;
 
-decl_specifier:
-    storage_class_specifier
-    | type_specifier
-    | type_qualifier
-    | function_specifier
-    | alignment_specifier
-    | attribute_specifier
-    ;
-
-storage_class_specifier:
-    TYPEDEF
-    | EXTERN
-    | STATIC
-    | AUTO
-    | REGISTER
-    | THREAD_LOCAL
-    ;
-
-type_specifier:
-    type_specifier_keyword
-    | IDENTIFIER { free($1); }
-    ;
-
-type_specifier_keyword:
-    VOID
-    | CHAR
-    | SHORT
-    | INT
-    | LONG
-    | FLOAT
-    | DOUBLE
-    | SIGNED
-    | UNSIGNED
-    | BOOL
-    | COMPLEX
-    | IMAGINARY
-    | STRUCT
-    | UNION
-    | ENUM
-    | TYPEOF
-    ;
-
-type_qualifier:
-    CONST
-    | VOLATILE
-    | RESTRICT
-    | ATOMIC
-    ;
-
-function_specifier:
-    INLINE
-    | NORETURN
-    ;
-
-alignment_specifier:
-    ALIGNAS
-    ;
-
-attribute_specifier:
-    ATTRIBUTE
-    | DECLSPEC
-    | ASM
-    ;
-
-param_tokens_opt:
-    /* empty */
-    | param_tokens
-    ;
-
-param_tokens:
-    param_tokens param_token
-    | param_token
-    ;
-
-param_token:
-    IDENTIFIER { free($1); }
-    | CONSTANT { free($1); }
-    | STRING_LITERAL { free($1); }
-    | ELLIPSIS
-    | type_specifier_keyword
-    | type_qualifier
-    | storage_class_specifier
-    | function_specifier
-    | alignment_specifier
-    | attribute_specifier
-    | FUN_MACRO
-    | DEFINE_OPT_SHOW_SECTION
-    | ARRAY_RENAME
-    | '(' param_tokens_opt ')'
-    | '[' param_tokens_opt ']'
-    | '*' { }
-    | ',' { }
-    | '=' { }
-    | OTHER { }
-    ;
-
-non_function_tokens:
-    non_function_tokens non_function_token
-    | non_function_token
-    ;
-
-non_function_token:
-    IDENTIFIER { free($1); }
-    | CONSTANT { free($1); }
-    | STRING_LITERAL { free($1); }
-    | ELLIPSIS
-    | type_specifier_keyword
-    | storage_class_specifier
-    | type_qualifier
-    | function_specifier
-    | alignment_specifier
-    | attribute_specifier
-    | FUN_MACRO
-    | DEFINE_OPT_SHOW_SECTION
-    | ARRAY_RENAME
-    | '(' non_function_tokens_opt ')'
-    | '[' non_function_tokens_opt ']'
-    | '*' { }
-    | ',' { }
-    | '=' { }
-    | OTHER { }
-    ;
-
-non_function_tokens_opt:
-    /* empty */
-    | non_function_tokens
+any_token_in_paren:
+    token_chunk { $$ = $1; }
+    | ',' { $$ = strdup(","); }
+    | '*' { $$ = strdup("*"); }
+    | '=' { $$ = strdup("="); }
+    | '[' { $$ = strdup("["); }
+    | ']' { $$ = strdup("]"); }
+    | '.' { $$ = strdup("."); }
+    | '&' { $$ = strdup("&"); }
+    | '-' { $$ = strdup("-"); }
+    | '+' { $$ = strdup("+"); }
+    | '(' nested_parentheses ')' {
+        char *temp = concat("(", $2);
+        $$ = concat(temp, ")");
+        free($2);
+        free(temp);
+    }
     ;
 
 initializer:
-    initializer_tokens
+    token_chunk { free($1); }
+    | initializer token_chunk { free($2); }
     | BLOCK
+    | initializer ',' { }
+    | initializer '*' { }
     ;
 
-initializer_tokens:
-    initializer_tokens initializer_token
-    | initializer_token
+macro_arg
+    : macro_arg_tokens { $$ = $1; }
     ;
 
-initializer_token:
-    IDENTIFIER { free($1); }
-    | CONSTANT { free($1); }
-    | STRING_LITERAL { free($1); }
-    | ELLIPSIS
-    | type_specifier_keyword
-    | storage_class_specifier
-    | type_qualifier
-    | function_specifier
-    | alignment_specifier
-    | attribute_specifier
-    | FUN_MACRO
-    | DEFINE_OPT_SHOW_SECTION
-    | ARRAY_RENAME
-    | '(' initializer_tokens_opt ')'
-    | '[' initializer_tokens_opt ']'
-    | BLOCK
-    | '*' { }
-    | ',' { }
-    | '=' { }
-    | OTHER { }
-    ;
-
-initializer_tokens_opt:
-    /* empty */
-    | initializer_tokens
-    ;
-
-macro_arg:
-    macro_arg_tokens { $$ = $1; }
-    ;
-
-macro_arg_tokens:
-    macro_arg_token { $$ = $1; }
+macro_arg_tokens
+    : macro_arg_token { $$ = $1; $1 = NULL; }
     | macro_arg_tokens macro_arg_token {
         $$ = concat($1, $2);
         free($1);
@@ -372,37 +324,66 @@ macro_arg_tokens:
     }
     ;
 
-macro_arg_token:
-    IDENTIFIER { $$ = $1; }
-    | CONSTANT { $$ = $1; }
+macro_arg_token
+    : IDENTIFIER { $$ = $1; $1 = NULL; }
+    | CONSTANT { $$ = $1; $1 = NULL; }
     ;
 
-macro_skip:
-    /* empty */
-    | macro_skip macro_skip_token
-    | macro_skip_token
+macro_skip
+    : /* empty */ { $$ = NULL; }
+    | macro_skip macro_skip_token { $$ = NULL; }
+    | macro_skip_token { $$ = NULL; }
     ;
 
-macro_skip_token:
-    IDENTIFIER { free($1); }
-    | CONSTANT { free($1); }
-    | STRING_LITERAL { free($1); }
-    | ELLIPSIS
-    | type_specifier_keyword
-    | storage_class_specifier
-    | type_qualifier
-    | function_specifier
-    | alignment_specifier
-    | attribute_specifier
-    | FUN_MACRO
-    | DEFINE_OPT_SHOW_SECTION
-    | ARRAY_RENAME
-    | '(' macro_skip ')'
-    | '[' macro_skip ']'
-    | '*' { }
-    | ',' { }
-    | '=' { }
-    | OTHER { }
+macro_skip_token
+    : token_chunk { free($1); $$ = NULL; }
+    | '(' macro_skip ')' { $$ = NULL; }
+    | '[' macro_skip ']' { $$ = NULL; }
+    | ',' { $$ = NULL; }
+    | '*' { $$ = NULL; }
+    | '=' { $$ = NULL; }
+    | '+' { $$ = NULL; }
+    | '-' { $$ = NULL; }
+    ;
+
+token_chunk:
+    IDENTIFIER
+    | CONSTANT
+    | STRING_LITERAL
+    | TYPEDEF { $$ = strdup("typedef"); }
+    | EXTERN { $$ = strdup("extern"); }
+    | STATIC { $$ = strdup("static"); }
+    | AUTO { $$ = strdup("auto"); }
+    | REGISTER { $$ = strdup("register"); }
+    | THREAD_LOCAL { $$ = strdup("_Thread_local"); }
+    | VOID { $$ = strdup("void"); }
+    | CHAR { $$ = strdup("char"); }
+    | SHORT { $$ = strdup("short"); }
+    | INT { $$ = strdup("int"); }
+    | LONG { $$ = strdup("long"); }
+    | FLOAT { $$ = strdup("float"); }
+    | DOUBLE { $$ = strdup("double"); }
+    | SIGNED { $$ = strdup("signed"); }
+    | UNSIGNED { $$ = strdup("unsigned"); }
+    | BOOL { $$ = strdup("_Bool"); }
+    | COMPLEX { $$ = strdup("_Complex"); }
+    | IMAGINARY { $$ = strdup("_Imaginary"); }
+    | STRUCT { $$ = strdup("struct"); }
+    | UNION { $$ = strdup("union"); }
+    | ENUM { $$ = strdup("enum"); }
+    | CONST { $$ = strdup("const"); }
+    | VOLATILE { $$ = strdup("volatile"); }
+    | RESTRICT { $$ = strdup("restrict"); }
+    | ATOMIC { $$ = strdup("_Atomic"); }
+    | INLINE { $$ = strdup("inline"); }
+    | NORETURN { $$ = strdup("_Noreturn"); }
+    | ALIGNAS { $$ = strdup("_Alignas"); }
+    | TYPEOF { $$ = strdup("typeof"); }
+    | ATTRIBUTE { $$ = strdup("__attribute__"); }
+    | DECLSPEC { $$ = strdup("__declspec"); }
+    | ASM { $$ = strdup("asm"); }
+    | ELLIPSIS { $$ = strdup("..."); }
+    | OTHER { $$ = strdup(""); }
     ;
 
 %%
