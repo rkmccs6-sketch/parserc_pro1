@@ -393,6 +393,22 @@ static MacroTok macro_next_token(const char *text, size_t *idx, char **ident_out
             *idx = i;
             return MACRO_TOK_IDENT;
         }
+        if (isdigit(c)) {
+            size_t start = i;
+            i++;
+            while (text[i]) {
+                unsigned char cc = (unsigned char)text[i];
+                if (!(isalnum(cc) || cc == '_')) {
+                    break;
+                }
+                i++;
+            }
+            if (ident_out) {
+                *ident_out = dup_range(text + start, text + i);
+            }
+            *idx = i;
+            return MACRO_TOK_IDENT;
+        }
         i++;
         *idx = i;
         switch (c) {
