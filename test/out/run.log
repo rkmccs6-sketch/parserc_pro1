@@ -7,5 +7,5 @@ Output null_fc.json: /workspace/test/out/null_fc.json
 Done.
 Elapsed: 0.12s
 Total files: 3332
-Total functions: 28959
-Files with no functions: 192
+Total functions: 29113
+Files with no functions: 174
