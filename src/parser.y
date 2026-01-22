@@ -828,7 +828,7 @@ static void check_and_record(char *full_sig) {
 %token OTHER
 
 %type <str> signature sig_element token_chunk nested_parentheses any_token_in_paren array_index
-%type <str> macro_arg macro_arg_tokens macro_arg_token
+%type <str> macro_arg macro_arg_parts macro_arg_piece macro_arg_group macro_arg_group_piece
 %type <args> macro_arg_list macro_arg_list_opt
 %type <str> array_rename_invocation
 
@@ -976,7 +976,7 @@ initializer:
     ;
 
 macro_arg
-    : macro_arg_tokens { $$ = $1; $1 = NULL; }
+    : macro_arg_parts { $$ = $1; $1 = NULL; }
     ;
 
 macro_arg_list_opt
@@ -1001,9 +1001,9 @@ macro_arg_list
     }
     ;
 
-macro_arg_tokens
-    : macro_arg_token { $$ = $1; $1 = NULL; }
-    | macro_arg_tokens macro_arg_token {
+macro_arg_parts
+    : macro_arg_piece { $$ = $1; $1 = NULL; }
+    | macro_arg_parts macro_arg_piece {
         $$ = concat($1, $2);
         free($1);
         free($2);
@@ -1012,12 +1012,42 @@ macro_arg_tokens
     }
     ;
 
-macro_arg_token
+macro_arg_piece
     : token_chunk { $$ = $1; $1 = NULL; }
-    | '*' { $$ = strdup(""); }
-    | '+' { $$ = strdup(""); }
-    | '-' { $$ = strdup(""); }
-    | '=' { $$ = strdup(""); }
+    | '*' { $$ = strdup("*"); }
+    | '+' { $$ = strdup("+"); }
+    | '-' { $$ = strdup("-"); }
+    | '=' { $$ = strdup("="); }
+    | '(' macro_arg_group ')' {
+        char *temp = concat("(", $2);
+        $$ = concat(temp, ")");
+        free(temp);
+        free($2);
+        $2 = NULL;
+    }
+    | '[' macro_arg_group ']' {
+        char *temp = concat("[", $2);
+        $$ = concat(temp, "]");
+        free(temp);
+        free($2);
+        $2 = NULL;
+    }
+    ;
+
+macro_arg_group
+    : /* empty */ { $$ = strdup(""); }
+    | macro_arg_group macro_arg_group_piece {
+        $$ = concat($1, $2);
+        free($1);
+        free($2);
+        $1 = NULL;
+        $2 = NULL;
+    }
+    ;
+
+macro_arg_group_piece
+    : macro_arg_piece { $$ = $1; $1 = NULL; }
+    | ',' { $$ = strdup(","); }
     ;
 
 token_chunk:
