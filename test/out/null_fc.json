@@ -34,6 +34,8 @@
   "/workspace/test/in/FFmpeg/libavcodec/eac3_data.c",
   "/workspace/test/in/FFmpeg/libavcodec/file_open.c",
   "/workspace/test/in/FFmpeg/libavcodec/flacdata.c",
+  "/workspace/test/in/FFmpeg/libavcodec/flacdsp_lpc_template.c",
+  "/workspace/test/in/FFmpeg/libavcodec/flacdsp_template.c",
   "/workspace/test/in/FFmpeg/libavcodec/float2half.c",
   "/workspace/test/in/FFmpeg/libavcodec/float_scalarproduct.c",
   "/workspace/test/in/FFmpeg/libavcodec/golomb.c",
