@@ -1,4 +1,4 @@
-.PHONY: all build clean install uninstall
+.PHONY: all compile clean install uninstall
 
 CC ?= gcc
 CFLAGS ?= -O2 -Wall -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L -Ibuild
@@ -15,7 +15,7 @@ PARSER := $(BUILD_DIR)/cfc_parser
 
 all: install
 
-build: $(BIN_DIR)/parsercfc $(PARSER)
+compile: $(BIN_DIR)/parsercfc $(PARSER)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
@@ -43,7 +43,7 @@ $(BIN_DIR)/parsercfc: $(SRC_DIR)/parsercfc.py | $(BIN_DIR)
 clean: uninstall
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
 
-install: build
+install: compile
 	install -d $(INSTALL_BINDIR)
 	install -m 755 $(BIN_DIR)/parsercfc $(INSTALL_BINDIR)/parsercfc
 	install -m 755 $(PARSER) $(INSTALL_BINDIR)/cfc_parser
