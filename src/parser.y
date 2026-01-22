@@ -80,45 +80,6 @@ static char *trim_spaces(const char *s) {
     return out;
 }
 
-static char *first_macro_arg(const char *clean, const char *macro) {
-    const char *p = strstr(clean, macro);
-    const char *start = NULL;
-    const char *end = NULL;
-    char *out = NULL;
-    size_t i = 0;
-    size_t j = 0;
-    if (!p) {
-        return NULL;
-    }
-    p = strchr(p, '(');
-    if (!p) {
-        return NULL;
-    }
-    p++;
-    while (*p && isspace((unsigned char)*p)) {
-        p++;
-    }
-    start = p;
-    while (*p && *p != ',' && *p != ')') {
-        p++;
-    }
-    end = p;
-    while (end > start && isspace((unsigned char)*(end - 1))) {
-        end--;
-    }
-    out = malloc((size_t)(end - start) + 1);
-    if (!out) {
-        return NULL;
-    }
-    for (i = 0, j = 0; start + i < end; i++) {
-        if (!isspace((unsigned char)start[i])) {
-            out[j++] = start[i];
-        }
-    }
-    out[j] = '\0';
-    return out;
-}
-
 static void check_and_record(char *full_sig) {
     if (!full_sig) {
         return;
@@ -167,47 +128,6 @@ static void check_and_record(char *full_sig) {
         return;
     }
 
-    if (strcmp(name, "FUN") == 0) {
-        char *arg = first_macro_arg(clean, "FUN");
-        if (arg && *arg) {
-            record_function(arg);
-        }
-        free(arg);
-        free(name);
-        free(clean);
-        return;
-    }
-
-    if (strcmp(name, "DEFINE_OPT_SHOW_SECTION") == 0) {
-        char *arg = first_macro_arg(clean, "DEFINE_OPT_SHOW_SECTION");
-        if (arg && *arg) {
-            char *full = concat("opt_show_", arg);
-            if (full) {
-                record_function(full);
-                free(full);
-            }
-        }
-        free(arg);
-        free(name);
-        free(clean);
-        return;
-    }
-
-    if (strcmp(name, "ARRAY_RENAME") == 0) {
-        char *arg = first_macro_arg(clean, "ARRAY_RENAME");
-        if (arg && *arg) {
-            char *full = concat(array_rename_prefix, arg);
-            if (full) {
-                record_function(full);
-                free(full);
-            }
-        }
-        free(arg);
-        free(name);
-        free(clean);
-        return;
-    }
-
     record_function(name);
     free(name);
     free(clean);
@@ -220,7 +140,7 @@ static void check_and_record(char *full_sig) {
 
 %token <str> IDENTIFIER
 %token <str> CONSTANT STRING_LITERAL PP_DEFINE
-%token FUN_MACRO DEFINE_OPT_SHOW_SECTION
+%token FUN_MACRO DEFINE_OPT_SHOW_SECTION ARRAY_RENAME
 %token TYPEDEF EXTERN STATIC AUTO REGISTER THREAD_LOCAL
 %token VOID CHAR SHORT INT LONG FLOAT DOUBLE SIGNED UNSIGNED BOOL COMPLEX IMAGINARY
 %token STRUCT UNION ENUM
@@ -234,6 +154,7 @@ static void check_and_record(char *full_sig) {
 
 %type <str> signature sig_element token_chunk nested_parentheses any_token_in_paren array_index
 %type <str> macro_arg macro_arg_tokens macro_arg_token macro_skip macro_skip_token
+%type <str> array_rename_invocation
 
 %destructor { free($$); } <str>
 
@@ -322,6 +243,7 @@ signature:
 
 sig_element:
     token_chunk { $$ = $1; }
+    | array_rename_invocation { $$ = $1; }
     | '*' { $$ = strdup("*"); }
     ;
 
@@ -343,6 +265,13 @@ array_index:
     | array_index '-' {
         $$ = concat($1, "-");
         free($1);
+    }
+    ;
+
+array_rename_invocation
+    : ARRAY_RENAME '(' macro_arg ')' {
+        $$ = concat(array_rename_prefix, $3);
+        free($3);
     }
     ;
 
