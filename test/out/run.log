@@ -3,9 +3,9 @@ Workers: 4
 Found 3332 .c files
 Output fc.json: /workspace/test/out/fc.json
 Output null_fc.json: /workspace/test/out/null_fc.json
-[3332/3332] 100.0% elapsed 1.7s
+[3332/3332] 100.0% elapsed 0.4s
 Done.
-Elapsed: 1.66s
+Elapsed: 0.35s
 Total files: 3332
 Total functions: 31514
 Files with no functions: 161
