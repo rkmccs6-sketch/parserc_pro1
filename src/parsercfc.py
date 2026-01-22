@@ -86,48 +86,25 @@ def find_c_files(root_dir):
     files = []
     for path in root.rglob("*.c"):
         if path.is_file():
-            files.append(path.resolve())
+            files.append(str(path.resolve()))
     files.sort()
     return files
 
 
-def parse_one_file(args):
-    parser_bin, path = args
-    try:
-        result = subprocess.run(
-            [parser_bin, str(path)],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-    except OSError as exc:
-        return (str(path), [], f"spawn failed: {exc}")
-
-    if result.returncode != 0:
-        err = result.stderr.strip() or f"exit code {result.returncode}"
-        return (str(path), [], err)
-
-    output = result.stdout.strip() or "[]"
-    try:
-        names = json.loads(output)
-        if not isinstance(names, list):
-            raise ValueError("output is not a list")
-    except Exception as exc:
-        return (str(path), [], f"invalid output: {exc}")
-
+def resolve_function_list(path, parser_names, stderr_message=None):
     try:
         text = Path(path).read_text(encoding="utf-8", errors="ignore")
     except OSError as exc:
-        err = result.stderr.strip()
+        err = stderr_message or ""
         err = err + "; " + f"macro scan failed: {exc}" if err else f"macro scan failed: {exc}"
-        return (str(path), names, err)
+        return (parser_names, err)
 
     macros = parse_macro_definitions(text)
     ordered_defs, macro_named_defs, macro_template_defs, macro_used_names = (
         scan_function_definitions(text, macros)
     )
 
-    filtered_parser_names = [name for name in names if name not in macro_used_names]
+    filtered_parser_names = [name for name in parser_names if name not in macro_used_names]
     target_names = filtered_parser_names + macro_named_defs + macro_template_defs
 
     counts = {}
@@ -148,7 +125,89 @@ def parse_one_file(args):
                 merged.append(name)
                 counts[name] = remaining - 1
 
-    return (str(path), merged, None)
+    return (merged, None)
+
+
+def parse_one_file(args):
+    parser_bin, path = args
+    try:
+        result = subprocess.run(
+            [parser_bin, path],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        return (path, [], f"spawn failed: {exc}")
+
+    if result.returncode != 0:
+        err = result.stderr.strip() or f"exit code {result.returncode}"
+        return (path, [], err)
+
+    output = result.stdout.strip() or "[]"
+    try:
+        names = json.loads(output)
+        if not isinstance(names, list):
+            raise ValueError("output is not a list")
+    except Exception as exc:
+        return (path, [], f"invalid output: {exc}")
+
+    merged, err = resolve_function_list(path, names, result.stderr.strip())
+    return (path, merged, err)
+
+
+def parse_batch_files(args):
+    parser_bin, paths = args
+    cmd = [parser_bin, "--batch", *paths]
+    try:
+        result = subprocess.run(
+            cmd,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        return [(path, [], f"spawn failed: {exc}") for path in paths]
+
+    output_map = {}
+    parse_error = None
+    for line in result.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            record = json.loads(line)
+            if not isinstance(record, dict):
+                raise ValueError("record is not an object")
+            record_path = record.get("path")
+            record_fc = record.get("fc")
+            if not isinstance(record_path, str) or not isinstance(record_fc, list):
+                raise ValueError("invalid record fields")
+            output_map[record_path] = record_fc
+        except Exception as exc:
+            parse_error = f"invalid batch output: {exc}"
+            break
+
+    results = []
+    stderr_message = result.stderr.strip()
+    for path in paths:
+        parser_names = output_map.get(path, [])
+        err = None
+        if parse_error:
+            err = parse_error
+        elif path not in output_map:
+            err = "missing batch output"
+        merged, merge_err = resolve_function_list(path, parser_names, stderr_message)
+        if merge_err:
+            err = merge_err if not err else f"{err}; {merge_err}"
+        results.append((path, merged, err))
+
+    return results
+
+
+def chunk_list(items, size):
+    for i in range(0, len(items), size):
+        yield items[i : i + size]
 
 
 def dedupe_preserve_order(items):
@@ -1039,20 +1098,45 @@ def main():
     report_every = max(1, total_files // 20)
     processed = 0
 
-    with ProcessPoolExecutor(max_workers=workers) as executor:
-        futures = {
-            executor.submit(parse_one_file, (str(parser_bin), path)): path
-            for path in files
-        }
-        for future in as_completed(futures):
-            file_path, names, err = future.result()
-            results[file_path] = {"fc": names}
-            if not names:
-                null_files.append(file_path)
-            if err:
-                errors.append((file_path, err))
+    env_batch = int(os.environ.get("PARSERCFC_BATCH_SIZE", "0") or 0)
+    if env_batch > 0:
+        batch_size = env_batch
+    else:
+        auto = max(1, total_files // (workers * 4)) if workers > 0 else 1
+        batch_size = max(1, min(100, auto))
 
-            processed += 1
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        if batch_size <= 1:
+            futures = {
+                executor.submit(parse_one_file, (str(parser_bin), path)): 1
+                for path in files
+            }
+        else:
+            chunks = list(chunk_list(files, batch_size))
+            futures = {
+                executor.submit(parse_batch_files, (str(parser_bin), chunk)): len(chunk)
+                for chunk in chunks
+            }
+
+        for future in as_completed(futures):
+            result = future.result()
+            if batch_size <= 1:
+                file_path, names, err = result
+                results[file_path] = {"fc": names}
+                if not names:
+                    null_files.append(file_path)
+                if err:
+                    errors.append((file_path, err))
+                processed += 1
+            else:
+                for file_path, names, err in result:
+                    results[file_path] = {"fc": names}
+                    if not names:
+                        null_files.append(file_path)
+                    if err:
+                        errors.append((file_path, err))
+                processed += futures[future]
+
             if processed % report_every == 0 or processed == total_files:
                 percent = (processed / total_files) * 100.0
                 elapsed = time.time() - start_time

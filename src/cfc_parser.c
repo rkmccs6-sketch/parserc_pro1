@@ -6,6 +6,7 @@
 
 extern int yyparse(void);
 extern FILE *yyin;
+extern void yyrestart(FILE *input_file);
 
 static int parse_error_count = 0;
 
@@ -203,7 +204,7 @@ static void json_escape_and_print(const char *s) {
     putchar('"');
 }
 
-static void print_json_array(void) {
+static void print_json_array(int newline) {
     size_t i = 0;
     putchar('[');
     for (i = 0; i < g_functions.count; i++) {
@@ -212,33 +213,89 @@ static void print_json_array(void) {
         }
         json_escape_and_print(g_functions.items[i]);
     }
-    puts("]");
+    putchar(']');
+    if (newline) {
+        putchar('\n');
+    }
 }
 
-int main(int argc, char **argv) {
-    if (argc != 2) {
-        fprintf(stderr, "usage: cfc_parser <file.c>\n");
-        return 2;
-    }
+static void print_json_record(const char *path) {
+    fputs("{\"path\":", stdout);
+    json_escape_and_print(path);
+    fputs(",\"fc\":", stdout);
+    print_json_array(0);
+    putchar('}');
+    putchar('\n');
+}
 
-    yyin = fopen(argv[1], "r");
+static void reset_parser_state(void) {
+    parse_error_count = 0;
+    reset_candidate_state();
+    free_functions();
+}
+
+static int parse_file(const char *path, int batch_mode) {
+    int rc = 0;
+
+    reset_parser_state();
+
+    yyin = fopen(path, "r");
     if (!yyin) {
-        fprintf(stderr, "error: cannot open file: %s\n", argv[1]);
+        fprintf(stderr, "error: cannot open file: %s\n", path);
+        if (batch_mode) {
+            print_json_record(path);
+        } else {
+            print_json_array(1);
+        }
+        reset_parser_state();
         return 2;
     }
 
+    yyrestart(yyin);
     if (yyparse() != 0) {
         parse_error_count++;
+        rc = 1;
     }
 
     fclose(yyin);
-    print_json_array();
-    reset_candidate_state();
-    free_functions();
 
-    if (parse_error_count > 0) {
-        return 0;
+    if (batch_mode) {
+        print_json_record(path);
+    } else {
+        print_json_array(1);
     }
 
-    return 0;
+    reset_parser_state();
+
+    return rc;
+}
+
+int main(int argc, char **argv) {
+    int batch_mode = 0;
+    int start_idx = 1;
+    int rc = 0;
+
+    if (argc < 2) {
+        fprintf(stderr, "usage: cfc_parser [--batch] <file.c> [file2.c ...]\n");
+        return 2;
+    }
+
+    if (strcmp(argv[1], "--batch") == 0) {
+        batch_mode = 1;
+        start_idx = 2;
+    }
+
+    if (start_idx >= argc) {
+        fprintf(stderr, "usage: cfc_parser [--batch] <file.c> [file2.c ...]\n");
+        return 2;
+    }
+
+    for (int i = start_idx; i < argc; i++) {
+        int file_rc = parse_file(argv[i], batch_mode);
+        if (file_rc != 0) {
+            rc = file_rc;
+        }
+    }
+
+    return rc;
 }
