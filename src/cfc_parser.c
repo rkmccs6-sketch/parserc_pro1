@@ -7,6 +7,7 @@
 extern int yyparse(void);
 extern FILE *yyin;
 extern void yyrestart(FILE *input_file);
+extern void lexer_reset(void);
 
 static int parse_error_count = 0;
 
@@ -251,6 +252,7 @@ static int parse_file(const char *path, int batch_mode) {
         return 2;
     }
 
+    lexer_reset();
     yyrestart(yyin);
     if (yyparse() != 0) {
         parse_error_count++;
