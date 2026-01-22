@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import time
+from collections import Counter
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -105,7 +106,19 @@ def resolve_function_list(path, parser_names, stderr_message=None):
     )
 
     filtered_parser_names = [name for name in parser_names if name not in macro_used_names]
-    target_names = filtered_parser_names + macro_named_defs + macro_template_defs
+    macro_generated = macro_named_defs + macro_template_defs
+    skip_counts = Counter(macro_generated)
+    if skip_counts:
+        deduped_parser = []
+        for name in filtered_parser_names:
+            remaining = skip_counts.get(name, 0)
+            if remaining > 0:
+                skip_counts[name] = remaining - 1
+                continue
+            deduped_parser.append(name)
+        filtered_parser_names = deduped_parser
+
+    target_names = filtered_parser_names + macro_generated
 
     counts = {}
     for name in target_names:
