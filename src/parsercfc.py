@@ -11,6 +11,71 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 
+DECL_KEYWORDS = {
+    "typedef",
+    "extern",
+    "static",
+    "auto",
+    "register",
+    "_Thread_local",
+    "__thread",
+    "void",
+    "char",
+    "short",
+    "int",
+    "long",
+    "float",
+    "double",
+    "signed",
+    "unsigned",
+    "_Bool",
+    "_Complex",
+    "_Imaginary",
+    "struct",
+    "union",
+    "enum",
+    "const",
+    "volatile",
+    "restrict",
+    "_Atomic",
+    "inline",
+    "_Noreturn",
+    "_Alignas",
+    "typeof",
+    "__typeof__",
+    "__const",
+    "__volatile__",
+    "__restrict",
+    "__restrict__",
+    "__inline",
+    "__inline__",
+    "__alignas",
+    "__alignas__",
+    "__attribute__",
+    "__attribute",
+    "__declspec",
+    "__asm__",
+    "__asm",
+    "asm",
+}
+
+CONTROL_KEYWORDS = {
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "switch",
+    "case",
+    "default",
+    "break",
+    "continue",
+    "return",
+    "goto",
+    "sizeof",
+}
+
+
 def default_workers():
     count = os.cpu_count() or 1
     return max(count - 1, 1)
@@ -50,17 +115,39 @@ def parse_one_file(args):
     except Exception as exc:
         return (str(path), [], f"invalid output: {exc}")
 
-    macro_names, macro_used_names, macro_err = extract_macro_function_names(path)
-    if macro_err:
+    try:
+        text = Path(path).read_text(encoding="utf-8", errors="ignore")
+    except OSError as exc:
         err = result.stderr.strip()
-        err = err + "; " + macro_err if err else macro_err
+        err = err + "; " + f"macro scan failed: {exc}" if err else f"macro scan failed: {exc}"
         return (str(path), names, err)
 
-    filtered = [name for name in names if name not in macro_used_names]
-    merged = list(filtered)
-    for macro_name in macro_names:
-        if macro_name not in merged:
-            merged.append(macro_name)
+    macros = parse_macro_definitions(text)
+    ordered_defs, macro_named_defs, macro_template_defs, macro_used_names = (
+        scan_function_definitions(text, macros)
+    )
+
+    filtered_parser_names = [name for name in names if name not in macro_used_names]
+    target_names = filtered_parser_names + macro_named_defs + macro_template_defs
+
+    counts = {}
+    for name in target_names:
+        counts[name] = counts.get(name, 0) + 1
+
+    merged = []
+    for name in ordered_defs:
+        remaining = counts.get(name, 0)
+        if remaining > 0:
+            merged.append(name)
+            counts[name] = remaining - 1
+
+    if any(counts.values()):
+        for name in target_names:
+            remaining = counts.get(name, 0)
+            if remaining > 0:
+                merged.append(name)
+                counts[name] = remaining - 1
+
     return (str(path), merged, None)
 
 
@@ -398,7 +485,212 @@ def extract_macro_named_definitions(text, macros):
 
         i += 1
 
-    return (dedupe_preserve_order(names), used_macro_names)
+    return (names, used_macro_names)
+
+
+def scan_function_definitions(text, macros):
+    macro_name_map = {
+        macro["name"]: macro
+        for macro in macros
+        if macro.get("expansion_parts") and macro.get("params")
+    }
+    macro_template_map = {
+        macro["name"]: macro
+        for macro in macros
+        if macro.get("name_parts") and macro.get("params")
+    }
+
+    ordered_defs = []
+    macro_named_defs = []
+    macro_template_defs = []
+    macro_used_names = set()
+
+    i = 0
+    length = len(text)
+    at_line_start = True
+    brace_depth = 0
+    paren_depth = 0
+    bracket_depth = 0
+
+    last_identifier = None
+    last_identifier_macro = None
+    paren_candidate = None
+    paren_candidate_macro = None
+    pending_name = None
+    pending_name_macro = None
+
+    while i < length:
+        c = text[i]
+
+        if at_line_start:
+            j = i
+            while j < length and text[j] in " \t":
+                j += 1
+            if j < length and text[j] == "#":
+                i = skip_preprocessor_line(text, j)
+                at_line_start = True
+                continue
+
+        if c == "\n":
+            at_line_start = True
+            i += 1
+            continue
+
+        at_line_start = False
+
+        if c == "/" and i + 1 < length and text[i + 1] == "/":
+            i = text.find("\n", i)
+            if i == -1:
+                break
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "*":
+            end = text.find("*/", i + 2)
+            if end == -1:
+                break
+            i = end + 2
+            continue
+        if c in ("'", '"'):
+            quote = c
+            i += 1
+            while i < length:
+                if text[i] == "\\":
+                    i += 2
+                    continue
+                if text[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+
+        if c.isalpha() or c == "_":
+            start = i
+            i += 1
+            while i < length and (text[i].isalnum() or text[i] == "_"):
+                i += 1
+            ident = text[start:i]
+
+            if ident in CONTROL_KEYWORDS:
+                last_identifier = None
+                last_identifier_macro = None
+                continue
+
+            if ident in DECL_KEYWORDS:
+                if brace_depth == 0 and paren_depth == 0 and bracket_depth == 0:
+                    last_identifier = None
+                    last_identifier_macro = None
+                    paren_candidate = None
+                    paren_candidate_macro = None
+                    pending_name = None
+                    pending_name_macro = None
+                continue
+
+            template_macro = macro_template_map.get(ident)
+            if template_macro and brace_depth == 0:
+                j = i
+                while j < length and text[j].isspace():
+                    j += 1
+                if j < length and text[j] == "(":
+                    args, new_i = parse_macro_args(text, j)
+                    if args is not None and len(args) == len(template_macro["params"]):
+                        arg_map = build_arg_map(template_macro["params"], args)
+                        name = render_macro_name(template_macro["name_parts"], arg_map)
+                        if name:
+                            ordered_defs.append(name)
+                            macro_template_defs.append(name)
+                    if args is not None:
+                        i = new_i
+                        last_identifier = None
+                        last_identifier_macro = None
+                        continue
+
+            name_macro = macro_name_map.get(ident)
+            if name_macro:
+                j = i
+                while j < length and text[j].isspace():
+                    j += 1
+                if j < length and text[j] == "(":
+                    args, new_i = parse_macro_args(text, j)
+                    if args is not None and len(args) == len(name_macro["params"]):
+                        arg_map = build_arg_map(name_macro["params"], args)
+                        expanded = render_macro_name(name_macro["expansion_parts"], arg_map)
+                        if expanded:
+                            last_identifier = expanded
+                            last_identifier_macro = ident
+                            i = new_i
+                            continue
+
+            last_identifier = ident
+            last_identifier_macro = None
+            continue
+
+        if c == "(":
+            if paren_depth == 0 and pending_name is None:
+                paren_candidate = last_identifier
+                paren_candidate_macro = last_identifier_macro
+            paren_depth += 1
+            i += 1
+            continue
+
+        if c == ")":
+            if paren_depth > 0:
+                paren_depth -= 1
+                if paren_depth == 0 and pending_name is None and paren_candidate:
+                    pending_name = paren_candidate
+                    pending_name_macro = paren_candidate_macro
+            i += 1
+            continue
+
+        if c == "[":
+            bracket_depth += 1
+            i += 1
+            continue
+
+        if c == "]":
+            if bracket_depth > 0:
+                bracket_depth -= 1
+            i += 1
+            continue
+
+        if c == "{":
+            if (
+                brace_depth == 0
+                and paren_depth == 0
+                and bracket_depth == 0
+                and pending_name
+            ):
+                ordered_defs.append(pending_name)
+                if pending_name_macro:
+                    macro_named_defs.append(pending_name)
+                    macro_used_names.add(pending_name_macro)
+                pending_name = None
+                pending_name_macro = None
+                paren_candidate = None
+                paren_candidate_macro = None
+                last_identifier = None
+                last_identifier_macro = None
+            brace_depth += 1
+            i += 1
+            continue
+
+        if c == "}":
+            if brace_depth > 0:
+                brace_depth -= 1
+            i += 1
+            continue
+
+        if c in ";,=" and brace_depth == 0 and paren_depth == 0 and bracket_depth == 0:
+            pending_name = None
+            pending_name_macro = None
+            paren_candidate = None
+            paren_candidate_macro = None
+            last_identifier = None
+            last_identifier_macro = None
+            i += 1
+            continue
+
+        i += 1
+
+    return ordered_defs, macro_named_defs, macro_template_defs, macro_used_names
 
 
 def find_macro_invocations(text, macro_name, param_count):
@@ -737,7 +1029,7 @@ def main():
         ensure_parent(args.output_fc)
         ensure_parent(args.output_null_fc)
         with open(args.output_fc, "w", encoding="utf-8") as fc_fp:
-            json.dump(results, fc_fp, ensure_ascii=True, indent=2)
+            json.dump(results, fc_fp, ensure_ascii=True, indent=2, sort_keys=True)
         with open(args.output_null_fc, "w", encoding="utf-8") as null_fp:
             json.dump(null_files, null_fp, ensure_ascii=True, indent=2)
         print("No .c files found, outputs created.")
@@ -769,12 +1061,15 @@ def main():
     total_functions = sum(len(v["fc"]) for v in results.values())
     elapsed = time.time() - start_time
 
+    ordered_results = {key: results[key] for key in sorted(results)}
+    null_files_sorted = sorted(null_files)
+
     ensure_parent(args.output_fc)
     ensure_parent(args.output_null_fc)
     with open(args.output_fc, "w", encoding="utf-8") as fc_fp:
-        json.dump(results, fc_fp, ensure_ascii=True, indent=2)
+        json.dump(ordered_results, fc_fp, ensure_ascii=True, indent=2)
     with open(args.output_null_fc, "w", encoding="utf-8") as null_fp:
-        json.dump(null_files, null_fp, ensure_ascii=True, indent=2)
+        json.dump(null_files_sorted, null_fp, ensure_ascii=True, indent=2)
 
     print("Done.")
     print(f"Elapsed: {elapsed:.2f}s")
