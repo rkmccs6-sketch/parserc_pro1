@@ -1085,6 +1085,9 @@ macro_arg_parts
 
 macro_arg_piece
     : token_chunk { $$ = $1; $1 = NULL; }
+    | MACRO_CALL { $$ = $1; $1 = NULL; }
+    | MACRO_RENAME { $$ = $1; $1 = NULL; }
+    | MACRO_TEMPLATE { $$ = $1; $1 = NULL; }
     | '*' { $$ = strdup("*"); }
     | '+' { $$ = strdup("+"); }
     | '-' { $$ = strdup("-"); }
