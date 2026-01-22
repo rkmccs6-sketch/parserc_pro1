@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -45,9 +46,375 @@ def parse_one_file(args):
         names = json.loads(output)
         if not isinstance(names, list):
             raise ValueError("output is not a list")
-        return (str(path), names, None)
     except Exception as exc:
         return (str(path), [], f"invalid output: {exc}")
+
+    macro_names, macro_err = extract_macro_defined_functions(path)
+    if macro_err:
+        err = result.stderr.strip()
+        err = err + "; " + macro_err if err else macro_err
+        return (str(path), names, err)
+
+    merged = dedupe_preserve_order(names + macro_names)
+    return (str(path), merged, None)
+
+
+def dedupe_preserve_order(items):
+    seen = set()
+    output = []
+    for item in items:
+        if item not in seen:
+            seen.add(item)
+            output.append(item)
+    return output
+
+
+def extract_macro_defined_functions(path):
+    try:
+        text = Path(path).read_text(encoding="utf-8", errors="ignore")
+    except OSError as exc:
+        return ([], f"macro scan failed: {exc}")
+
+    macros = parse_macro_definitions(text)
+    if not macros:
+        return ([], None)
+
+    macro_names = []
+    for macro in macros:
+        if not macro["name_parts"]:
+            continue
+        for args in find_macro_invocations(text, macro["name"], len(macro["params"])):
+            arg_map = build_arg_map(macro["params"], args)
+            name = render_macro_name(macro["name_parts"], arg_map)
+            if name:
+                macro_names.append(name)
+
+    return (dedupe_preserve_order(macro_names), None)
+
+
+def parse_macro_definitions(text):
+    macros = []
+    lines = text.splitlines()
+    i = 0
+    define_re = re.compile(
+        r"^\s*#\s*define\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)(.*)$"
+    )
+
+    while i < len(lines):
+        line = lines[i]
+        match = define_re.match(line)
+        if not match:
+            i += 1
+            continue
+
+        name = match.group(1)
+        params = [p.strip() for p in match.group(2).split(",") if p.strip()]
+        body_parts = [match.group(3)]
+
+        while line.rstrip().endswith("\\"):
+            i += 1
+            if i >= len(lines):
+                break
+            line = lines[i]
+            body_parts.append(line)
+
+        body = "\n".join(strip_line_continuation(p) for p in body_parts).strip()
+        name_parts = extract_function_name_template(body, params)
+        macros.append({"name": name, "params": params, "name_parts": name_parts})
+        i += 1
+
+    return macros
+
+
+def strip_line_continuation(line):
+    stripped = line.rstrip()
+    if stripped.endswith("\\"):
+        return stripped[:-1]
+    return line
+
+
+def extract_function_name_template(body, params):
+    tokens = tokenize_macro_body(body)
+    if not tokens:
+        return None
+
+    last_parts = None
+    paren_candidate = None
+    pending_parts = None
+    pending_paste = False
+    paren_depth = 0
+    bracket_depth = 0
+
+    def ident_parts(identifier):
+        if identifier in params:
+            return [("param", identifier)]
+        return [("lit", identifier)]
+
+    for token in tokens:
+        if token == "##":
+            pending_paste = last_parts is not None
+            continue
+
+        if isinstance(token, dict) and token.get("kind") == "ident":
+            parts = ident_parts(token["value"])
+            if pending_paste and last_parts is not None:
+                last_parts = last_parts + parts
+            else:
+                last_parts = parts
+            pending_paste = False
+            continue
+
+        pending_paste = False
+        if token == "(":
+            if paren_depth == 0 and pending_parts is None:
+                paren_candidate = last_parts
+            paren_depth += 1
+        elif token == ")":
+            if paren_depth > 0:
+                paren_depth -= 1
+                if paren_depth == 0 and pending_parts is None and paren_candidate:
+                    pending_parts = paren_candidate
+        elif token == "[":
+            bracket_depth += 1
+        elif token == "]":
+            if bracket_depth > 0:
+                bracket_depth -= 1
+        elif token == "{":
+            if paren_depth == 0 and bracket_depth == 0 and pending_parts:
+                return pending_parts
+        elif token in {",", ";", "="}:
+            if paren_depth == 0 and bracket_depth == 0:
+                last_parts = None
+                paren_candidate = None
+                pending_parts = None
+
+    return None
+
+
+def tokenize_macro_body(body):
+    tokens = []
+    i = 0
+    length = len(body)
+    while i < length:
+        c = body[i]
+        if c.isspace():
+            i += 1
+            continue
+        if c == "/" and i + 1 < length and body[i + 1] == "/":
+            i = body.find("\n", i)
+            if i == -1:
+                break
+            continue
+        if c == "/" and i + 1 < length and body[i + 1] == "*":
+            end = body.find("*/", i + 2)
+            if end == -1:
+                break
+            i = end + 2
+            continue
+        if c in ("'", '"'):
+            quote = c
+            i += 1
+            while i < length:
+                if body[i] == "\\":
+                    i += 2
+                    continue
+                if body[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+        if c == "#" and i + 1 < length and body[i + 1] == "#":
+            tokens.append("##")
+            i += 2
+            continue
+        if c.isalpha() or c == "_":
+            start = i
+            i += 1
+            while i < length and (body[i].isalnum() or body[i] == "_"):
+                i += 1
+            tokens.append({"kind": "ident", "value": body[start:i]})
+            continue
+        if c in "(){}[];,=":
+            tokens.append(c)
+            i += 1
+            continue
+        i += 1
+    return tokens
+
+
+def find_macro_invocations(text, macro_name, param_count):
+    invocations = []
+    i = 0
+    length = len(text)
+    at_line_start = True
+
+    while i < length:
+        c = text[i]
+
+        if at_line_start:
+            j = i
+            while j < length and text[j] in " \t":
+                j += 1
+            if j < length and text[j] == "#":
+                i = skip_preprocessor_line(text, j)
+                at_line_start = True
+                continue
+
+        if c == "\n":
+            at_line_start = True
+            i += 1
+            continue
+
+        at_line_start = False
+
+        if c == "/" and i + 1 < length and text[i + 1] == "/":
+            i = text.find("\n", i)
+            if i == -1:
+                break
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "*":
+            end = text.find("*/", i + 2)
+            if end == -1:
+                break
+            i = end + 2
+            continue
+        if c in ("'", '"'):
+            quote = c
+            i += 1
+            while i < length:
+                if text[i] == "\\":
+                    i += 2
+                    continue
+                if text[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+
+        if c.isalpha() or c == "_":
+            start = i
+            i += 1
+            while i < length and (text[i].isalnum() or text[i] == "_"):
+                i += 1
+            ident = text[start:i]
+            if ident != macro_name:
+                continue
+            j = i
+            while j < length and text[j].isspace():
+                j += 1
+            if j >= length or text[j] != "(":
+                continue
+            args, new_i = parse_macro_args(text, j)
+            if args is not None and len(args) == param_count:
+                invocations.append(args)
+            i = new_i
+            continue
+
+        i += 1
+
+    return invocations
+
+
+def skip_preprocessor_line(text, start_idx):
+    i = start_idx
+    length = len(text)
+    while i < length:
+        if text[i] == "\n":
+            if i > 0 and text[i - 1] == "\\":
+                i += 1
+                continue
+            return i + 1
+        i += 1
+    return length
+
+
+def parse_macro_args(text, start_idx):
+    args = []
+    current = []
+    i = start_idx
+    length = len(text)
+    depth = 0
+
+    if text[i] != "(":
+        return (None, i)
+    depth = 1
+    i += 1
+
+    while i < length:
+        c = text[i]
+        if c == "(":
+            depth += 1
+            current.append(c)
+            i += 1
+            continue
+        if c == ")":
+            depth -= 1
+            if depth == 0:
+                arg = "".join(current).strip()
+                if arg or args:
+                    args.append(arg)
+                return (args, i + 1)
+            current.append(c)
+            i += 1
+            continue
+        if c == "," and depth == 1:
+            args.append("".join(current).strip())
+            current = []
+            i += 1
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "/":
+            i = text.find("\n", i)
+            if i == -1:
+                break
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "*":
+            end = text.find("*/", i + 2)
+            if end == -1:
+                break
+            i = end + 2
+            continue
+        if c in ("'", '"'):
+            quote = c
+            current.append(c)
+            i += 1
+            while i < length:
+                current.append(text[i])
+                if text[i] == "\\":
+                    if i + 1 < length:
+                        current.append(text[i + 1])
+                        i += 2
+                        continue
+                if text[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+        current.append(c)
+        i += 1
+
+    return (None, i)
+
+
+def build_arg_map(params, args):
+    normalized = [normalize_macro_arg(arg) for arg in args]
+    return {name: normalized[idx] if idx < len(normalized) else "" for idx, name in enumerate(params)}
+
+
+def normalize_macro_arg(arg):
+    return re.sub(r"\s+", "", arg or "")
+
+
+def render_macro_name(parts, arg_map):
+    output = []
+    for kind, value in parts:
+        if kind == "param":
+            output.append(arg_map.get(value, ""))
+        else:
+            output.append(value)
+    name = "".join(output)
+    if name and re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
+        return name
+    return None
 
 
 def ensure_parent(path):
