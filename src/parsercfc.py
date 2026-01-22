@@ -49,13 +49,14 @@ def parse_one_file(args):
     except Exception as exc:
         return (str(path), [], f"invalid output: {exc}")
 
-    macro_names, macro_err = extract_macro_defined_functions(path)
+    macro_names, macro_used_names, macro_err = extract_macro_function_names(path)
     if macro_err:
         err = result.stderr.strip()
         err = err + "; " + macro_err if err else macro_err
         return (str(path), names, err)
 
-    merged = dedupe_preserve_order(names + macro_names)
+    filtered = [name for name in names if name not in macro_used_names]
+    merged = dedupe_preserve_order(filtered + macro_names)
     return (str(path), merged, None)
 
 
@@ -69,17 +70,18 @@ def dedupe_preserve_order(items):
     return output
 
 
-def extract_macro_defined_functions(path):
+def extract_macro_function_names(path):
     try:
         text = Path(path).read_text(encoding="utf-8", errors="ignore")
     except OSError as exc:
-        return ([], f"macro scan failed: {exc}")
+        return ([], set(), f"macro scan failed: {exc}")
 
     macros = parse_macro_definitions(text)
     if not macros:
-        return ([], None)
+        return ([], set(), None)
 
     macro_names = []
+    macro_used_names = set()
     for macro in macros:
         if not macro["name_parts"]:
             continue
@@ -89,7 +91,11 @@ def extract_macro_defined_functions(path):
             if name:
                 macro_names.append(name)
 
-    return (dedupe_preserve_order(macro_names), None)
+    macro_defs, used_names = extract_macro_named_definitions(text, macros)
+    macro_names.extend(macro_defs)
+    macro_used_names.update(used_names)
+
+    return (dedupe_preserve_order(macro_names), macro_used_names, None)
 
 
 def parse_macro_definitions(text):
@@ -120,7 +126,15 @@ def parse_macro_definitions(text):
 
         body = "\n".join(strip_line_continuation(p) for p in body_parts).strip()
         name_parts = extract_function_name_template(body, params)
-        macros.append({"name": name, "params": params, "name_parts": name_parts})
+        expansion_parts = extract_macro_expansion_parts(body, params)
+        macros.append(
+            {
+                "name": name,
+                "params": params,
+                "name_parts": name_parts,
+                "expansion_parts": expansion_parts,
+            }
+        )
         i += 1
 
     return macros
@@ -191,6 +205,34 @@ def extract_function_name_template(body, params):
     return None
 
 
+def extract_macro_expansion_parts(body, params):
+    tokens = tokenize_macro_body(body)
+    if not tokens:
+        return None
+
+    parts = None
+    pending_paste = False
+
+    for token in tokens:
+        if token == "##":
+            pending_paste = True
+            continue
+        if isinstance(token, dict) and token.get("kind") == "ident":
+            value = token["value"]
+            new_parts = [("param", value)] if value in params else [("lit", value)]
+            if parts is None:
+                parts = new_parts
+            elif pending_paste:
+                parts += new_parts
+            else:
+                return None
+            pending_paste = False
+            continue
+        return None
+
+    return parts
+
+
 def tokenize_macro_body(body):
     tokens = []
     i = 0
@@ -240,6 +282,119 @@ def tokenize_macro_body(body):
             continue
         i += 1
     return tokens
+
+
+def extract_macro_named_definitions(text, macros):
+    macros_by_name = {
+        macro["name"]: macro
+        for macro in macros
+        if macro["expansion_parts"] and macro["params"]
+    }
+    if not macros_by_name:
+        return ([], set())
+
+    names = []
+    used_macro_names = set()
+
+    i = 0
+    length = len(text)
+    at_line_start = True
+
+    while i < length:
+        c = text[i]
+
+        if at_line_start:
+            j = i
+            while j < length and text[j] in " \t":
+                j += 1
+            if j < length and text[j] == "#":
+                i = skip_preprocessor_line(text, j)
+                at_line_start = True
+                continue
+
+        if c == "\n":
+            at_line_start = True
+            i += 1
+            continue
+
+        at_line_start = False
+
+        if c == "/" and i + 1 < length and text[i + 1] == "/":
+            i = text.find("\n", i)
+            if i == -1:
+                break
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "*":
+            end = text.find("*/", i + 2)
+            if end == -1:
+                break
+            i = end + 2
+            continue
+        if c in ("'", '"'):
+            quote = c
+            i += 1
+            while i < length:
+                if text[i] == "\\":
+                    i += 2
+                    continue
+                if text[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+
+        if c.isalpha() or c == "_":
+            start = i
+            i += 1
+            while i < length and (text[i].isalnum() or text[i] == "_"):
+                i += 1
+            ident = text[start:i]
+            macro = macros_by_name.get(ident)
+            if not macro:
+                continue
+
+            j = i
+            while j < length and text[j].isspace():
+                j += 1
+            if j >= length or text[j] != "(":
+                continue
+
+            args, new_i = parse_macro_args(text, j)
+            if args is None or len(args) != len(macro["params"]):
+                i = new_i
+                continue
+
+            k = new_i
+            while k < length and text[k].isspace():
+                k += 1
+            if k >= length or text[k] != "(":
+                i = k
+                continue
+
+            end_k = skip_paren_group(text, k)
+            if end_k is None:
+                i = k
+                continue
+
+            k2 = end_k
+            while k2 < length and text[k2].isspace():
+                k2 += 1
+            if k2 >= length or text[k2] != "{":
+                i = k2
+                continue
+
+            arg_map = build_arg_map(macro["params"], args)
+            name = render_macro_name(macro["expansion_parts"], arg_map)
+            if name:
+                names.append(name)
+                used_macro_names.add(ident)
+
+            i = k2 + 1
+            continue
+
+        i += 1
+
+    return (dedupe_preserve_order(names), used_macro_names)
 
 
 def find_macro_invocations(text, macro_name, param_count):
@@ -393,6 +548,56 @@ def parse_macro_args(text, start_idx):
         i += 1
 
     return (None, i)
+
+
+def skip_paren_group(text, start_idx):
+    i = start_idx
+    length = len(text)
+    depth = 0
+
+    if i >= length or text[i] != "(":
+        return None
+    depth = 1
+    i += 1
+
+    while i < length:
+        c = text[i]
+        if c == "(":
+            depth += 1
+            i += 1
+            continue
+        if c == ")":
+            depth -= 1
+            i += 1
+            if depth == 0:
+                return i
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "/":
+            i = text.find("\n", i)
+            if i == -1:
+                break
+            continue
+        if c == "/" and i + 1 < length and text[i + 1] == "*":
+            end = text.find("*/", i + 2)
+            if end == -1:
+                break
+            i = end + 2
+            continue
+        if c in ("'", '"'):
+            quote = c
+            i += 1
+            while i < length:
+                if text[i] == "\\":
+                    i += 2
+                    continue
+                if text[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+        i += 1
+
+    return None
 
 
 def build_arg_map(params, args):
