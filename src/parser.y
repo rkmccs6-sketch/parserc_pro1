@@ -1177,6 +1177,9 @@ int macro_lookup_token(const char *name) {
     if (macro->expansion_parts && macro->expansion_parts->count > 0) {
         return MACRO_RENAME;
     }
+    if (strcmp(macro->name, "fn") == 0 || strcmp(macro->name, "FN") == 0) {
+        return MACRO_RENAME;
+    }
     return MACRO_CALL;
 }
 
