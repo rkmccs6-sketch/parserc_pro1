@@ -883,7 +883,7 @@ static void check_and_record(char *full_sig) {
 %type <str> signature sig_element token_chunk nested_parentheses any_token_in_paren array_index
 %type <str> macro_arg macro_arg_parts macro_arg_piece macro_arg_group macro_arg_group_piece
 %type <args> macro_arg_list macro_arg_list_opt
-%type <str> array_rename_invocation macro_rename_invocation
+%type <str> array_rename_invocation macro_rename_invocation macro_call_invocation
 
 %destructor { free($$); } <str>
 %destructor { arg_list_free($$); } <args>
@@ -967,6 +967,7 @@ signature:
 sig_element:
     token_chunk { $$ = $1; }
     | macro_rename_invocation { $$ = $1; }
+    | macro_call_invocation { $$ = $1; }
     | array_rename_invocation { $$ = $1; }
     | '*' { $$ = strdup("*"); }
     ;
@@ -979,6 +980,12 @@ macro_rename_invocation
         } else {
             $$ = strdup($1);
         }
+    }
+    ;
+
+macro_call_invocation
+    : MACRO_CALL '(' macro_arg_list_opt ')' {
+        $$ = strdup($1);
     }
     ;
 
