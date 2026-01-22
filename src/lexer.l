@@ -18,11 +18,15 @@ static char *dup_text(const char *text) {
 }
 %}
 
-%x BRACE BRACE_COMMENT BRACE_STRING BRACE_CHAR COMMENT
+%x BRACE BRACE_COMMENT BRACE_STRING BRACE_CHAR COMMENT PREPROC
 
 %%
 
-^[ \t]*#[^\n]*        { /* skip preprocessor line */ }
+^[ \t]*#[^\n]*\\\n    { BEGIN(PREPROC); }
+^[ \t]*#[^\n]*\n      { /* skip preprocessor line */ }
+<PREPROC>.*\\\n       { /* skip continued preprocessor line */ }
+<PREPROC>.*\n         { BEGIN(INITIAL); }
+<PREPROC><<EOF>>      { BEGIN(INITIAL); }
 [ \t\r\n]+            { /* skip whitespace */ }
 "//".*                { /* skip line comment */ }
 "/*"                  { BEGIN(COMMENT); }
