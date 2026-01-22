@@ -5,7 +5,7 @@ Output fc.json: /workspace/test/out/fc.json
 Output null_fc.json: /workspace/test/out/null_fc.json
 [3332/3332] 100.0% elapsed 0.1s
 Done.
-Elapsed: 0.12s
+Elapsed: 0.11s
 Total files: 3332
-Total functions: 29113
-Files with no functions: 174
+Total functions: 1763
+Files with no functions: 2820
