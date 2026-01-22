@@ -1010,6 +1010,8 @@ macro_arg_tokens
 macro_arg_token
     : IDENTIFIER { $$ = $1; $1 = NULL; }
     | CONSTANT { $$ = $1; $1 = NULL; }
+    | STRING_LITERAL { $$ = strdup(""); free($1); $1 = NULL; }
+    | OTHER { $$ = strdup(""); }
     ;
 
 token_chunk:
