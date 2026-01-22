@@ -285,6 +285,7 @@
       "uninit_parse_context",
       "split_commandline",
       "read_yesno",
+      "get_preset_file",
       "cmdutils_isalnum",
       "stream_specifier_uninit",
       "stream_specifier_parse",
@@ -299,8 +300,7 @@
       "read_file_to_string",
       "remove_avoptions",
       "check_avoptions",
-      "dump_dictionary",
-      "get_preset_file"
+      "dump_dictionary"
     ]
   },
   "/workspace/test/in/FFmpeg/fftools/ffmpeg.c": {
@@ -313,10 +313,13 @@
       "read_key",
       "decode_interrupt_cb",
       "ffmpeg_cleanup",
+      "ost_iter",
       "ist_iter",
       "frame_data_free",
       "frame_data_ensure",
+      "frame_data",
       "frame_data_c",
+      "packet_data",
       "packet_data_c",
       "check_avoptions_used",
       "update_benchmark",
@@ -327,10 +330,7 @@
       "transcode",
       "get_benchmark_time_stamps",
       "getmaxrss",
-      "main",
-      "ost_iter",
-      "frame_data",
-      "packet_data"
+      "main"
     ]
   },
   "/workspace/test/in/FFmpeg/fftools/ffmpeg_dec.c": {
@@ -446,12 +446,6 @@
       "sub2video_copy_rect",
       "sub2video_push_ref",
       "sub2video_update",
-      "choose_pix_fmts",
-      "choose_sample_fmts",
-      "choose_sample_rates",
-      "choose_color_spaces",
-      "choose_color_ranges",
-      "choose_alpha_modes",
       "choose_channel_layouts",
       "read_binary",
       "filter_opt_apply",
@@ -615,15 +609,7 @@
       "show_hwaccels",
       "opt_match_per_type_str",
       "opt_match_per_stream",
-      "opt_match_per_stream_str",
-      "opt_match_per_stream_int",
-      "opt_match_per_stream_int64",
-      "opt_match_per_stream_dbl",
       "opt_match_per_stream_group",
-      "opt_match_per_stream_group_str",
-      "opt_match_per_stream_group_int",
-      "opt_match_per_stream_group_int64",
-      "opt_match_per_stream_group_dbl",
       "view_specifier_parse",
       "parse_and_set_vsync",
       "correct_input_start_times",
@@ -881,12 +867,12 @@
       "resize",
       "destroy",
       "vk_get_renderer",
+      "vk_get_renderer",
       "vk_renderer_create",
       "vk_renderer_get_hw_dev",
       "vk_renderer_display",
       "vk_renderer_resize",
-      "vk_renderer_destroy",
-      "vk_get_renderer"
+      "vk_renderer_destroy"
     ]
   },
   "/workspace/test/in/FFmpeg/fftools/ffprobe.c": {
@@ -1090,8 +1076,8 @@
       "sq_add_stream",
       "sq_limit_frames",
       "sq_frame_samples",
-      "sq_free",
-      "sq_alloc"
+      "sq_alloc",
+      "sq_free"
     ]
   },
   "/workspace/test/in/FFmpeg/fftools/textformat/avtextformat.c": {
@@ -1227,13 +1213,13 @@
   "/workspace/test/in/FFmpeg/fftools/thread_queue.c": {
     "fc": [
       "tq_free",
+      "tq_alloc",
       "tq_send",
       "receive_locked",
       "tq_receive",
       "tq_send_finish",
       "tq_receive_finish",
-      "tq_choke",
-      "tq_alloc"
+      "tq_choke"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/012v.c": {
@@ -1301,6 +1287,7 @@
       "ff_aac_output_configure",
       "flush",
       "ff_aac_set_default_channel_config",
+      "ff_aac_get_che",
       "decode_channel_map",
       "relative_align_get_bits",
       "decode_pce",
@@ -1333,19 +1320,18 @@
       "aac_decode_er_frame",
       "decode_frame_ga",
       "aac_decode_frame_int",
-      "aac_decode_frame",
-      "ff_aac_get_che"
+      "aac_decode_frame"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/aac/aacdec_ac.c": {
     "fc": [
       "ff_aac_ac_map_process",
-      "ff_aac_ac_update_context",
-      "ff_aac_ac_init",
-      "ff_aac_ac_finish",
       "ff_aac_ac_get_context",
       "ff_aac_ac_get_pk",
-      "ff_aac_ac_decode"
+      "ff_aac_ac_update_context",
+      "ff_aac_ac_init",
+      "ff_aac_ac_decode",
+      "ff_aac_ac_finish"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/aac/aacdec_dsp_template.c": {
@@ -1453,15 +1439,6 @@
     "fc": [
       "quantize_and_encode_band_cost_template",
       "quantize_and_encode_band_cost_NONE",
-      "quantize_and_encode_band_cost_ZERO",
-      "quantize_and_encode_band_cost_SQUAD",
-      "quantize_and_encode_band_cost_UQUAD",
-      "quantize_and_encode_band_cost_SPAIR",
-      "quantize_and_encode_band_cost_UPAIR",
-      "quantize_and_encode_band_cost_ESC",
-      "quantize_and_encode_band_cost_ESC_RTZ",
-      "quantize_and_encode_band_cost_NOISE",
-      "quantize_and_encode_band_cost_STEREO",
       "ff_quantize_and_encode_band_cost",
       "quantize_and_encode_band",
       "set_special_band_scalefactors",
@@ -1476,6 +1453,10 @@
       "put_pce",
       "put_audio_specific_config",
       "ff_quantize_band_cost_cache_init",
+      "WINDOW_FUNC",
+      "WINDOW_FUNC",
+      "WINDOW_FUNC",
+      "WINDOW_FUNC",
       "apply_window_and_mdct",
       "put_ics_info",
       "encode_ms_info",
@@ -1494,11 +1475,7 @@
       "aac_encode_end",
       "dsp_init",
       "alloc_buffers",
-      "aac_encode_init",
-      "WINDOW_FUNC",
-      "WINDOW_FUNC",
-      "WINDOW_FUNC",
-      "WINDOW_FUNC"
+      "aac_encode_init"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/aacenc_is.c": {
@@ -1543,9 +1520,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/aacps_common.c": {
     "fc": [
-      "read_iid_data",
-      "read_icc_data",
-      "read_ipdopd_data",
       "ps_read_extension_data",
       "ff_ps_read_data",
       "ff_ps_init_common"
@@ -1827,9 +1801,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/aarch64/vvc/dsp_init.c": {
     "fc": [
-      "vvc_w_avg_8",
-      "vvc_w_avg_10",
-      "vvc_w_avg_12",
       "ff_vvc_dsp_init_aarch64"
     ]
   },
@@ -2019,9 +1990,9 @@
   "/workspace/test/in/FFmpeg/libavcodec/acelp_pitch_delay.c": {
     "fc": [
       "ff_acelp_update_past_gain",
+      "ff_acelp_decode_gain_code",
       "ff_amr_set_fixed_gain",
-      "ff_decode_pitch_lag",
-      "ff_acelp_decode_gain_code"
+      "ff_decode_pitch_lag"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/acelp_vectors.c": {
@@ -2047,6 +2018,7 @@
       "adpcm_ima_mtf_expand_nibble",
       "adpcm_ima_cunning_expand_nibble",
       "adpcm_ima_wav_expand_nibble",
+      "ff_adpcm_ima_qt_expand_nibble",
       "decode_adpcm_ima_hvqm2",
       "decode_adpcm_ima_hvqm4",
       "adpcm_ms_expand_nibble",
@@ -2059,14 +2031,13 @@
       "adpcm_zork_expand_nibble",
       "xa_decode",
       "adpcm_swf_decode",
+      "ff_adpcm_argo_expand_nibble",
       "adpcm_sanyo_expand3",
       "adpcm_sanyo_expand4",
       "adpcm_sanyo_expand5",
       "get_nb_samples",
       "adpcm_decode_frame",
-      "adpcm_flush",
-      "ff_adpcm_ima_qt_expand_nibble",
-      "ff_adpcm_argo_expand_nibble"
+      "adpcm_flush"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/adpcm_data.c": {
@@ -2804,21 +2775,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/arm/vc1dsp_init_neon.c": {
     "fc": [
-      "ff_put_vc1_mspel_mc10_16_neon",
-      "ff_put_vc1_mspel_mc20_16_neon",
-      "ff_put_vc1_mspel_mc30_16_neon",
-      "ff_put_vc1_mspel_mc01_16_neon",
-      "ff_put_vc1_mspel_mc02_16_neon",
-      "ff_put_vc1_mspel_mc03_16_neon",
-      "ff_put_vc1_mspel_mc11_16_neon",
-      "ff_put_vc1_mspel_mc12_16_neon",
-      "ff_put_vc1_mspel_mc13_16_neon",
-      "ff_put_vc1_mspel_mc21_16_neon",
-      "ff_put_vc1_mspel_mc22_16_neon",
-      "ff_put_vc1_mspel_mc23_16_neon",
-      "ff_put_vc1_mspel_mc31_16_neon",
-      "ff_put_vc1_mspel_mc32_16_neon",
-      "ff_put_vc1_mspel_mc33_16_neon",
       "vc1_unescape_buffer_neon",
       "ff_vc1dsp_init_neon"
     ]
@@ -2909,12 +2865,12 @@
       "get_default_field_orders",
       "ass_split_section",
       "ass_split",
+      "ff_ass_split",
       "free_section",
       "ff_ass_free_dialog",
+      "ff_ass_split_dialog",
       "ff_ass_split_free",
       "ff_ass_split_override_codes",
-      "ff_ass_split",
-      "ff_ass_split_dialog",
       "ff_ass_style_get"
     ]
   },
@@ -3961,28 +3917,6 @@
       "cavs_filter_cv_c",
       "cavs_filter_ch_c",
       "cavs_idct8_add_c",
-      "put_cavs_filt8_h_hpel",
-      "put_cavs_filt8_h_qpel_l",
-      "put_cavs_filt8_h_qpel_r",
-      "put_cavs_filt8_hv_jj",
-      "put_cavs_filt8_hv_ff",
-      "put_cavs_filt8_hv_ii",
-      "put_cavs_filt8_hv_kk",
-      "put_cavs_filt8_hv_qq",
-      "put_cavs_filt8_hv_egpr",
-      "avg_cavs_filt8_h_hpel",
-      "avg_cavs_filt8_h_qpel_l",
-      "avg_cavs_filt8_h_qpel_r",
-      "avg_cavs_filt8_hv_jj",
-      "avg_cavs_filt8_hv_ff",
-      "avg_cavs_filt8_hv_ii",
-      "avg_cavs_filt8_hv_kk",
-      "avg_cavs_filt8_hv_qq",
-      "avg_cavs_filt8_hv_egpr",
-      "put_cavs_qpel8_mc10_c",
-      "put_cavs_qpel16_mc10_c",
-      "avg_cavs_qpel8_mc10_c",
-      "avg_cavs_qpel16_mc10_c",
       "ff_cavsdsp_init"
     ]
   },
@@ -4178,13 +4112,6 @@
       "cbs_h2645_read_more_rbsp_data",
       "cbs_h2645_fragment_add_nals",
       "cbs_h2645_split_fragment",
-      "cbs_h264_replace_sps",
-      "cbs_h264_replace_pps",
-      "cbs_h265_replace_vps",
-      "cbs_h265_replace_sps",
-      "cbs_h265_replace_pps",
-      "cbs_h266_replace_vps",
-      "cbs_h266_replace_pps",
       "cbs_h266_replace_sps",
       "cbs_h266_replace_ph",
       "cbs_h264_read_nal_unit",
@@ -4222,15 +4149,7 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
+      "SEI_FUNC",
       "FUNC",
       "SEI_FUNC",
       "SEI_FUNC",
@@ -4238,7 +4157,15 @@
       "SEI_FUNC",
       "SEI_FUNC",
       "SEI_FUNC",
-      "SEI_FUNC"
+      "FUNC",
+      "FUNC",
+      "FUNC",
+      "FUNC",
+      "FUNC",
+      "FUNC",
+      "FUNC",
+      "FUNC",
+      "FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/cbs_h265_syntax_template.c": {
@@ -4269,19 +4196,19 @@
       "FUNC",
       "FUNC",
       "FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
       "FUNC",
-      "FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC"
+      "FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/cbs_h266_syntax_template.c": {
@@ -4387,19 +4314,19 @@
   "/workspace/test/in/FFmpeg/libavcodec/cbs_sei_syntax_template.c": {
     "fc": [
       "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
+      "SEI_FUNC",
       "FUNC",
-      "FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC",
-      "SEI_FUNC"
+      "FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/cbs_vp8.c": {
@@ -4539,8 +4466,8 @@
     "fc": [
       "ff_exp2",
       "ff_log2_q15",
-      "ff_celp_math_init",
-      "ff_dot_product"
+      "ff_dot_product",
+      "ff_celp_math_init"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/cfhd.c": {
@@ -4711,12 +4638,12 @@
   "/workspace/test/in/FFmpeg/libavcodec/codec_par.c": {
     "fc": [
       "codec_parameters_reset",
+      "avcodec_parameters_alloc",
       "avcodec_parameters_free",
       "codec_parameters_copy_side_data",
       "avcodec_parameters_copy",
       "avcodec_parameters_from_context",
-      "avcodec_parameters_to_context",
-      "avcodec_parameters_alloc"
+      "avcodec_parameters_to_context"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/cook.c": {
@@ -5364,13 +5291,13 @@
       "ff_copy_palette",
       "ff_hwaccel_frame_priv_alloc",
       "ff_decode_flush_buffers",
+      "ff_decode_internal_alloc",
       "ff_decode_internal_sync",
       "ff_decode_internal_uninit",
       "attach_displaymatrix",
       "exif_attach_ifd",
       "ff_decode_exif_attach_ifd",
-      "ff_decode_exif_attach_buffer",
-      "ff_decode_internal_alloc"
+      "ff_decode_exif_attach_buffer"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/dfa.c": {
@@ -5423,37 +5350,37 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/dirac_dwt_template.c": {
     "fc": [
-      "vertical_compose53iL0_12bit",
-      "interleave_12bit",
-      "horizontal_compose_dirac53i_12bit",
-      "horizontal_compose_dd97i_12bit",
-      "horizontal_compose_dd137i_12bit",
-      "horizontal_compose_haari_12bit",
-      "horizontal_compose_haar0i_12bit",
-      "horizontal_compose_haar1i_12bit",
-      "horizontal_compose_fidelityi_12bit",
-      "horizontal_compose_daub97i_12bit",
-      "vertical_compose_dirac53iH0_12bit",
-      "vertical_compose_dd97iH0_12bit",
-      "vertical_compose_dd137iL0_12bit",
-      "vertical_compose_haar_12bit",
-      "vertical_compose_fidelityiH0_12bit",
-      "vertical_compose_fidelityiL0_12bit",
-      "vertical_compose_daub97iH0_12bit",
-      "vertical_compose_daub97iH1_12bit",
-      "vertical_compose_daub97iL0_12bit",
-      "vertical_compose_daub97iL1_12bit",
-      "spatial_compose_dd97i_dy_12bit",
-      "spatial_compose_dirac53i_dy_12bit",
-      "spatial_compose_dd137i_dy_12bit",
-      "spatial_compose_haari_dy_12bit",
-      "spatial_compose_fidelity_12bit",
-      "spatial_compose_daub97i_dy_12bit",
-      "spatial_compose97i_init_12bit",
-      "spatial_compose53i_init_12bit",
-      "spatial_compose_dd97i_init_12bit",
-      "spatial_compose_dd137i_init_12bit",
-      "spatial_idwt_init_12bit"
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/dirac_parser.c": {
@@ -5483,11 +5410,7 @@
       "dirac_decode_flush",
       "dirac_decode_end",
       "coeff_unpack_golomb",
-      "coeff_unpack_arith_8",
-      "coeff_unpack_arith_10",
       "codeblock",
-      "intra_dc_prediction_8",
-      "intra_dc_prediction_10",
       "decode_subband_internal",
       "decode_subband_arith",
       "decode_subband_golomb",
@@ -5530,24 +5453,8 @@
   "/workspace/test/in/FFmpeg/libavcodec/diracdsp.c": {
     "fc": [
       "dirac_hpel_filter",
-      "ff_put_dirac_pixels8_bilinear_c",
-      "ff_put_dirac_pixels16_bilinear_c",
-      "ff_put_dirac_pixels32_bilinear_c",
-      "ff_avg_dirac_pixels8_bilinear_c",
-      "ff_avg_dirac_pixels16_bilinear_c",
-      "ff_avg_dirac_pixels32_bilinear_c",
-      "weight_dirac_pixels8_c",
-      "weight_dirac_pixels16_c",
-      "weight_dirac_pixels32_c",
-      "add_obmc8_c",
-      "add_obmc16_c",
-      "add_obmc32_c",
       "put_signed_rect_clamped_8bit_c",
-      "put_signed_rect_clamped_10bit_c",
-      "put_signed_rect_clamped_12bit_c",
       "add_rect_clamped_c",
-      "dequant_subband_int16_t_c",
-      "dequant_subband_int32_t_c",
       "ff_diracdsp_init"
     ]
   },
@@ -6286,10 +6193,10 @@
       "ff_encode_alloc_frame",
       "ff_encode_receive_frame",
       "ff_encode_flush_buffers",
-      "ff_encode_add_stats_side_data",
-      "ff_check_codec_matrices",
       "ff_encode_internal_alloc",
-      "ff_encode_add_cpb_side_data"
+      "ff_encode_add_cpb_side_data",
+      "ff_encode_add_stats_side_data",
+      "ff_check_codec_matrices"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/error_resilience.c": {
@@ -6385,9 +6292,9 @@
       "run_one_task",
       "executor_worker_task",
       "executor_free",
+      "ff_executor_alloc",
       "ff_executor_free",
-      "ff_executor_execute",
-      "ff_executor_alloc"
+      "ff_executor_execute"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/exif.c": {
@@ -6417,11 +6324,11 @@
       "av_exif_set_entry",
       "exif_remove_entry",
       "av_exif_remove_entry",
+      "av_exif_clone_ifd",
       "av_exif_matrix_to_orientation",
       "av_exif_orientation_to_matrix",
       "ff_exif_sanitize_ifd",
-      "ff_exif_get_buffer",
-      "av_exif_clone_ifd"
+      "ff_exif_get_buffer"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/exr.c": {
@@ -6523,13 +6430,13 @@
     "fc": [
       "jni_detach_env",
       "jni_create_pthread_key",
+      "ff_jni_get_env",
       "ff_jni_jstring_to_utf_chars",
+      "ff_jni_utf_chars_to_jstring",
       "ff_jni_exception_get_summary",
       "ff_jni_exception_check",
       "ff_jni_init_jfields",
-      "ff_jni_reset_jfields",
-      "ff_jni_get_env",
-      "ff_jni_utf_chars_to_jstring"
+      "ff_jni_reset_jfields"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/fflcms2.c": {
@@ -6551,6 +6458,7 @@
     "fc": [
       "ff_ffv1_common_init",
       "planes_free",
+      "ff_ffv1_planes_alloc",
       "ff_ffv1_init_slice_state",
       "ff_ffv1_init_slices_state",
       "ff_need_new_slices",
@@ -6560,8 +6468,7 @@
       "ff_ffv1_clear_slice_state",
       "ff_ffv1_compute_bits_per_plane",
       "ff_ffv1_get_symbol",
-      "ff_ffv1_close",
-      "ff_ffv1_planes_alloc"
+      "ff_ffv1_close"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/ffv1_parse.c": {
@@ -6647,9 +6554,9 @@
       "encode_float32_remap",
       "encode_float32_rgb_frame",
       "encode_slice",
+      "ff_ffv1_encode_buffer_size",
       "encode_frame",
-      "encode_close",
-      "ff_ffv1_encode_buffer_size"
+      "encode_close"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/ffv1enc_template.c": {
@@ -7516,8 +7423,8 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/h264_mb_template.c": {
     "fc": [
-      "hl_decode_mb_complex",
-      "hl_decode_mb_444_complex"
+      "FUNC",
+      "FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/h264_mc_template.c": {
@@ -7666,10 +7573,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/h264chroma_template.c": {
-    "fc": [
-      "FUNCC",
-      "FUNCC"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/h264data.c": {
     "fc": []
@@ -7708,10 +7612,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/h264dsp_template.c": {
     "fc": [
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
       "FUNCC",
       "FUNCC",
       "FUNCC",
@@ -7811,12 +7711,6 @@
       "FUNCC",
       "FUNCC",
       "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
       "FUNC",
       "FUNC",
       "FUNC",
@@ -7863,15 +7757,7 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC",
-      "FUNCC"
+      "FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/h265_profile_level.c": {
@@ -8133,17 +8019,6 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
       "FUNC"
     ]
   },
@@ -8274,14 +8149,6 @@
       "FUNC",
       "FUNC",
       "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
-      "FUNC",
       "FUNC"
     ]
   },
@@ -8376,15 +8243,10 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/hpel_template.c": {
-    "fc": [
-      "FUNC",
-      "FUNC"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/hpeldsp.c": {
     "fc": [
-      "avg_no_rnd_pixels8_l2_8",
-      "put_no_rnd_pixels8_l2_8",
       "ff_hpeldsp_init"
     ]
   },
@@ -8968,15 +8830,7 @@
       "ff_ivi_row_slant4",
       "ff_ivi_col_slant4",
       "ff_ivi_put_pixels_8x8",
-      "ff_ivi_put_dc_pixel_8x8",
-      "ivi_mc_8x8_no_delta",
-      "ivi_mc_8x8_delta",
-      "ivi_mc_4x4_no_delta",
-      "ivi_mc_4x4_delta",
-      "ff_ivi_mc_avg_8x8_no_delta",
-      "ff_ivi_mc_avg_8x8_delta",
-      "ff_ivi_mc_avg_4x4_no_delta",
-      "ff_ivi_mc_avg_4x4_delta"
+      "ff_ivi_put_dc_pixel_8x8"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/j2kenc.c": {
@@ -8993,8 +8847,6 @@
       "put_sot",
       "compute_rates",
       "init_tiles",
-      "copy_frame_8",
-      "copy_frame_16",
       "init_quantization",
       "init_luts",
       "getnmsedec_sig",
@@ -9124,8 +8976,6 @@
       "dequantization_int_97",
       "mct_decode",
       "tile_codeblocks",
-      "write_frame_8",
-      "write_frame_16",
       "jpeg2000_decode_tile",
       "jpeg2000_dec_cleanup",
       "jpeg2000_read_main_headers",
@@ -10366,43 +10216,7 @@
       "hevc_hv_4t_8w_lsx",
       "hevc_hv_4t_16w_lsx",
       "hevc_hv_4t_24w_lsx",
-      "hevc_hv_4t_32w_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels4_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels6_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels8_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels12_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels16_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels24_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels32_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels48_8_lsx",
-      "ff_hevc_put_hevc_bi_pel_pixels64_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_h16_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_h24_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_h32_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_h48_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_h64_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_v8_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_v16_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_v24_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_v32_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_v48_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_v64_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_h24_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_h32_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_v12_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_v16_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_v24_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_v32_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_hv8_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_hv16_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_hv24_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_hv32_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_hv48_8_lsx",
-      "ff_hevc_put_hevc_bi_qpel_hv64_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_hv8_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_hv16_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_hv24_8_lsx",
-      "ff_hevc_put_hevc_bi_epel_hv32_8_lsx"
+      "hevc_hv_4t_32w_lsx"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/loongarch/hevc_mc_uni_lsx.c": {
@@ -10430,25 +10244,7 @@
       "hevc_hv_4t_12w_lsx",
       "hevc_hv_4t_16w_lsx",
       "hevc_hv_4t_24w_lsx",
-      "hevc_hv_4t_32w_lsx",
-      "ff_hevc_put_hevc_uni_qpel_h64_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_v24_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_v32_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_v48_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_v64_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_v24_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_v32_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_hv8_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_hv16_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_hv24_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_hv32_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_hv48_8_lsx",
-      "ff_hevc_put_hevc_uni_qpel_hv64_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_hv8_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_hv12_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_hv16_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_hv24_8_lsx",
-      "ff_hevc_put_hevc_uni_epel_hv32_8_lsx"
+      "hevc_hv_4t_32w_lsx"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/loongarch/hevc_mc_uniw_lsx.c": {
@@ -10459,13 +10255,7 @@
       "hevc_hv_8t_24w_lsx",
       "hevc_hv_8t_32w_lsx",
       "hevc_hv_8t_48w_lsx",
-      "hevc_hv_8t_64w_lsx",
-      "ff_hevc_put_hevc_uni_w_qpel_hv8_8_lsx",
-      "ff_hevc_put_hevc_uni_w_qpel_hv16_8_lsx",
-      "ff_hevc_put_hevc_uni_w_qpel_hv24_8_lsx",
-      "ff_hevc_put_hevc_uni_w_qpel_hv32_8_lsx",
-      "ff_hevc_put_hevc_uni_w_qpel_hv48_8_lsx",
-      "ff_hevc_put_hevc_uni_w_qpel_hv64_8_lsx"
+      "hevc_hv_8t_64w_lsx"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/loongarch/hevcdsp_init_loongarch.c": {
@@ -10522,49 +10312,7 @@
       "hevc_hv_4t_12w_lsx",
       "hevc_hv_4t_16w_lsx",
       "hevc_hv_4t_24w_lsx",
-      "hevc_hv_4t_32w_lsx",
-      "ff_hevc_put_hevc_pel_pixels4_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels6_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels8_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels12_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels16_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels24_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels32_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels48_8_lsx",
-      "ff_hevc_put_hevc_pel_pixels64_8_lsx",
-      "ff_hevc_put_hevc_qpel_h4_8_lsx",
-      "ff_hevc_put_hevc_qpel_h8_8_lsx",
-      "ff_hevc_put_hevc_qpel_h12_8_lsx",
-      "ff_hevc_put_hevc_qpel_h16_8_lsx",
-      "ff_hevc_put_hevc_qpel_h24_8_lsx",
-      "ff_hevc_put_hevc_qpel_h32_8_lsx",
-      "ff_hevc_put_hevc_qpel_h48_8_lsx",
-      "ff_hevc_put_hevc_qpel_h64_8_lsx",
-      "ff_hevc_put_hevc_qpel_v4_8_lsx",
-      "ff_hevc_put_hevc_qpel_v8_8_lsx",
-      "ff_hevc_put_hevc_qpel_v12_8_lsx",
-      "ff_hevc_put_hevc_qpel_v16_8_lsx",
-      "ff_hevc_put_hevc_qpel_v24_8_lsx",
-      "ff_hevc_put_hevc_qpel_v32_8_lsx",
-      "ff_hevc_put_hevc_qpel_v48_8_lsx",
-      "ff_hevc_put_hevc_qpel_v64_8_lsx",
-      "ff_hevc_put_hevc_epel_h32_8_lsx",
-      "ff_hevc_put_hevc_epel_v16_8_lsx",
-      "ff_hevc_put_hevc_epel_v24_8_lsx",
-      "ff_hevc_put_hevc_epel_v32_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv4_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv8_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv12_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv16_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv24_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv32_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv48_8_lsx",
-      "ff_hevc_put_hevc_qpel_hv64_8_lsx",
-      "ff_hevc_put_hevc_epel_hv8_8_lsx",
-      "ff_hevc_put_hevc_epel_hv12_8_lsx",
-      "ff_hevc_put_hevc_epel_hv16_8_lsx",
-      "ff_hevc_put_hevc_epel_hv24_8_lsx",
-      "ff_hevc_put_hevc_epel_hv32_8_lsx"
+      "hevc_hv_4t_32w_lsx"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/loongarch/hpeldsp_init_loongarch.c": {
@@ -10628,24 +10376,9 @@
       "ff_vc1_inv_trans_4x4_dc_lasx",
       "ff_vc1_inv_trans_4x4_lasx",
       "put_vc1_mspel_mc_h_v_lasx",
-      "ff_put_vc1_mspel_mc11_lasx",
-      "ff_put_vc1_mspel_mc12_lasx",
-      "ff_put_vc1_mspel_mc13_lasx",
-      "ff_put_vc1_mspel_mc21_lasx",
-      "ff_put_vc1_mspel_mc22_lasx",
-      "ff_put_vc1_mspel_mc23_lasx",
-      "ff_put_vc1_mspel_mc31_lasx",
-      "ff_put_vc1_mspel_mc32_lasx",
-      "ff_put_vc1_mspel_mc33_lasx",
       "ff_put_no_rnd_vc1_chroma_mc8_lasx",
       "put_vc1_mspel_mc_v_lasx",
-      "ff_put_vc1_mspel_mc01_16_lasx",
-      "ff_put_vc1_mspel_mc02_16_lasx",
-      "ff_put_vc1_mspel_mc03_16_lasx",
-      "put_vc1_mspel_mc_h_lasx",
-      "ff_put_vc1_mspel_mc1_16_lasx",
-      "ff_put_vc1_mspel_mc2_16_lasx",
-      "ff_put_vc1_mspel_mc3_16_lasx"
+      "put_vc1_mspel_mc_h_lasx"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/loongarch/videodsp_init.c": {
@@ -10718,23 +10451,9 @@
       "ff_hor_16x16_lsx",
       "ff_hor_32x32_lsx",
       "ff_dc_4x4_lsx",
-      "ff_dc_top_4x4_lsx",
-      "ff_dc_left_4x4_lsx",
       "ff_dc_8x8_lsx",
-      "ff_dc_top_8x8_lsx",
-      "ff_dc_left_8x8_lsx",
       "ff_dc_16x16_lsx",
-      "ff_dc_top_16x16_lsx",
-      "ff_dc_left_16x16_lsx",
       "ff_dc_32x32_lsx",
-      "ff_dc_top_32x32_lsx",
-      "ff_dc_left_32x32_lsx",
-      "ff_dc_127_16x16_lsx",
-      "ff_dc_128_16x16_lsx",
-      "ff_dc_129_16x16_lsx",
-      "ff_dc_127_32x32_lsx",
-      "ff_dc_128_32x32_lsx",
-      "ff_dc_129_32x32_lsx",
       "ff_tm_4x4_lsx",
       "ff_tm_8x8_lsx",
       "ff_tm_16x16_lsx",
@@ -10817,26 +10536,7 @@
       "avg_width8_lsx",
       "avg_width16_lsx",
       "avg_width32_lsx",
-      "avg_width64_lsx",
-      "ff_put_8tap_regular_64h_lsx",
-      "ff_put_8tap_regular_32h_lsx",
-      "ff_put_8tap_regular_16h_lsx",
-      "ff_put_8tap_regular_8h_lsx",
-      "ff_put_8tap_regular_4h_lsx",
-      "ff_put_8tap_sharp_64h_lsx",
-      "ff_put_8tap_sharp_32h_lsx",
-      "ff_put_8tap_sharp_16h_lsx",
-      "ff_put_8tap_sharp_8h_lsx",
-      "ff_put_8tap_sharp_4h_lsx",
-      "ff_put_8tap_smooth_64h_lsx",
-      "ff_put_8tap_smooth_32h_lsx",
-      "ff_put_8tap_smooth_16h_lsx",
-      "ff_put_8tap_smooth_8h_lsx",
-      "ff_put_8tap_smooth_4h_lsx",
-      "ff_copy64_lsx",
-      "ff_copy32_lsx",
-      "ff_copy16_lsx",
-      "ff_copy8_lsx"
+      "avg_width64_lsx"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/loongarch/vp9dsp_init_loongarch.c": {
@@ -11030,22 +10730,6 @@
       "quant_psnr8x8_c",
       "rd8x8_c",
       "bit8x8_c",
-      "vsad_intra8_c",
-      "vsad_intra16_c",
-      "vsad8_c",
-      "vsad16_c",
-      "vsse_intra8_c",
-      "vsse_intra16_c",
-      "vsse8_c",
-      "vsse16_c",
-      "hadamard8_diff16_c",
-      "hadamard8_intra16_c",
-      "dct_sad16_c",
-      "dct264_sad16_c",
-      "dct_max16_c",
-      "quant_psnr16_c",
-      "rd16_c",
-      "bit16_c",
       "ff_me_cmp_init"
     ]
   },
@@ -11056,11 +10740,11 @@
       "av_mediacodec_default_free",
       "av_mediacodec_release_buffer",
       "av_mediacodec_render_buffer_at_time",
+      "av_mediacodec_alloc_context",
       "av_mediacodec_default_init",
       "av_mediacodec_default_free",
       "av_mediacodec_release_buffer",
-      "av_mediacodec_render_buffer_at_time",
-      "av_mediacodec_alloc_context"
+      "av_mediacodec_render_buffer_at_time"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mediacodec_surface.c": {
@@ -11098,9 +10782,6 @@
       "mediaformat_jni_setBuffer",
       "codec_init_static_fields",
       "codec_create",
-      "mediacodec_jni_createCodecByName",
-      "mediacodec_jni_createDecoderByType",
-      "mediacodec_jni_createEncoderByType",
       "mediacodec_jni_delete",
       "mediacodec_jni_getName",
       "mediacodec_jni_configure",
@@ -11144,14 +10825,8 @@
       "mediaformat_ndk_setRect",
       "mediacodec_ndk_getName",
       "ndk_codec_create",
-      "mediacodec_ndk_createCodecByName",
-      "mediacodec_ndk_createDecoderByType",
-      "mediacodec_ndk_createEncoderByType",
       "mediacodec_ndk_delete",
       "mediacodec_ndk_configure",
-      "mediacodec_ndk_start",
-      "mediacodec_ndk_stop",
-      "mediacodec_ndk_flush",
       "mediacodec_ndk_getInputBuffer",
       "mediacodec_ndk_getOutputBuffer",
       "mediacodec_ndk_dequeueInputBuffer",
@@ -11175,6 +10850,9 @@
       "mediacodec_ndk_onError",
       "mediacodec_ndk_setAsyncNotifyCallback",
       "ff_AMediaFormat_new",
+      "ff_AMediaCodec_createCodecByName",
+      "ff_AMediaCodec_createDecoderByType",
+      "ff_AMediaCodec_createEncoderByType",
       "ff_Build_SDK_INT",
       "ff_AMediaFormatColorRange_to_AVColorRange",
       "ff_AMediaFormatColorRange_from_AVColorRange",
@@ -11182,10 +10860,7 @@
       "ff_AMediaFormatColorStandard_from_AVColorSpace",
       "ff_AMediaFormatColorStandard_to_AVColorPrimaries",
       "ff_AMediaFormatColorTransfer_to_AVColorTransfer",
-      "ff_AMediaFormatColorTransfer_from_AVColorTransfer",
-      "ff_AMediaCodec_createCodecByName",
-      "ff_AMediaCodec_createDecoderByType",
-      "ff_AMediaCodec_createEncoderByType"
+      "ff_AMediaFormatColorTransfer_from_AVColorTransfer"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mediacodecdec.c": {
@@ -11266,7 +10941,9 @@
   "/workspace/test/in/FFmpeg/libavcodec/mf_utils.c": {
     "fc": [
       "ff_MFGetAttributeSize",
+      "ff_MFSetAttributeSize",
       "ff_hr_str_buf",
+      "ff_create_memory_sample",
       "ff_media_type_to_sample_fmt",
       "ff_media_type_to_pix_fmt",
       "ff_pix_fmt_to_guid",
@@ -11278,9 +10955,7 @@
       "init_com_mf",
       "uninit_com_mf",
       "ff_instantiate_mf",
-      "ff_free_mf",
-      "ff_MFSetAttributeSize",
-      "ff_create_memory_sample"
+      "ff_free_mf"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mfenc.c": {
@@ -11669,10 +11344,6 @@
       "intra_predict_vert_16x16_msa",
       "intra_predict_horiz_8x8_msa",
       "intra_predict_horiz_16x16_msa",
-      "intra_predict_127dc_8x8_msa",
-      "intra_predict_129dc_8x8_msa",
-      "intra_predict_127dc_16x16_msa",
-      "intra_predict_129dc_16x16_msa",
       "intra_predict_plane_8x8_msa",
       "intra_predict_plane_16x16_msa",
       "intra_predict_dc_4blk_8x8_msa",
@@ -12088,61 +11759,7 @@
       "hevc_hv_bi_4t_12w_msa",
       "hevc_hv_bi_4t_16w_msa",
       "hevc_hv_bi_4t_24w_msa",
-      "hevc_hv_bi_4t_32w_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels4_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels6_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels8_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels12_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels16_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels24_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels32_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels48_8_msa",
-      "ff_hevc_put_hevc_bi_pel_pixels64_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h4_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h8_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h12_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h16_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h24_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h32_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h48_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_h64_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v4_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v8_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v12_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v16_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v24_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v32_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v48_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_v64_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h4_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h8_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h6_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h12_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h16_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h24_8_msa",
-      "ff_hevc_put_hevc_bi_epel_h32_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v4_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v8_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v6_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v12_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v16_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v24_8_msa",
-      "ff_hevc_put_hevc_bi_epel_v32_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv4_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv8_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv12_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv16_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv24_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv32_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv48_8_msa",
-      "ff_hevc_put_hevc_bi_qpel_hv64_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv4_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv8_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv6_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv12_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv16_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv24_8_msa",
-      "ff_hevc_put_hevc_bi_epel_hv32_8_msa"
+      "hevc_hv_bi_4t_32w_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevc_mc_biw_msa.c": {
@@ -12221,61 +11838,7 @@
       "hevc_hv_biwgt_4t_12w_msa",
       "hevc_hv_biwgt_4t_16w_msa",
       "hevc_hv_biwgt_4t_24w_msa",
-      "hevc_hv_biwgt_4t_32w_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels4_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels6_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels8_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels12_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels16_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels24_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels32_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels48_8_msa",
-      "ff_hevc_put_hevc_bi_w_pel_pixels64_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h4_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h8_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h12_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h16_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h24_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h32_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h48_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_h64_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v4_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v8_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v12_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v16_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v24_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v32_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v48_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_v64_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h4_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h8_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h6_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h12_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h16_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h24_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_h32_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v4_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v8_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v6_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v12_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v16_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v24_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_v32_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv4_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv8_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv12_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv16_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv24_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv32_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv48_8_msa",
-      "ff_hevc_put_hevc_bi_w_qpel_hv64_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv4_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv8_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv6_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv12_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv16_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv24_8_msa",
-      "ff_hevc_put_hevc_bi_w_epel_hv32_8_msa"
+      "hevc_hv_biwgt_4t_32w_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevc_mc_uni_msa.c": {
@@ -12354,59 +11917,7 @@
       "hevc_hv_uni_4t_12w_msa",
       "hevc_hv_uni_4t_16w_msa",
       "hevc_hv_uni_4t_24w_msa",
-      "hevc_hv_uni_4t_32w_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels8_8_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels12_8_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels16_8_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels24_8_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels32_8_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels48_8_msa",
-      "ff_hevc_put_hevc_uni_pel_pixels64_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h4_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h8_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h12_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h16_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h24_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h32_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h48_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_h64_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v4_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v8_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v12_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v16_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v24_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v32_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v48_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_v64_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h4_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h6_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h8_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h12_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h16_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h24_8_msa",
-      "ff_hevc_put_hevc_uni_epel_h32_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v4_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v6_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v8_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v12_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v16_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v24_8_msa",
-      "ff_hevc_put_hevc_uni_epel_v32_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv4_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv8_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv12_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv16_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv24_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv32_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv48_8_msa",
-      "ff_hevc_put_hevc_uni_qpel_hv64_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv4_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv6_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv8_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv12_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv16_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv24_8_msa",
-      "ff_hevc_put_hevc_uni_epel_hv32_8_msa"
+      "hevc_hv_uni_4t_32w_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevc_mc_uniw_msa.c": {
@@ -12487,61 +11998,7 @@
       "hevc_hv_uniwgt_4t_12w_msa",
       "hevc_hv_uniwgt_4t_16w_msa",
       "hevc_hv_uniwgt_4t_24w_msa",
-      "hevc_hv_uniwgt_4t_32w_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels4_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels6_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels8_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels12_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels16_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels24_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels32_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels48_8_msa",
-      "ff_hevc_put_hevc_uni_w_pel_pixels64_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h4_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h8_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h12_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h16_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h24_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h32_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h48_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_h64_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v4_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v8_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v12_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v16_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v24_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v32_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v48_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_v64_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h4_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h6_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h8_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h12_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h16_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h24_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_h32_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v4_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v6_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v8_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v12_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v16_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v24_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_v32_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv4_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv8_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv12_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv16_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv24_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv32_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv48_8_msa",
-      "ff_hevc_put_hevc_uni_w_qpel_hv64_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv4_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv6_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv8_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv12_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv16_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv24_8_msa",
-      "ff_hevc_put_hevc_uni_w_epel_hv32_8_msa"
+      "hevc_hv_uniwgt_4t_32w_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevcdsp_init_mips.c": {
@@ -12550,60 +12007,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevcdsp_mmi.c": {
-    "fc": [
-      "ff_hevc_put_hevc_qpel_h4_8_mmi",
-      "ff_hevc_put_hevc_qpel_h8_8_mmi",
-      "ff_hevc_put_hevc_qpel_h12_8_mmi",
-      "ff_hevc_put_hevc_qpel_h16_8_mmi",
-      "ff_hevc_put_hevc_qpel_h24_8_mmi",
-      "ff_hevc_put_hevc_qpel_h32_8_mmi",
-      "ff_hevc_put_hevc_qpel_h48_8_mmi",
-      "ff_hevc_put_hevc_qpel_h64_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv4_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv8_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv12_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv16_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv24_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv32_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv48_8_mmi",
-      "ff_hevc_put_hevc_qpel_hv64_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h4_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h8_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h12_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h16_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h24_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h32_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h48_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_h64_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv4_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv8_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv12_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv16_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv24_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv32_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv48_8_mmi",
-      "ff_hevc_put_hevc_qpel_bi_hv64_8_mmi",
-      "ff_hevc_put_hevc_epel_bi_hv4_8_mmi",
-      "ff_hevc_put_hevc_epel_bi_hv8_8_mmi",
-      "ff_hevc_put_hevc_epel_bi_hv12_8_mmi",
-      "ff_hevc_put_hevc_epel_bi_hv16_8_mmi",
-      "ff_hevc_put_hevc_epel_bi_hv24_8_mmi",
-      "ff_hevc_put_hevc_epel_bi_hv32_8_mmi",
-      "ff_hevc_put_hevc_pel_bi_pixels8_8_mmi",
-      "ff_hevc_put_hevc_pel_bi_pixels16_8_mmi",
-      "ff_hevc_put_hevc_pel_bi_pixels24_8_mmi",
-      "ff_hevc_put_hevc_pel_bi_pixels32_8_mmi",
-      "ff_hevc_put_hevc_pel_bi_pixels48_8_mmi",
-      "ff_hevc_put_hevc_pel_bi_pixels64_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv4_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv8_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv12_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv16_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv24_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv32_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv48_8_mmi",
-      "ff_hevc_put_hevc_qpel_uni_hv64_8_mmi"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevcdsp_msa.c": {
     "fc": [
@@ -12681,61 +12085,7 @@
       "hevc_hv_4t_12w_msa",
       "hevc_hv_4t_16w_msa",
       "hevc_hv_4t_24w_msa",
-      "hevc_hv_4t_32w_msa",
-      "ff_hevc_put_hevc_pel_pixels4_8_msa",
-      "ff_hevc_put_hevc_pel_pixels6_8_msa",
-      "ff_hevc_put_hevc_pel_pixels8_8_msa",
-      "ff_hevc_put_hevc_pel_pixels12_8_msa",
-      "ff_hevc_put_hevc_pel_pixels16_8_msa",
-      "ff_hevc_put_hevc_pel_pixels24_8_msa",
-      "ff_hevc_put_hevc_pel_pixels32_8_msa",
-      "ff_hevc_put_hevc_pel_pixels48_8_msa",
-      "ff_hevc_put_hevc_pel_pixels64_8_msa",
-      "ff_hevc_put_hevc_qpel_h4_8_msa",
-      "ff_hevc_put_hevc_qpel_h8_8_msa",
-      "ff_hevc_put_hevc_qpel_h12_8_msa",
-      "ff_hevc_put_hevc_qpel_h16_8_msa",
-      "ff_hevc_put_hevc_qpel_h24_8_msa",
-      "ff_hevc_put_hevc_qpel_h32_8_msa",
-      "ff_hevc_put_hevc_qpel_h48_8_msa",
-      "ff_hevc_put_hevc_qpel_h64_8_msa",
-      "ff_hevc_put_hevc_qpel_v4_8_msa",
-      "ff_hevc_put_hevc_qpel_v8_8_msa",
-      "ff_hevc_put_hevc_qpel_v12_8_msa",
-      "ff_hevc_put_hevc_qpel_v16_8_msa",
-      "ff_hevc_put_hevc_qpel_v24_8_msa",
-      "ff_hevc_put_hevc_qpel_v32_8_msa",
-      "ff_hevc_put_hevc_qpel_v48_8_msa",
-      "ff_hevc_put_hevc_qpel_v64_8_msa",
-      "ff_hevc_put_hevc_epel_h4_8_msa",
-      "ff_hevc_put_hevc_epel_h6_8_msa",
-      "ff_hevc_put_hevc_epel_h8_8_msa",
-      "ff_hevc_put_hevc_epel_h12_8_msa",
-      "ff_hevc_put_hevc_epel_h16_8_msa",
-      "ff_hevc_put_hevc_epel_h24_8_msa",
-      "ff_hevc_put_hevc_epel_h32_8_msa",
-      "ff_hevc_put_hevc_epel_v4_8_msa",
-      "ff_hevc_put_hevc_epel_v6_8_msa",
-      "ff_hevc_put_hevc_epel_v8_8_msa",
-      "ff_hevc_put_hevc_epel_v12_8_msa",
-      "ff_hevc_put_hevc_epel_v16_8_msa",
-      "ff_hevc_put_hevc_epel_v24_8_msa",
-      "ff_hevc_put_hevc_epel_v32_8_msa",
-      "ff_hevc_put_hevc_qpel_hv4_8_msa",
-      "ff_hevc_put_hevc_qpel_hv8_8_msa",
-      "ff_hevc_put_hevc_qpel_hv12_8_msa",
-      "ff_hevc_put_hevc_qpel_hv16_8_msa",
-      "ff_hevc_put_hevc_qpel_hv24_8_msa",
-      "ff_hevc_put_hevc_qpel_hv32_8_msa",
-      "ff_hevc_put_hevc_qpel_hv48_8_msa",
-      "ff_hevc_put_hevc_qpel_hv64_8_msa",
-      "ff_hevc_put_hevc_epel_hv4_8_msa",
-      "ff_hevc_put_hevc_epel_hv6_8_msa",
-      "ff_hevc_put_hevc_epel_hv8_8_msa",
-      "ff_hevc_put_hevc_epel_hv12_8_msa",
-      "ff_hevc_put_hevc_epel_hv16_8_msa",
-      "ff_hevc_put_hevc_epel_hv24_8_msa",
-      "ff_hevc_put_hevc_epel_hv32_8_msa"
+      "hevc_hv_4t_32w_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/hevcpred_init_mips.c": {
@@ -12953,9 +12303,7 @@
       "ff_sse8_msa",
       "ff_sse4_msa",
       "ff_hadamard8_diff8x8_msa",
-      "ff_hadamard8_intra8x8_msa",
-      "ff_hadamard8_diff16_msa",
-      "ff_hadamard8_intra16_msa"
+      "ff_hadamard8_intra8x8_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/mpegaudiodsp_mips_fixed.c": {
@@ -13288,37 +12636,6 @@
       "ff_avg_vc1_mspel_mc00_mmi",
       "ff_avg_vc1_mspel_mc00_16_mmi",
       "vc1_put_ver_16b_shift2_mmi",
-      "put_vc1_hor_16b_shift2_mmi",
-      "avg_vc1_hor_16b_shift2_mmi",
-      "put_vc1_shift2_mmi",
-      "avg_vc1_shift2_mmi",
-      "put_vc1_shift1_mmi",
-      "avg_vc1_shift1_mmi",
-      "vc1_put_ver_16b_shift1_mmi",
-      "put_vc1_hor_16b_shift1_mmi",
-      "avg_vc1_hor_16b_shift1_mmi",
-      "put_vc1_shift3_mmi",
-      "avg_vc1_shift3_mmi",
-      "vc1_put_ver_16b_shift3_mmi",
-      "put_vc1_hor_16b_shift3_mmi",
-      "avg_vc1_hor_16b_shift3_mmi",
-      "put_vc1_mspel_mc",
-      "avg_vc1_mspel_mc",
-      "ff_put_vc1_mspel_mc01_mmi",
-      "ff_put_vc1_mspel_mc02_mmi",
-      "ff_put_vc1_mspel_mc03_mmi",
-      "ff_put_vc1_mspel_mc10_mmi",
-      "ff_put_vc1_mspel_mc11_mmi",
-      "ff_put_vc1_mspel_mc12_mmi",
-      "ff_put_vc1_mspel_mc13_mmi",
-      "ff_put_vc1_mspel_mc20_mmi",
-      "ff_put_vc1_mspel_mc21_mmi",
-      "ff_put_vc1_mspel_mc22_mmi",
-      "ff_put_vc1_mspel_mc23_mmi",
-      "ff_put_vc1_mspel_mc30_mmi",
-      "ff_put_vc1_mspel_mc31_mmi",
-      "ff_put_vc1_mspel_mc32_mmi",
-      "ff_put_vc1_mspel_mc33_mmi",
       "ff_put_no_rnd_vc1_chroma_mc8_mmi",
       "ff_put_no_rnd_vc1_chroma_mc4_mmi",
       "ff_avg_no_rnd_vc1_chroma_mc8_mmi",
@@ -13330,16 +12647,7 @@
       "ff_vc1_inv_trans_8x8_msa",
       "ff_vc1_inv_trans_4x8_msa",
       "ff_vc1_inv_trans_8x4_msa",
-      "put_vc1_mspel_mc_h_v_msa",
-      "ff_put_vc1_mspel_mc11_msa",
-      "ff_put_vc1_mspel_mc12_msa",
-      "ff_put_vc1_mspel_mc13_msa",
-      "ff_put_vc1_mspel_mc21_msa",
-      "ff_put_vc1_mspel_mc22_msa",
-      "ff_put_vc1_mspel_mc23_msa",
-      "ff_put_vc1_mspel_mc31_msa",
-      "ff_put_vc1_mspel_mc32_msa",
-      "ff_put_vc1_mspel_mc33_msa"
+      "put_vc1_mspel_mc_h_v_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/videodsp_init.c": {
@@ -13581,23 +12889,9 @@
       "ff_hor_16x16_msa",
       "ff_hor_32x32_msa",
       "ff_dc_4x4_msa",
-      "ff_dc_top_4x4_msa",
-      "ff_dc_left_4x4_msa",
       "ff_dc_8x8_msa",
-      "ff_dc_top_8x8_msa",
-      "ff_dc_left_8x8_msa",
       "ff_dc_16x16_msa",
-      "ff_dc_top_16x16_msa",
-      "ff_dc_left_16x16_msa",
       "ff_dc_32x32_msa",
-      "ff_dc_top_32x32_msa",
-      "ff_dc_left_32x32_msa",
-      "ff_dc_127_16x16_msa",
-      "ff_dc_128_16x16_msa",
-      "ff_dc_129_16x16_msa",
-      "ff_dc_127_32x32_msa",
-      "ff_dc_128_32x32_msa",
-      "ff_dc_129_32x32_msa",
       "ff_tm_4x4_msa",
       "ff_tm_8x8_msa",
       "ff_tm_16x16_msa",
@@ -13639,22 +12933,7 @@
       "convolve_vert_mmi",
       "convolve_avg_horiz_mmi",
       "convolve_avg_vert_mmi",
-      "convolve_avg_mmi",
-      "ff_put_8tap_regular_64h_mmi",
-      "ff_put_8tap_regular_32h_mmi",
-      "ff_put_8tap_regular_16h_mmi",
-      "ff_put_8tap_regular_8h_mmi",
-      "ff_put_8tap_regular_4h_mmi",
-      "ff_put_8tap_sharp_64h_mmi",
-      "ff_put_8tap_sharp_32h_mmi",
-      "ff_put_8tap_sharp_16h_mmi",
-      "ff_put_8tap_sharp_8h_mmi",
-      "ff_put_8tap_sharp_4h_mmi",
-      "ff_put_8tap_smooth_64h_mmi",
-      "ff_put_8tap_smooth_32h_mmi",
-      "ff_put_8tap_smooth_16h_mmi",
-      "ff_put_8tap_smooth_8h_mmi",
-      "ff_put_8tap_smooth_4h_mmi"
+      "convolve_avg_mmi"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/vp9_mc_msa.c": {
@@ -13759,27 +13038,7 @@
       "avg_width8_msa",
       "avg_width16_msa",
       "avg_width32_msa",
-      "avg_width64_msa",
-      "ff_put_8tap_regular_64h_msa",
-      "ff_put_8tap_regular_32h_msa",
-      "ff_put_8tap_regular_16h_msa",
-      "ff_put_8tap_regular_8h_msa",
-      "ff_put_8tap_regular_4h_msa",
-      "ff_put_8tap_sharp_64h_msa",
-      "ff_put_8tap_sharp_32h_msa",
-      "ff_put_8tap_sharp_16h_msa",
-      "ff_put_8tap_sharp_8h_msa",
-      "ff_put_8tap_sharp_4h_msa",
-      "ff_put_8tap_smooth_64h_msa",
-      "ff_put_8tap_smooth_32h_msa",
-      "ff_put_8tap_smooth_16h_msa",
-      "ff_put_8tap_smooth_8h_msa",
-      "ff_put_8tap_smooth_4h_msa",
-      "ff_copy64_msa",
-      "ff_copy32_msa",
-      "ff_copy16_msa",
-      "ff_copy8_msa",
-      "ff_avg4_msa"
+      "avg_width64_msa"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mips/vp9dsp_init_mips.c": {
@@ -14582,13 +13841,13 @@
     "fc": [
       "round_sample",
       "round_sample",
-      "ff_mpadsp_apply_window_fixed",
-      "ff_mpa_synth_filter_fixed",
+      "RENAME",
+      "RENAME",
       "mpa_synth_init",
       "mpa_synth_window_init",
-      "ff_mpa_synth_init_fixed",
+      "RENAME",
       "imdct36",
-      "ff_imdct36_blocks_fixed"
+      "RENAME"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mpegaudioenc.c": {
@@ -14613,6 +13872,7 @@
       "mpv_pic_reset",
       "mpv_pic_init",
       "mpv_pic_free",
+      "ff_mpv_alloc_pic_pool",
       "ff_mpv_unref_picture",
       "set_workpic_from_pic",
       "ff_mpv_replace_picture",
@@ -14620,8 +13880,7 @@
       "ff_mpv_framesize_alloc",
       "ff_mpv_pic_check_linesize",
       "alloc_picture_tables",
-      "ff_mpv_alloc_pic_accessories",
-      "ff_mpv_alloc_pic_pool"
+      "ff_mpv_alloc_pic_accessories"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/mpegutils.c": {
@@ -14657,8 +13916,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/mpegvideo_dec.c": {
     "fc": [
-      "put_h264_chroma_mc1",
-      "avg_h264_chroma_mc1",
       "ff_mpv_decode_init",
       "ff_mpeg_update_thread_context",
       "ff_mpv_decode_close",
@@ -14724,8 +13981,6 @@
       "get_visual_weight",
       "encode_mb_internal",
       "encode_mb",
-      "backup_context_before_encode",
-      "reset_context_before_encode",
       "encode_mb_hq",
       "sse",
       "sse_mb",
@@ -15460,10 +14715,10 @@
       "codec_child_class_iterate",
       "get_category",
       "init_context_defaults",
+      "avcodec_alloc_context3",
       "avcodec_free_context",
       "avcodec_get_class",
-      "avcodec_get_subtitle_rect_class",
-      "avcodec_alloc_context3"
+      "avcodec_get_subtitle_rect_class"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/opus/celt.c": {
@@ -15611,24 +14866,24 @@
       "opus_rc_enc_normalize",
       "opus_rc_dec_update",
       "opus_rc_enc_update",
+      "ff_opus_rc_dec_cdf",
       "ff_opus_rc_enc_cdf",
+      "ff_opus_rc_dec_log",
       "ff_opus_rc_enc_log",
+      "ff_opus_rc_get_raw",
       "ff_opus_rc_put_raw",
+      "ff_opus_rc_dec_uint",
       "ff_opus_rc_enc_uint",
+      "ff_opus_rc_dec_uint_step",
       "ff_opus_rc_enc_uint_step",
+      "ff_opus_rc_dec_uint_tri",
       "ff_opus_rc_enc_uint_tri",
       "ff_opus_rc_dec_laplace",
       "ff_opus_rc_enc_laplace",
       "ff_opus_rc_dec_init",
       "ff_opus_rc_dec_raw_init",
       "ff_opus_rc_enc_end",
-      "ff_opus_rc_enc_init",
-      "ff_opus_rc_dec_cdf",
-      "ff_opus_rc_dec_log",
-      "ff_opus_rc_get_raw",
-      "ff_opus_rc_dec_uint",
-      "ff_opus_rc_dec_uint_step",
-      "ff_opus_rc_dec_uint_tri"
+      "ff_opus_rc_enc_init"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/opus/silk.c": {
@@ -15672,6 +14927,7 @@
     "fc": [
       "av_init_packet",
       "get_packet_defaults",
+      "av_packet_alloc",
       "av_packet_free",
       "packet_alloc",
       "av_new_packet",
@@ -15680,6 +14936,8 @@
       "av_packet_from_data",
       "av_packet_free_side_data",
       "av_packet_add_side_data",
+      "av_packet_new_side_data",
+      "av_packet_get_side_data",
       "av_packet_side_data_name",
       "av_packet_pack_dictionary",
       "av_packet_unpack_dictionary",
@@ -15687,6 +14945,7 @@
       "av_packet_copy_props",
       "av_packet_unref",
       "av_packet_ref",
+      "av_packet_clone",
       "av_packet_move_ref",
       "av_packet_make_refcounted",
       "av_packet_make_writable",
@@ -15697,18 +14956,14 @@
       "ff_side_data_set_prft",
       "av_packet_side_data_get",
       "packet_side_data_add",
+      "av_packet_side_data_add",
+      "av_packet_side_data_new",
       "av_packet_side_data_remove",
       "av_packet_side_data_free",
       "container_packet_alloc",
       "container_packet_reset",
       "container_packet_free",
       "container_packet_transfer",
-      "av_packet_alloc",
-      "av_packet_new_side_data",
-      "av_packet_get_side_data",
-      "av_packet_clone",
-      "av_packet_side_data_add",
-      "av_packet_side_data_new",
       "av_container_fifo_alloc_avpacket"
     ]
   },
@@ -15813,10 +15068,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/pel_template.c": {
-    "fc": [
-      "FUNCC",
-      "FUNCC"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/pgssubdec.c": {
     "fc": [
@@ -15837,8 +15089,6 @@
     "fc": [
       "pgx_get_number",
       "pgx_decode_header",
-      "write_frame_8",
-      "write_frame_16",
       "pgx_decode_frame"
     ]
   },
@@ -15904,8 +15154,6 @@
     "fc": [
       "png_put_interlaced_row",
       "ff_png_filter_row",
-      "deloco_rgb8",
-      "deloco_rgb16",
       "percent_missing",
       "png_handle_row",
       "png_decode_idat",
@@ -16052,8 +15300,6 @@
       "h264_h_loop_filter_luma_altivec",
       "weight_h264_W_altivec",
       "biweight_h264_W_altivec",
-      "weight_h264_pixels16_altivec",
-      "weight_h264_pixels8_altivec",
       "ff_h264dsp_init_ppc"
     ]
   },
@@ -16061,8 +15307,6 @@
     "fc": [
       "put_pixels16_l2_altivec",
       "avg_pixels16_l2_altivec",
-      "put_h264_qpel16_mc00_altivec",
-      "avg_h264_qpel16_mc00_altivec",
       "ff_h264qpel_init_ppc"
     ]
   },
@@ -16206,20 +15450,6 @@
     "fc": [
       "put_vp8_epel_h_altivec_core",
       "put_vp8_epel_v_altivec_core",
-      "put_vp8_epel16_h6_altivec",
-      "put_vp8_epel8_h6_altivec",
-      "put_vp8_epel8_h4_altivec",
-      "put_vp8_epel4_h6_altivec",
-      "put_vp8_epel4_h4_altivec",
-      "put_vp8_epel16_h6v6_altivec",
-      "put_vp8_epel8_h6v6_altivec",
-      "put_vp8_epel8_h4v6_altivec",
-      "put_vp8_epel8_h6v4_altivec",
-      "put_vp8_epel8_h4v4_altivec",
-      "put_vp8_epel4_h6v6_altivec",
-      "put_vp8_epel4_h4v6_altivec",
-      "put_vp8_epel4_h6v4_altivec",
-      "put_vp8_epel4_h4v4_altivec",
       "put_vp8_pixels16_altivec",
       "ff_vp78dsp_init_ppc"
     ]
@@ -16359,8 +15589,8 @@
   "/workspace/test/in/FFmpeg/libavcodec/psymodel.c": {
     "fc": [
       "ff_psy_init",
-      "ff_psy_end",
-      "ff_psy_find_group"
+      "ff_psy_find_group",
+      "ff_psy_end"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/pthread.c": {
@@ -16545,23 +15775,15 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/qpel_template.c": {
-    "fc": [
-      "avg_no_rnd_pixels8_l2_8",
-      "put_no_rnd_pixels8_l2_8"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavcodec/qpeldsp.c": {
     "fc": [
-      "put_mpeg4_qpel8_h_lowpass",
-      "put_no_rnd_mpeg4_qpel8_h_lowpass",
-      "avg_mpeg4_qpel8_h_lowpass",
       "ff_put_pixels8x8_c",
       "ff_avg_pixels8x8_c",
       "ff_put_pixels16x16_c",
       "ff_avg_pixels16x16_c",
       "ff_put_pixels8_l2_8",
-      "ff_put_dirac_pixels8_c",
-      "ff_avg_dirac_pixels8_c",
       "ff_qpeldsp_init"
     ]
   },
@@ -16875,8 +16097,6 @@
     "fc": [
       "raw_init_decoder",
       "flip",
-      "scale16be",
-      "scale16le",
       "raw_decode",
       "raw_close_decoder"
     ]
@@ -17331,12 +16551,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/rv30dsp.c": {
     "fc": [
-      "put_rv30_tpel8_h_lowpass",
-      "avg_rv30_tpel8_h_lowpass",
-      "put_rv30_tpel8_mc10_c",
-      "put_rv30_tpel16_mc10_c",
-      "avg_rv30_tpel8_mc10_c",
-      "avg_rv30_tpel16_mc10_c",
       "ff_rv30dsp_init"
     ]
   },
@@ -17421,22 +16635,10 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/rv40dsp.c": {
     "fc": [
-      "put_rv40_qpel8_h_lowpass",
-      "avg_rv40_qpel8_h_lowpass",
-      "put_rv40_qpel8_mc10_c",
-      "put_rv40_qpel16_mc10_c",
-      "avg_rv40_qpel8_mc10_c",
-      "avg_rv40_qpel16_mc10_c",
-      "avg_pixels8_xy2_8_c",
-      "put_pixels8_xy2_8_c",
       "put_rv40_qpel16_mc33_c",
       "avg_rv40_qpel16_mc33_c",
       "put_rv40_qpel8_mc33_c",
       "avg_rv40_qpel8_mc33_c",
-      "put_rv40_chroma_mc4_c",
-      "avg_rv40_chroma_mc4_c",
-      "rv40_weight_func_rnd_16",
-      "rv40_weight_func_rnd_8",
       "rv40_weak_loop_filter",
       "rv40_h_weak_loop_filter",
       "rv40_v_weak_loop_filter",
@@ -17476,8 +16678,6 @@
       "pred_angle",
       "pu_is_intra",
       "ipm_compar",
-      "unique_list_intramode_init",
-      "unique_list_mvinfo_init",
       "reconstruct_intra",
       "get_skip_mv_index",
       "add_if_valid",
@@ -18001,8 +17201,8 @@
       "snappy_copy2",
       "snappy_copy4",
       "decode_len",
-      "ff_snappy_uncompress",
-      "ff_snappy_peek_uncompressed_length"
+      "ff_snappy_peek_uncompressed_length",
+      "ff_snappy_uncompress"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/snow.c": {
@@ -18016,14 +17216,6 @@
       "ff_snow_alloc_blocks",
       "mc_block",
       "ff_snow_pred_block",
-      "mc_block_hpel0016",
-      "mc_block_hpel8016",
-      "mc_block_hpel0816",
-      "mc_block_hpel8816",
-      "mc_block_hpel008",
-      "mc_block_hpel808",
-      "mc_block_hpel088",
-      "mc_block_hpel888",
       "snow_static_init",
       "ff_snow_common_init",
       "ff_snow_common_init_after_header",
@@ -18034,6 +17226,7 @@
   "/workspace/test/in/FFmpeg/libavcodec/snow_dwt.c": {
     "fc": [
       "ff_slice_buffer_init",
+      "ff_slice_buffer_load_line",
       "ff_slice_buffer_release",
       "ff_slice_buffer_flush",
       "ff_slice_buffer_destroy",
@@ -18080,8 +17273,7 @@
       "ff_w53_32_c",
       "ff_w97_32_c",
       "ff_dsputil_init_dwt",
-      "ff_dwt_init",
-      "ff_slice_buffer_load_line"
+      "ff_dwt_init"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/snowdec.c": {
@@ -18580,8 +17772,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/tests/x86/dct.c": {
     "fc": [
-      "ff_prores_idct_put_10_sse2_wrap",
-      "ff_prores_idct_put_10_avx_wrap",
       "permute_x86"
     ]
   },
@@ -18989,8 +18179,8 @@
       "ff_thread_await_progress",
       "ff_thread_can_start_frame",
       "avpriv_find_start_code",
-      "ff_alloc_timecode_sei",
       "av_cpb_properties_alloc",
+      "ff_alloc_timecode_sei",
       "ff_guess_coded_bitrate"
     ]
   },
@@ -19638,26 +18828,7 @@
       "vc1_inv_trans_4x8_c",
       "vc1_inv_trans_4x4_dc_c",
       "vc1_inv_trans_4x4_c",
-      "vc1_mspel_ver_filter_16bits",
-      "vc1_mspel_hor_filter_16bits",
       "vc1_mspel_filter",
-      "put_vc1_mspel_mc",
-      "avg_vc1_mspel_mc",
-      "put_vc1_mspel_mc10_c",
-      "put_vc1_mspel_mc20_c",
-      "put_vc1_mspel_mc30_c",
-      "put_vc1_mspel_mc01_c",
-      "put_vc1_mspel_mc11_c",
-      "put_vc1_mspel_mc21_c",
-      "put_vc1_mspel_mc31_c",
-      "put_vc1_mspel_mc02_c",
-      "put_vc1_mspel_mc12_c",
-      "put_vc1_mspel_mc22_c",
-      "put_vc1_mspel_mc32_c",
-      "put_vc1_mspel_mc03_c",
-      "put_vc1_mspel_mc13_c",
-      "put_vc1_mspel_mc23_c",
-      "put_vc1_mspel_mc33_c",
       "put_no_rnd_vc1_chroma_mc8_c",
       "put_no_rnd_vc1_chroma_mc4_c",
       "avg_no_rnd_vc1_chroma_mc8_c",
@@ -19829,6 +19000,8 @@
       "videotoolbox_postproc_frame",
       "ff_videotoolbox_alloc_frame",
       "escape_ps",
+      "ff_videotoolbox_avcc_extradata_create",
+      "ff_videotoolbox_hvcc_extradata_create",
       "ff_videotoolbox_h264_start_frame",
       "videotoolbox_h264_decode_params",
       "videotoolbox_common_decode_slice",
@@ -19862,9 +19035,7 @@
       "videotoolbox_best_pixel_format",
       "videotoolbox_alloc_context_with_pix_fmt",
       "ff_videotoolbox_common_init",
-      "ff_videotoolbox_frame_params",
-      "ff_videotoolbox_avcc_extradata_create",
-      "ff_videotoolbox_hvcc_extradata_create"
+      "ff_videotoolbox_frame_params"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/videotoolbox_av1.c": {
@@ -20023,9 +19194,9 @@
       "av_vorbis_parse_frame",
       "av_vorbis_parse_reset",
       "av_vorbis_parse_free",
+      "av_vorbis_parse_init",
       "vorbis_parse",
-      "vorbis_parser_close",
-      "av_vorbis_parse_init"
+      "vorbis_parser_close"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/vorbisdec.c": {
@@ -20149,10 +19320,6 @@
       "vp3_idct_dc_add_c",
       "vp3_v_loop_filter_c",
       "vp3_h_loop_filter_c",
-      "vp3_v_loop_filter_8_c",
-      "vp3_h_loop_filter_8_c",
-      "ff_vp3dsp_v_loop_filter_12",
-      "ff_vp3dsp_h_loop_filter_12",
       "put_no_rnd_pixels_l2",
       "ff_vp3dsp_init",
       "ff_vp3dsp_set_bounding_values"
@@ -20200,8 +19367,6 @@
   "/workspace/test/in/FFmpeg/libavcodec/vp5dsp.c": {
     "fc": [
       "vp5_adjust",
-      "vp5_edge_filter_hor",
-      "vp5_edge_filter_ver",
       "ff_vp5dsp_init"
     ]
   },
@@ -20336,46 +19501,17 @@
       "vp7_luma_dc_wht_dc_c",
       "vp7_idct_add_c",
       "vp7_idct_dc_add_c",
-      "vp7_idct_dc_add4uv_c",
       "vp8_luma_dc_wht_c",
       "vp8_luma_dc_wht_dc_c",
       "vp8_idct_add_c",
       "vp8_idct_dc_add_c",
-      "vp8_idct_dc_add4uv_c",
       "filter_common",
       "vp7_filter_common",
       "vp8_filter_common",
       "vp7_simple_limit",
       "vp8_simple_limit",
-      "vp7_normal_limit",
-      "vp8_normal_limit",
       "hev",
       "filter_mbedge",
-      "put_vp8_pixels16_c",
-      "put_vp8_pixels8_c",
-      "put_vp8_pixels4_c",
-      "put_vp8_epel8_h4_c",
-      "put_vp8_epel4_h4_c",
-      "put_vp8_epel16_h6_c",
-      "put_vp8_epel8_h6_c",
-      "put_vp8_epel4_h6_c",
-      "put_vp8_epel8_v4_c",
-      "put_vp8_epel4_v4_c",
-      "put_vp8_epel16_v6_c",
-      "put_vp8_epel8_v6_c",
-      "put_vp8_epel4_v6_c",
-      "put_vp8_epel8_h4v4_c",
-      "put_vp8_epel4_h4v4_c",
-      "put_vp8_epel8_h4v6_c",
-      "put_vp8_epel4_h4v6_c",
-      "put_vp8_epel8_h6v4_c",
-      "put_vp8_epel4_h6v4_c",
-      "put_vp8_epel16_h6v6_c",
-      "put_vp8_epel8_h6v6_c",
-      "put_vp8_epel4_h6v6_c",
-      "put_vp8_bilinear16_h_c",
-      "put_vp8_bilinear8_h_c",
-      "put_vp8_bilinear4_h_c",
       "ff_vp78dsp_init",
       "ff_vp7dsp_init",
       "ff_vp8dsp_init"
@@ -20496,29 +19632,11 @@
       "dc_129_32x32_c",
       "memset_bpc",
       "diag_downleft_4x4_c",
-      "diag_downleft_8x8_c",
-      "diag_downleft_16x16_c",
-      "diag_downleft_32x32_c",
       "diag_downright_4x4_c",
-      "diag_downright_8x8_c",
-      "diag_downright_16x16_c",
-      "diag_downright_32x32_c",
       "vert_right_4x4_c",
-      "vert_right_8x8_c",
-      "vert_right_16x16_c",
-      "vert_right_32x32_c",
       "hor_down_4x4_c",
-      "hor_down_8x8_c",
-      "hor_down_16x16_c",
-      "hor_down_32x32_c",
       "vert_left_4x4_c",
-      "vert_left_8x8_c",
-      "vert_left_16x16_c",
-      "vert_left_32x32_c",
       "hor_up_4x4_c",
-      "hor_up_8x8_c",
-      "hor_up_16x16_c",
-      "hor_up_32x32_c",
       "FUNC",
       "idct4_1d",
       "iadst4_1d",
@@ -20527,39 +19645,19 @@
       "idct16_1d",
       "iadst16_1d",
       "idct32_1d",
-      "idct_idct_32x32_add_c",
       "iwht4_1d",
-      "iwht_iwht_4x4_add_c",
       "vp9dsp_itxfm_init",
       "loop_filter",
-      "loop_filter_h_16_16_c",
-      "loop_filter_v_16_16_c",
       "vp9dsp_loopfilter_init",
       "copy_c",
       "avg_c",
       "do_8tap_1d_c",
-      "put_8tap_1d_v_c",
-      "put_8tap_1d_h_c",
-      "avg_8tap_1d_v_c",
-      "avg_8tap_1d_h_c",
       "do_8tap_2d_c",
-      "put_8tap_2d_hv_c",
-      "avg_8tap_2d_hv_c",
       "do_bilin_1d_c",
-      "put_bilin_1d_v_c",
-      "put_bilin_1d_h_c",
-      "avg_bilin_1d_v_c",
-      "avg_bilin_1d_h_c",
       "do_bilin_2d_c",
-      "put_bilin_2d_hv_c",
-      "avg_bilin_2d_hv_c",
       "FUNC",
       "do_scaled_8tap_c",
-      "put_scaled_8tap_c",
-      "avg_scaled_8tap_c",
       "do_scaled_bilin_c",
-      "put_scaled_bilin_c",
-      "avg_scaled_bilin_c",
       "FUNC",
       "FUNC"
     ]
@@ -20904,6 +20002,7 @@
       "split_qt_flag_decode",
       "mtt_split_cu_vertical_flag_decode",
       "mtt_split_cu_binary_flag_decode",
+      "ff_vvc_split_mode",
       "ff_vvc_non_inter_flag",
       "ff_vvc_pred_mode_flag",
       "ff_vvc_pred_mode_plt_flag",
@@ -20930,6 +20029,10 @@
       "ff_vvc_palette_predictor_run",
       "ff_vvc_num_signalled_palette_entries",
       "ff_vvc_new_palette_entries",
+      "ff_vvc_palette_escape_val_present_flag",
+      "ff_vvc_palette_transpose_flag",
+      "ff_vvc_run_copy_flag",
+      "ff_vvc_copy_above_palette_indices_flag",
       "ff_vvc_palette_idx_idc",
       "ff_vvc_palette_escape_val",
       "ff_vvc_general_merge_flag",
@@ -20947,6 +20050,7 @@
       "ff_vvc_merge_gpm_partition_idx",
       "ff_vvc_merge_gpm_idx",
       "ff_vvc_ciip_flag",
+      "ff_vvc_pred_flag",
       "ff_vvc_inter_affine_flag",
       "ff_vvc_cu_affine_type_flag",
       "ff_vvc_sym_mvd_flag",
@@ -21009,13 +20113,7 @@
       "ff_vvc_mts_idx",
       "ff_vvc_end_of_slice_flag_decode",
       "ff_vvc_end_of_tile_one_bit",
-      "ff_vvc_end_of_subset_one_bit",
-      "ff_vvc_split_mode",
-      "ff_vvc_palette_escape_val_present_flag",
-      "ff_vvc_palette_transpose_flag",
-      "ff_vvc_run_copy_flag",
-      "ff_vvc_copy_above_palette_indices_flag",
-      "ff_vvc_pred_flag"
+      "ff_vvc_end_of_subset_one_bit"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/vvc/ctu.c": {
@@ -21437,15 +20535,7 @@
       "ff_vvc_inv_dct2_64",
       "matrix_mul",
       "inv_dct8",
-      "ff_vvc_inv_dct8_4",
-      "ff_vvc_inv_dct8_8",
-      "ff_vvc_inv_dct8_16",
-      "ff_vvc_inv_dct8_32",
       "inv_dst7",
-      "ff_vvc_inv_dst7_4",
-      "ff_vvc_inv_dst7_8",
-      "ff_vvc_inv_dst7_16",
-      "ff_vvc_inv_dst7_32",
       "ff_vvc_inv_lfnst_1d"
     ]
   },
@@ -21699,13 +20789,13 @@
       "run_alf",
       "task_run_stage",
       "task_run",
+      "ff_vvc_executor_alloc",
       "ff_vvc_executor_free",
       "ff_vvc_frame_thread_free",
       "frame_thread_init_score",
       "ff_vvc_frame_thread_init",
       "ff_vvc_frame_submit",
-      "ff_vvc_frame_wait",
-      "ff_vvc_executor_alloc"
+      "ff_vvc_frame_wait"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/vvc_parser.c": {
@@ -22026,8 +21116,6 @@
       "revert_mclms",
       "use_high_update_speed",
       "use_normal_update_speed",
-      "lms_update16",
-      "lms_update32",
       "revert_inter_ch_decorr",
       "revert_acfilter",
       "decode_subframe",
@@ -22215,8 +21303,6 @@
   "/workspace/test/in/FFmpeg/libavcodec/x86/cavsdsp.c": {
     "fc": [
       "cavs_idct8_add_sse2",
-      "put_cavs_qpel16_mc02_sse2",
-      "avg_cavs_qpel16_mc02_sse2",
       "ff_cavsdsp_init_x86"
     ]
   },
@@ -22245,16 +21331,12 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/dirac_dwt_init.c": {
     "fc": [
-      "vertical_compose53iL0_sse2",
       "horizontal_compose_dd97i_ssse3",
       "ff_spatial_idwt_init_x86"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/diracdsp_init.c": {
     "fc": [
-      "put_dirac_pixels16_sse2",
-      "avg_dirac_pixels16_sse2",
-      "dirac_hpel_filter_sse2",
       "ff_diracdsp_init_x86"
     ]
   },
@@ -22270,7 +21352,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/fdct.c": {
     "fc": [
-      "fdct_col_sse2",
       "fdct_row_sse2",
       "ff_fdct_sse2"
     ]
@@ -22319,17 +21400,6 @@
   "/workspace/test/in/FFmpeg/libavcodec/x86/h264_qpel.c": {
     "fc": [
       "put_h264_qpel8or16_hv1_lowpass_sse2",
-      "put_h264_qpel4_hv_lowpass_mmxext",
-      "avg_h264_qpel4_hv_lowpass_mmxext",
-      "ff_put_h264_qpel8_v_lowpass_sse2",
-      "ff_avg_h264_qpel8_v_lowpass_sse2",
-      "put_h264_qpel8_hv_lowpass_sse2",
-      "avg_h264_qpel8_hv_lowpass_sse2",
-      "QPEL_H264_H16_XMM",
-      "QPEL_H264_H16_XMM",
-      "ff_put_h264_qpel8_v_lowpass_ssse3",
-      "put_h264_qpel8_hv_lowpass_ssse3",
-      "avg_h264_qpel8_hv_lowpass_ssse3",
       "ff_h264qpel_init_x86"
     ]
   },
@@ -22348,77 +21418,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/hevc/dsp_init.c": {
     "fc": [
-      "hevc_put_pel_pixels16_10_avx2",
-      "hevc_put_pel_pixels24_10_avx2",
-      "ff_hevc_put_bi_pel_pixels24_10_avx2",
-      "hevc_put_uni_pel_pixels128_8_avx2",
-      "hevc_put_uni_pel_pixels96_8_avx2",
-      "hevc_put_pel_pixels32_10_avx2",
-      "hevc_put_pel_pixels48_10_avx2",
-      "hevc_put_pel_pixels64_10_avx2",
-      "ff_hevc_put_bi_pel_pixels32_10_avx2",
-      "ff_hevc_put_bi_pel_pixels48_10_avx2",
-      "ff_hevc_put_bi_pel_pixels64_10_avx2",
-      "ff_hevc_put_uni_w12_8_sse4",
-      "ff_hevc_put_uni_w16_8_sse4",
-      "ff_hevc_put_uni_w24_8_sse4",
-      "ff_hevc_put_uni_w32_8_sse4",
-      "ff_hevc_put_uni_w48_8_sse4",
-      "ff_hevc_put_uni_w64_8_sse4",
-      "ff_hevc_put_uni_w12_10_sse4",
-      "ff_hevc_put_uni_w16_10_sse4",
-      "ff_hevc_put_uni_w24_10_sse4",
-      "ff_hevc_put_uni_w32_10_sse4",
-      "ff_hevc_put_uni_w48_10_sse4",
-      "ff_hevc_put_uni_w64_10_sse4",
-      "ff_hevc_put_uni_w12_12_sse4",
-      "ff_hevc_put_uni_w16_12_sse4",
-      "ff_hevc_put_uni_w24_12_sse4",
-      "ff_hevc_put_uni_w32_12_sse4",
-      "ff_hevc_put_uni_w48_12_sse4",
-      "ff_hevc_put_uni_w64_12_sse4",
-      "ff_hevc_put_bi_w12_8_sse4",
-      "ff_hevc_put_bi_w16_8_sse4",
-      "ff_hevc_put_bi_w24_8_sse4",
-      "ff_hevc_put_bi_w32_8_sse4",
-      "ff_hevc_put_bi_w48_8_sse4",
-      "ff_hevc_put_bi_w64_8_sse4",
-      "ff_hevc_put_bi_w12_10_sse4",
-      "ff_hevc_put_bi_w16_10_sse4",
-      "ff_hevc_put_bi_w24_10_sse4",
-      "ff_hevc_put_bi_w32_10_sse4",
-      "ff_hevc_put_bi_w48_10_sse4",
-      "ff_hevc_put_bi_w64_10_sse4",
-      "ff_hevc_put_bi_w12_12_sse4",
-      "ff_hevc_put_bi_w16_12_sse4",
-      "ff_hevc_put_bi_w24_12_sse4",
-      "ff_hevc_put_bi_w32_12_sse4",
-      "ff_hevc_put_bi_w48_12_sse4",
-      "ff_hevc_put_bi_w64_12_sse4",
-      "hevc_put_uni_w_pel_pixels6_8_sse4",
-      "hevc_put_uni_w_epel_h6_8_sse4",
-      "hevc_put_uni_w_epel_v6_8_sse4",
-      "hevc_put_uni_w_epel_hv6_8_sse4",
-      "hevc_put_uni_w_pel_pixels6_10_sse4",
-      "hevc_put_uni_w_epel_h6_10_sse4",
-      "hevc_put_uni_w_epel_v6_10_sse4",
-      "hevc_put_uni_w_epel_hv6_10_sse4",
-      "hevc_put_uni_w_pel_pixels6_12_sse4",
-      "hevc_put_uni_w_epel_h6_12_sse4",
-      "hevc_put_uni_w_epel_v6_12_sse4",
-      "hevc_put_uni_w_epel_hv6_12_sse4",
-      "hevc_put_bi_w_pel_pixels6_8_sse4",
-      "hevc_put_bi_w_epel_h6_8_sse4",
-      "hevc_put_bi_w_epel_v6_8_sse4",
-      "hevc_put_bi_w_epel_hv6_8_sse4",
-      "hevc_put_bi_w_pel_pixels6_10_sse4",
-      "hevc_put_bi_w_epel_h6_10_sse4",
-      "hevc_put_bi_w_epel_v6_10_sse4",
-      "hevc_put_bi_w_epel_hv6_10_sse4",
-      "hevc_put_bi_w_pel_pixels6_12_sse4",
-      "hevc_put_bi_w_epel_h6_12_sse4",
-      "hevc_put_bi_w_epel_v6_12_sse4",
-      "hevc_put_bi_w_epel_hv6_12_sse4",
       "ff_hevc_dsp_init_x86"
     ]
   },
@@ -22495,10 +21494,6 @@
     "fc": [
       "apply_window",
       "apply_window_mp3",
-      "imdct36_blocks_sse2",
-      "imdct36_blocks_sse3",
-      "imdct36_blocks_ssse3",
-      "imdct36_blocks_avx",
       "ff_mpadsp_init_x86_tabs",
       "ff_mpadsp_init_x86"
     ]
@@ -22553,9 +21548,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/qpeldsp_init.c": {
     "fc": [
-      "put_qpel8_mc10_mmxext",
-      "avg_qpel8_mc10_mmxext",
-      "put_no_rnd_qpel8_mc10_mmxext",
       "ff_qpeldsp_init_x86"
     ]
   },
@@ -22566,12 +21558,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/rv40dsp_init.c": {
     "fc": [
-      "put_rv40_qpel8_mc33_ssse3",
-      "put_rv40_qpel16_mc33_sse2",
-      "put_rv40_qpel16_mc33_ssse3",
-      "avg_rv40_qpel8_mc33_ssse3",
-      "avg_rv40_qpel16_mc33_sse2",
-      "avg_rv40_qpel16_mc33_ssse3",
       "ff_rv40dsp_init_x86"
     ]
   },
@@ -22607,9 +21593,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/synth_filter_init.c": {
     "fc": [
-      "synth_filter_sse2",
-      "synth_filter_avx",
-      "synth_filter_fma3",
       "ff_synth_filter_init_x86"
     ]
   },
@@ -22645,47 +21628,12 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/vc1dsp_init.c": {
     "fc": [
-      "vc1_v_loop_filter16_sse2",
-      "vc1_v_loop_filter16_ssse3",
       "vc1_h_loop_filter16_sse4",
-      "put_vc1_mspel_mc00_8_sse2",
-      "avg_vc1_mspel_mc00_8_mmxext",
-      "put_vc1_mspel_mc00_16_sse2",
-      "avg_vc1_mspel_mc00_16_sse2",
       "ff_vc1dsp_init_x86"
     ]
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/vc1dsp_mmx.c": {
     "fc": [
-      "put_vc1_shift2_mmx",
-      "avg_vc1_shift2_mmx",
-      "put_vc1_shift1_mmx",
-      "avg_vc1_shift1_mmx",
-      "vc1_put_ver_16b_shift1_mmx",
-      "put_vc1_hor_16b_shift1_mmx",
-      "avg_vc1_hor_16b_shift1_mmx",
-      "put_vc1_shift3_mmx",
-      "avg_vc1_shift3_mmx",
-      "vc1_put_ver_16b_shift3_mmx",
-      "put_vc1_hor_16b_shift3_mmx",
-      "avg_vc1_hor_16b_shift3_mmx",
-      "put_vc1_mspel_mc",
-      "avg_vc1_mspel_mc",
-      "put_vc1_mspel_mc01_mmx",
-      "put_vc1_mspel_mc02_mmx",
-      "put_vc1_mspel_mc03_mmx",
-      "put_vc1_mspel_mc10_mmx",
-      "put_vc1_mspel_mc11_mmx",
-      "put_vc1_mspel_mc12_mmx",
-      "put_vc1_mspel_mc13_mmx",
-      "put_vc1_mspel_mc20_mmx",
-      "put_vc1_mspel_mc21_mmx",
-      "put_vc1_mspel_mc22_mmx",
-      "put_vc1_mspel_mc23_mmx",
-      "put_vc1_mspel_mc30_mmx",
-      "put_vc1_mspel_mc31_mmx",
-      "put_vc1_mspel_mc32_mmx",
-      "put_vc1_mspel_mc33_mmx",
       "ff_vc1dsp_init_mmx",
       "ff_vc1dsp_init_mmxext"
     ]
@@ -22715,23 +21663,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/vp8dsp_init.c": {
     "fc": [
-      "ff_put_vp8_epel_h6_sse2",
-      "ff_put_vp8_epel_v6_sse2",
-      "ff_put_vp8_bilinear_h_sse2",
-      "ff_put_vp8_bilinear_v_sse2",
-      "ff_put_vp8_epel_h6_ssse3",
-      "ff_put_vp8_epel_v6_ssse3",
-      "ff_put_vp8_bilinear_h_ssse3",
-      "ff_put_vp8_bilinear_v_ssse3",
-      "ff_put_vp8_epel4_h4v4_ssse3",
-      "ff_put_vp8_epel4_h4v6_ssse3",
-      "ff_put_vp8_epel4_h6v4_ssse3",
-      "ff_put_vp8_epel4_h6v6_ssse3",
-      "ff_put_vp8_bilinear8_hv_sse2",
-      "ff_put_vp8_bilinear16_hv_sse2",
-      "ff_put_vp8_bilinear4_hv_ssse3",
-      "ff_put_vp8_bilinear8_hv_ssse3",
-      "ff_put_vp8_bilinear16_hv_ssse3",
       "ff_vp78dsp_init_x86",
       "ff_vp8dsp_init_x86"
     ]
@@ -22759,15 +21690,6 @@
   },
   "/workspace/test/in/FFmpeg/libavcodec/x86/vvc/dsp_init.c": {
     "fc": [
-      "vvc_apply_bdof_8_avx2",
-      "vvc_apply_bdof_10_avx2",
-      "vvc_apply_bdof_12_avx2",
-      "bf",
-      "bf",
-      "bf",
-      "bf",
-      "bf",
-      "bf",
       "ff_vvc_dsp_init_x86"
     ]
   },
@@ -23092,10 +22014,6 @@
     "fc": [
       "caca_deinit",
       "list_drivers",
-      "list_dither_color",
-      "list_dither_charset",
-      "list_dither_algorithm",
-      "list_dither_antialias",
       "caca_write_header",
       "caca_write_packet"
     ]
@@ -23648,10 +22566,6 @@
       "set_ap",
       "set_ap1",
       "calc_q_factors",
-      "biquad_process_fltp",
-      "biquad_process_dblp",
-      "filter_channels_fltp",
-      "filter_channels_dblp",
       "config_input",
       "filter_frame",
       "activate",
@@ -23706,16 +22620,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_adelay.c": {
     "fc": [
-      "delay_channel_u8p",
-      "delay_channel_s16p",
-      "delay_channel_s32p",
-      "delay_channel_fltp",
-      "delay_channel_dblp",
-      "resize_samples_u8p",
-      "resize_samples_s16p",
-      "resize_samples_s32p",
-      "resize_samples_fltp",
-      "resize_samples_dblp",
       "parse_delays",
       "config_input",
       "process_command",
@@ -23741,12 +22645,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_aderivative.c": {
     "fc": [
-      "aderivative_fltp",
-      "aderivative_dblp",
-      "aderivative_s16p",
-      "aderivative_s32p",
-      "aintegral_fltp",
-      "aintegral_dblp",
       "config_input",
       "filter_frame",
       "uninit"
@@ -23794,10 +22692,6 @@
       "fill_items",
       "uninit",
       "init",
-      "echo_samples_dblp",
-      "echo_samples_fltp",
-      "echo_samples_s16p",
-      "echo_samples_s32p",
       "config_output",
       "filter_frame",
       "request_frame",
@@ -23833,34 +22727,10 @@
   "/workspace/test/in/FFmpeg/libavfilter/af_afade.c": {
     "fc": [
       "fade_gain",
-      "fade_samples_dblp",
-      "fade_samples_fltp",
-      "fade_samples_s16p",
-      "fade_samples_s32p",
-      "fade_samples_dbl",
-      "fade_samples_flt",
-      "fade_samples_s16",
-      "fade_samples_s32",
-      "scale_samples_dblp",
-      "scale_samples_fltp",
-      "scale_samples_s16p",
-      "scale_samples_s32p",
-      "scale_samples_dbl",
-      "scale_samples_flt",
-      "scale_samples_s16",
-      "scale_samples_s32",
       "config_output",
       "init",
       "filter_frame",
       "process_command",
-      "crossfade_samples_dblp",
-      "crossfade_samples_fltp",
-      "crossfade_samples_s16p",
-      "crossfade_samples_s32p",
-      "crossfade_samples_dbl",
-      "crossfade_samples_flt",
-      "crossfade_samples_s16",
-      "crossfade_samples_s32",
       "pass_frame",
       "pass_samples",
       "pass_crossfade",
@@ -23937,10 +22807,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_afreqshift.c": {
     "fc": [
-      "pfilter_channel_flt",
-      "pfilter_channel_dbl",
-      "ffilter_channel_flt",
-      "ffilter_channel_dbl",
       "compute_transition_param",
       "ipowp",
       "compute_acc_num",
@@ -23998,22 +22864,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/af_aiir.c": {
     "fc": [
       "query_formats",
-      "iir_ch_s16p",
-      "iir_ch_s32p",
-      "iir_ch_fltp",
-      "iir_ch_dblp",
-      "iir_ch_serial_s16p",
-      "iir_ch_serial_s32p",
-      "iir_ch_serial_fltp",
-      "iir_ch_serial_dblp",
-      "iir_ch_parallel_s16p",
-      "iir_ch_parallel_s32p",
-      "iir_ch_parallel_fltp",
-      "iir_ch_parallel_dblp",
-      "iir_ch_lattice_s16p",
-      "iir_ch_lattice_s32p",
-      "iir_ch_lattice_fltp",
-      "iir_ch_lattice_dblp",
       "count_coefficients",
       "read_gains",
       "read_tf_coefficients",
@@ -24161,14 +23011,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/af_aphaser.c": {
     "fc": [
       "init",
-      "phaser_dblp",
-      "phaser_fltp",
-      "phaser_s16p",
-      "phaser_s32p",
-      "phaser_dbl",
-      "phaser_flt",
-      "phaser_s16",
-      "phaser_s32",
       "config_output",
       "filter_frame",
       "uninit"
@@ -24272,12 +23114,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_asdr.c": {
     "fc": [
-      "sdr_fltp",
-      "sdr_dblp",
-      "sisdr_fltp",
-      "sisdr_dblp",
-      "psnr_fltp",
-      "psnr_dblp",
       "activate",
       "config_output",
       "uninit"
@@ -24389,8 +23225,6 @@
     "fc": [
       "calc_q_factors",
       "get_coeffs",
-      "filter_channels_fltp",
-      "filter_channels_dblp",
       "config_input",
       "filter_frame",
       "process_command",
@@ -24434,8 +23268,6 @@
       "set_tf1s",
       "set_filter",
       "get_coeffs",
-      "filter_channels_fltp",
-      "filter_channels_dblp",
       "config_input",
       "filter_frame",
       "process_command",
@@ -24444,18 +23276,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_axcorrelate.c": {
     "fc": [
-      "mean_sum_f",
-      "mean_sum_d",
-      "square_sum_f",
-      "square_sum_d",
-      "xcorrelate_f",
-      "xcorrelate_d",
-      "xcorrelate_slow_f",
-      "xcorrelate_slow_d",
-      "xcorrelate_fast_f",
-      "xcorrelate_fast_d",
-      "xcorrelate_best_f",
-      "xcorrelate_best_d",
       "activate",
       "config_output",
       "uninit"
@@ -24464,34 +23284,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/af_biquads.c": {
     "fc": [
       "query_formats",
-      "biquad_s16",
-      "biquad_s32",
-      "biquad_flt",
-      "biquad_dbl",
-      "biquad_dii_s16",
-      "biquad_dii_s32",
-      "biquad_dii_flt",
-      "biquad_dii_dbl",
-      "biquad_tdi_s16",
-      "biquad_tdi_s32",
-      "biquad_tdi_flt",
-      "biquad_tdi_dbl",
-      "biquad_tdii_s16",
-      "biquad_tdii_s32",
-      "biquad_tdii_flt",
-      "biquad_tdii_dbl",
-      "biquad_latt_s16",
-      "biquad_latt_s32",
-      "biquad_latt_flt",
-      "biquad_latt_dbl",
-      "biquad_svf_s16",
-      "biquad_svf_s32",
-      "biquad_svf_flt",
-      "biquad_svf_dbl",
-      "biquad_zdf_s16",
-      "biquad_zdf_s32",
-      "biquad_zdf_flt",
-      "biquad_zdf_dbl",
       "convert_dir2latt",
       "convert_dir2svf",
       "convert_width2qfactor",
@@ -24503,12 +23295,7 @@
       "filter_frame",
       "activate",
       "process_command",
-      "uninit",
-      "bass_init",
-      "lowshelf_init",
-      "treble_init",
-      "highshelf_init",
-      "tiltshelf_init"
+      "uninit"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_bs2b.c": {
@@ -24590,22 +23377,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/af_crystalizer.c": {
     "fc": [
-      "filter_inverse_flt_noclip",
-      "filter_inverse_flt_clip",
-      "filter_noinverse_flt_noclip",
-      "filter_noinverse_flt_clip",
-      "filter_inverse_fltp_noclip",
-      "filter_inverse_fltp_clip",
-      "filter_noinverse_fltp_noclip",
-      "filter_noinverse_fltp_clip",
-      "filter_inverse_dbl_noclip",
-      "filter_inverse_dbl_clip",
-      "filter_noinverse_dbl_noclip",
-      "filter_noinverse_dbl_clip",
-      "filter_inverse_dblp_noclip",
-      "filter_inverse_dblp_clip",
-      "filter_noinverse_dblp_noclip",
-      "filter_noinverse_dblp_clip",
       "config_input",
       "filter_frame",
       "uninit"
@@ -24912,14 +23683,6 @@
     "fc": [
       "set_meta",
       "update",
-      "silencedetect_dbl",
-      "silencedetect_flt",
-      "silencedetect_s32",
-      "silencedetect_s16",
-      "silencedetect_dblp",
-      "silencedetect_fltp",
-      "silencedetect_s32p",
-      "silencedetect_s16p",
       "config_input",
       "filter_frame",
       "uninit"
@@ -24963,14 +23726,8 @@
       "next_gain",
       "next_pi",
       "min_gain",
-      "analyze_channel_dbl",
-      "analyze_channel_flt",
-      "filter_channels_dbl",
-      "filter_channels_flt",
       "dlerp",
       "flerp",
-      "filter_link_channels_dbl",
-      "filter_link_channels_flt",
       "filter_frame",
       "activate",
       "config_input",
@@ -25241,10 +23998,10 @@
   "/workspace/test/in/FFmpeg/libavfilter/audio.c": {
     "fc": [
       "ff_null_get_audio_buffer",
+      "ff_default_get_audio_buffer",
       "ff_get_audio_buffer",
       "ff_parse_sample_rate",
-      "ff_parse_channel_layout",
-      "ff_default_get_audio_buffer"
+      "ff_parse_channel_layout"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/avf_a3dscope.c": {
@@ -25537,6 +24294,7 @@
       "filter_child_next",
       "filter_child_class_iterate",
       "default_execute",
+      "ff_filter_alloc",
       "free_link",
       "avfilter_free",
       "ff_filter_get_nb_threads",
@@ -25558,12 +24316,14 @@
       "filter_activate_default",
       "ff_filter_activate",
       "ff_inlink_acknowledge_status",
+      "ff_inlink_queued_frames",
       "ff_inlink_check_available_frame",
       "ff_inlink_queued_samples",
       "ff_inlink_check_available_samples",
       "consume_update",
       "ff_inlink_consume_frame",
       "ff_inlink_consume_samples",
+      "ff_inlink_peek_frame",
       "ff_inlink_make_frame_writable",
       "ff_inlink_process_commands",
       "ff_inlink_request_frame",
@@ -25573,10 +24333,7 @@
       "avfilter_get_class",
       "ff_filter_init_hw_frames",
       "ff_outlink_frame_wanted",
-      "ff_filter_execute",
-      "ff_filter_alloc",
-      "ff_inlink_queued_frames",
-      "ff_inlink_peek_frame"
+      "ff_filter_execute"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/avfiltergraph.c": {
@@ -25588,9 +24345,11 @@
       "avfilter_graph_free",
       "avfilter_graph_create_filter",
       "avfilter_graph_set_auto_convert",
+      "avfilter_graph_alloc_filter",
       "graph_check_validity",
       "graph_config_links",
       "graph_check_links",
+      "avfilter_graph_get_filter",
       "filter_link_check_formats",
       "filter_check_formats",
       "filter_query_formats",
@@ -25621,60 +24380,16 @@
       "heap_bubble_down",
       "ff_avfilter_graph_update_heap",
       "avfilter_graph_request_oldest",
-      "ff_filter_graph_run_once",
-      "avfilter_graph_alloc_filter",
-      "avfilter_graph_get_filter"
+      "ff_filter_graph_run_once"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/bbox.c": {
     "fc": [
-      "bbox_8",
-      "bbox_16",
       "ff_calculate_bounding_box"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/blend_modes.c": {
-    "fc": [
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0",
-      "fn0"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavfilter/boxblur.c": {
     "fc": [
@@ -25695,23 +24410,13 @@
       "activate",
       "config_input_audio",
       "av_buffersink_set_frame_size",
-      "av_buffersink_get_type",
-      "av_buffersink_get_time_base",
-      "av_buffersink_get_format",
-      "av_buffersink_get_w",
-      "av_buffersink_get_h",
-      "av_buffersink_get_sample_aspect_ratio",
-      "av_buffersink_get_colorspace",
-      "av_buffersink_get_color_range",
-      "av_buffersink_get_alpha_mode",
-      "av_buffersink_get_sample_rate",
+      "MAKE_AVFILTERLINK_ACCESSOR",
+      "av_buffersink_get_hw_frames_ctx",
       "av_buffersink_get_channels",
       "av_buffersink_get_ch_layout",
       "av_buffersink_get_side_data",
       "vsink_query_formats",
-      "asink_query_formats",
-      "MAKE_AVFILTERLINK_ACCESSOR",
-      "av_buffersink_get_hw_frames_ctx"
+      "asink_query_formats"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/buffersrc.c": {
@@ -25814,8 +24519,8 @@
       "async_thread_routine",
       "ff_dnn_async_module_cleanup",
       "ff_dnn_start_inference_async",
-      "ff_dnn_fill_gettingoutput_task",
-      "ff_dnn_get_result_common"
+      "ff_dnn_get_result_common",
+      "ff_dnn_fill_gettingoutput_task"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/dnn/dnn_backend_openvino.c": {
@@ -25878,15 +24583,15 @@
   "/workspace/test/in/FFmpeg/libavfilter/dnn/queue.c": {
     "fc": [
       "create_entry",
+      "ff_queue_create",
       "ff_queue_destroy",
+      "ff_queue_size",
       "ff_queue_peek_front",
       "ff_queue_peek_back",
       "ff_queue_push_front",
       "ff_queue_push_back",
       "ff_queue_pop_front",
-      "ff_queue_pop_back",
-      "ff_queue_create",
-      "ff_queue_size"
+      "ff_queue_pop_back"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/dnn/safe_queue.c": {
@@ -25897,10 +24602,10 @@
       "dnn_cond_wait",
       "ff_safe_queue_create",
       "ff_safe_queue_destroy",
+      "ff_safe_queue_size",
       "ff_safe_queue_push_front",
       "ff_safe_queue_push_back",
-      "ff_safe_queue_pop_front",
-      "ff_safe_queue_size"
+      "ff_safe_queue_pop_front"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/dnn_filter_common.c": {
@@ -25916,9 +24621,9 @@
       "ff_dnn_get_output",
       "ff_dnn_execute_model",
       "ff_dnn_execute_model_classification",
+      "ff_dnn_get_result",
       "ff_dnn_flush",
-      "ff_dnn_uninit",
-      "ff_dnn_get_result"
+      "ff_dnn_uninit"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/drawutils.c": {
@@ -25952,14 +24657,12 @@
       "ebur128_init_filter",
       "ebur128_init_channel_map",
       "init_histogram",
+      "ff_ebur128_init",
       "ff_ebur128_destroy",
-      "ebur128_filter_double",
       "ebur128_energy_to_loudness",
       "find_histogram_index",
       "ebur128_calc_gating_block",
       "ff_ebur128_set_channel",
-      "ebur128_add_frames_planar_double",
-      "ff_ebur128_add_frames_double",
       "ebur128_calc_relative_threshold",
       "ebur128_gated_loudness",
       "ff_ebur128_relative_threshold",
@@ -25969,8 +24672,7 @@
       "ff_ebur128_loudness_shortterm",
       "ff_ebur128_loudness_range_multiple",
       "ff_ebur128_loudness_range",
-      "ff_ebur128_sample_peak",
-      "ff_ebur128_init"
+      "ff_ebur128_sample_peak"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/edge_common.c": {
@@ -26206,22 +24908,21 @@
       "merge_generic_internal",
       "can_merge_generic",
       "merge_generic",
-      "print_get_sample_fmt_name",
-      "print_get_pix_fmt_name",
-      "print_color_space_name",
-      "print_color_range_name",
-      "print_alpha_mode_name",
       "print_channel_layout_desc",
       "print_sample_rate",
       "ff_filter_get_negotiation",
       "ff_fmt_is_in",
-      "ff_make_format_list",
-      "ff_make_sample_format_list",
-      "ff_make_pixel_format_list",
+      "MAKE_FORMAT_LIST_TYPE",
       "ff_add_format",
       "ff_add_channel_layout",
+      "ff_make_formats_list_singleton",
+      "ff_all_formats",
       "ff_formats_pixdesc_filter",
+      "ff_planar_sample_fmts",
       "ff_all_samplerates",
+      "ff_all_channel_layouts",
+      "ff_all_channel_counts",
+      "ff_all_color_spaces",
       "ff_all_color_ranges",
       "ff_all_alpha_modes",
       "ff_channel_layouts_ref",
@@ -26277,24 +24978,17 @@
       "ff_formats_check_color_ranges",
       "ff_formats_check_alpha_modes",
       "layouts_compatible",
-      "ff_formats_check_channel_layouts",
-      "MAKE_FORMAT_LIST_TYPE",
-      "ff_make_formats_list_singleton",
-      "ff_all_formats",
-      "ff_planar_sample_fmts",
-      "ff_all_channel_layouts",
-      "ff_all_channel_counts",
-      "ff_all_color_spaces"
+      "ff_formats_check_channel_layouts"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/framepool.c": {
     "fc": [
       "ff_frame_pool_video_init",
+      "ff_frame_pool_audio_init",
       "ff_frame_pool_get_video_config",
       "ff_frame_pool_get_audio_config",
-      "ff_frame_pool_uninit",
-      "ff_frame_pool_audio_init",
-      "ff_frame_pool_get"
+      "ff_frame_pool_get",
+      "ff_frame_pool_uninit"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/framequeue.c": {
@@ -26305,9 +24999,9 @@
       "ff_framequeue_init",
       "ff_framequeue_free",
       "ff_framequeue_add",
-      "ff_framequeue_skip_samples",
       "ff_framequeue_take",
-      "ff_framequeue_peek"
+      "ff_framequeue_peek",
+      "ff_framequeue_skip_samples"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/framesync.c": {
@@ -26347,6 +25041,7 @@
   "/workspace/test/in/FFmpeg/libavfilter/graphparser.c": {
     "fc": [
       "parse_link_name",
+      "avfilter_inout_alloc",
       "avfilter_inout_free",
       "extract_inout",
       "append_inout",
@@ -26372,8 +25067,7 @@
       "avfilter_graph_segment_link",
       "log_unknown_opt",
       "avfilter_graph_segment_apply",
-      "avfilter_graph_parse_ptr",
-      "avfilter_inout_alloc"
+      "avfilter_graph_parse_ptr"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/lavfutils.c": {
@@ -26652,47 +25346,16 @@
     "fc": [
       "mock_av_log",
       "update_current_point",
-      "cairo_arc",
-      "cairo_clip",
-      "cairo_clip_preserve",
-      "cairo_close_path",
-      "cairo_curve_to",
-      "cairo_fill",
-      "cairo_fill_preserve",
-      "cairo_identity_matrix",
-      "cairo_line_to",
-      "cairo_move_to",
-      "cairo_new_path",
-      "cairo_new_sub_path",
-      "cairo_rectangle",
-      "cairo_rel_curve_to",
-      "cairo_rel_line_to",
-      "cairo_rel_move_to",
-      "cairo_reset_clip",
-      "cairo_restore",
-      "cairo_rotate",
-      "cairo_save",
-      "cairo_scale",
-      "cairo_set_fill_rule",
-      "cairo_set_font_size",
-      "cairo_set_line_cap",
-      "cairo_set_line_join",
-      "cairo_set_line_width",
-      "cairo_set_miter_limit",
-      "cairo_set_source_rgba",
-      "cairo_stroke",
-      "cairo_stroke_preserve",
-      "cairo_translate",
       "cairo_get_dash_count",
       "cairo_status",
       "cairo_get_dash",
       "cairo_set_dash",
+      "cairo_has_current_point",
       "cairo_get_current_point",
       "cairo_set_source",
       "check_sorted_cmds_array",
       "check_script",
-      "main",
-      "cairo_has_current_point"
+      "main"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/tests/filtfmts.c": {
@@ -26728,10 +25391,10 @@
   "/workspace/test/in/FFmpeg/libavfilter/transform.c": {
     "fc": [
       "INTERPOLATE_METHOD",
-      "ff_get_matrix",
-      "ff_affine_transform",
       "INTERPOLATE_METHOD",
-      "INTERPOLATE_METHOD"
+      "INTERPOLATE_METHOD",
+      "ff_get_matrix",
+      "ff_affine_transform"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/trim.c": {
@@ -26813,8 +25476,8 @@
       "amf_copy_surface",
       "amf_init_filter_config",
       "amf_free_amfsurface",
-      "amf_avframe_to_amfsurface",
-      "amf_amfsurface_to_avframe"
+      "amf_amfsurface_to_avframe",
+      "amf_avframe_to_amfsurface"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_amplify.c": {
@@ -26838,14 +25501,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_atadenoise.c": {
     "fc": [
       "init",
-      "fweight_row8",
-      "fweight_row16",
-      "fweight_row8_serial",
-      "fweight_row16_serial",
-      "filter_row8",
-      "filter_row16",
-      "filter_row8_serial",
-      "filter_row16_serial",
       "filter_slice",
       "config_input",
       "filter_frame",
@@ -26856,10 +25511,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_avgblur.c": {
     "fc": [
-      "filter_lut8",
-      "filter_lut16",
-      "filter_slow8",
-      "filter_slow16",
       "build_lut",
       "uninit",
       "config_input",
@@ -26903,12 +25554,6 @@
     "fc": [
       "config_params",
       "config_input",
-      "bilateralh_byte",
-      "bilateralh_word",
-      "bilateralv_byte",
-      "bilateralv_word",
-      "bilateralo_byte",
-      "bilateralo_word",
       "bilateralh_planes",
       "bilateralv_planes",
       "bilateralo_planes",
@@ -26964,9 +25609,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_blend.c": {
     "fc": [
-      "blend_expr_8bit",
-      "blend_expr_16bit",
-      "blend_expr_32bit",
       "filter_slice",
       "blend_frame",
       "blend_frame_for_dualinput",
@@ -27044,8 +25686,6 @@
       "uninit",
       "query_formats",
       "config_input",
-      "blur8",
-      "blur16",
       "blur",
       "blur_power",
       "hblur",
@@ -27134,28 +25774,12 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_chromanr.c": {
     "fc": [
-      "manhattan_slice8",
-      "manhattan_slice16",
-      "euclidean_slice8",
-      "euclidean_slice16",
-      "manhattan_e_slice8",
-      "manhattan_e_slice16",
-      "euclidean_e_slice8",
-      "euclidean_e_slice16",
       "filter_frame",
       "config_input"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_chromashift.c": {
     "fc": [
-      "smear_slice8",
-      "smear_slice16",
-      "wrap_slice8",
-      "wrap_slice16",
-      "rgbasmear_slice8",
-      "rgbasmear_slice16",
-      "rgbawrap_slice8",
-      "rgbawrap_slice16",
       "filter_frame",
       "config_input"
     ]
@@ -27336,10 +25960,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_colorkey.c": {
     "fc": [
       "do_colorkey_pixel",
-      "do_colorkey_slice8",
-      "do_colorkey_slice16",
-      "do_colorhold_slice8",
-      "do_colorhold_slice16",
       "filter_frame",
       "config_output"
     ]
@@ -27522,10 +26142,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_corr.c": {
     "fc": [
       "set_meta",
-      "sum_slice8",
-      "sum_slice16",
-      "corr_slice8",
-      "corr_slice16",
       "do_corr",
       "init",
       "config_input_ref",
@@ -27633,12 +26249,8 @@
       "idct8_1d",
       "fdct16_1d",
       "idct16_1d",
-      "filter_freq_8",
-      "filter_freq_16",
       "color_decorrelation",
       "color_correlation",
-      "color_decorrelation_rgb",
-      "color_decorrelation_bgr",
       "color_decorrelation_gbrp",
       "color_correlation_gbrp",
       "config_input",
@@ -27665,14 +26277,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_deblock.c": {
     "fc": [
-      "deblockh8_weak",
-      "deblockh16_weak",
-      "deblockv8_weak",
-      "deblockv16_weak",
-      "deblockh8_strong",
-      "deblockh16_strong",
-      "deblockv8_strong",
-      "deblockv16_strong",
       "config_output",
       "filter_frame",
       "process_command"
@@ -27690,10 +26294,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_dedot.c": {
     "fc": [
-      "dedotcrawl8",
-      "dedotcrawl16",
-      "derainbow8",
-      "derainbow16",
       "config_output",
       "activate",
       "uninit"
@@ -28035,20 +26635,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_estdif.c": {
     "fc": [
       "config_output",
-      "midl_8",
-      "midl_16",
-      "mid2_8",
-      "mid2_16",
-      "mid4_8",
-      "mid4_16",
-      "mid6_8",
-      "mid6_16",
-      "diff_8",
-      "diff_16",
-      "cost_8",
-      "cost_16",
-      "interpolate_8",
-      "interpolate_16",
       "deinterlace_slice",
       "filter",
       "config_input",
@@ -28303,8 +26889,6 @@
       "process_work_frame",
       "init",
       "uninit",
-      "blend_frames8_c",
-      "blend_frames16_c",
       "ff_framerate_init",
       "config_input",
       "activate",
@@ -28457,8 +27041,6 @@
     "fc": [
       "box_slice",
       "config_input",
-      "guided_byte",
-      "guided_word",
       "filter_frame",
       "process_frame",
       "config_output",
@@ -28517,9 +27099,6 @@
       "hq3x_interp_2x1",
       "hq4x_interp_2x2",
       "hqx_filter",
-      "hq2x",
-      "hq3x",
-      "hq4x",
       "config_output",
       "filter_frame",
       "init"
@@ -28559,10 +27138,6 @@
       "get_triplet",
       "lerpi8",
       "lerpi16",
-      "do_slice_8_0",
-      "do_slice_16_0",
-      "do_slice_8_1",
-      "do_slice_16_1",
       "identity_matrix",
       "matrix_multiply",
       "colorscale_matrix",
@@ -28705,12 +27280,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_lagfun.c": {
     "fc": [
-      "lagfun_frame8",
-      "lagfun_frame16",
-      "lagfun_frame32",
-      "lagfun_framed8",
-      "lagfun_framed16",
-      "lagfun_framed32",
       "config_output",
       "filter_frame",
       "uninit"
@@ -28736,10 +27305,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_lenscorrection.c": {
     "fc": [
-      "filter8_slice",
-      "filter16_slice",
-      "filter8_slice_bilinear",
-      "filter16_slice_bilinear",
       "uninit",
       "calc_correction",
       "config_output",
@@ -28851,8 +27416,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_limiter.c": {
     "fc": [
       "init",
-      "limiter8",
-      "limiter16",
       "config_input",
       "filter_slice",
       "filter_frame",
@@ -28892,14 +27455,6 @@
       "query_formats",
       "config_inputx",
       "config_inputy",
-      "lut2_8_8_8",
-      "lut2_8_8_16",
-      "lut2_8_16_8",
-      "lut2_8_16_16",
-      "lut2_16_8_8",
-      "lut2_16_8_16",
-      "lut2_16_16_8",
-      "lut2_16_16_16",
       "process_frame",
       "config_output",
       "lut2_config_output",
@@ -28921,51 +27476,6 @@
       "interp_tetrahedral",
       "prelut_interp_1d_linear",
       "apply_prelut",
-      "interp_8_nearest_p8",
-      "interp_8_trilinear_p8",
-      "interp_8_tetrahedral_p8",
-      "interp_8_pyramid_p8",
-      "interp_8_prism_p8",
-      "interp_16_nearest_p9",
-      "interp_16_trilinear_p9",
-      "interp_16_tetrahedral_p9",
-      "interp_16_pyramid_p9",
-      "interp_16_prism_p9",
-      "interp_16_nearest_p10",
-      "interp_16_trilinear_p10",
-      "interp_16_tetrahedral_p10",
-      "interp_16_pyramid_p10",
-      "interp_16_prism_p10",
-      "interp_16_nearest_p12",
-      "interp_16_trilinear_p12",
-      "interp_16_tetrahedral_p12",
-      "interp_16_pyramid_p12",
-      "interp_16_prism_p12",
-      "interp_16_nearest_p14",
-      "interp_16_trilinear_p14",
-      "interp_16_tetrahedral_p14",
-      "interp_16_pyramid_p14",
-      "interp_16_prism_p14",
-      "interp_16_nearest_p16",
-      "interp_16_trilinear_p16",
-      "interp_16_tetrahedral_p16",
-      "interp_16_pyramid_p16",
-      "interp_16_prism_p16",
-      "interp_nearest_pf32",
-      "interp_trilinear_pf32",
-      "interp_tetrahedral_pf32",
-      "interp_pyramid_pf32",
-      "interp_prism_pf32",
-      "interp_8_nearest",
-      "interp_8_trilinear",
-      "interp_8_tetrahedral",
-      "interp_8_pyramid",
-      "interp_8_prism",
-      "interp_16_nearest",
-      "interp_16_trilinear",
-      "interp_16_tetrahedral",
-      "interp_16_pyramid",
-      "interp_16_prism",
       "skip_line",
       "fget_next_word",
       "allocate_3dlut",
@@ -28999,51 +27509,6 @@
       "interp_1d_cosine",
       "interp_1d_cubic",
       "interp_1d_spline",
-      "interp_1d_8_nearest_p8",
-      "interp_1d_8_linear_p8",
-      "interp_1d_8_cosine_p8",
-      "interp_1d_8_cubic_p8",
-      "interp_1d_8_spline_p8",
-      "interp_1d_16_nearest_p9",
-      "interp_1d_16_linear_p9",
-      "interp_1d_16_cosine_p9",
-      "interp_1d_16_cubic_p9",
-      "interp_1d_16_spline_p9",
-      "interp_1d_16_nearest_p10",
-      "interp_1d_16_linear_p10",
-      "interp_1d_16_cosine_p10",
-      "interp_1d_16_cubic_p10",
-      "interp_1d_16_spline_p10",
-      "interp_1d_16_nearest_p12",
-      "interp_1d_16_linear_p12",
-      "interp_1d_16_cosine_p12",
-      "interp_1d_16_cubic_p12",
-      "interp_1d_16_spline_p12",
-      "interp_1d_16_nearest_p14",
-      "interp_1d_16_linear_p14",
-      "interp_1d_16_cosine_p14",
-      "interp_1d_16_cubic_p14",
-      "interp_1d_16_spline_p14",
-      "interp_1d_16_nearest_p16",
-      "interp_1d_16_linear_p16",
-      "interp_1d_16_cosine_p16",
-      "interp_1d_16_cubic_p16",
-      "interp_1d_16_spline_p16",
-      "interp_1d_nearest_pf32",
-      "interp_1d_linear_pf32",
-      "interp_1d_cosine_pf32",
-      "interp_1d_cubic_pf32",
-      "interp_1d_spline_pf32",
-      "interp_1d_8_nearest",
-      "interp_1d_8_linear",
-      "interp_1d_8_cosine",
-      "interp_1d_8_cubic",
-      "interp_1d_8_spline",
-      "interp_1d_16_nearest",
-      "interp_1d_16_linear",
-      "interp_1d_16_cosine",
-      "interp_1d_16_cubic",
-      "interp_1d_16_spline",
       "config_input_1d",
       "lut1d_init",
       "apply_1d_lut",
@@ -29055,8 +27520,6 @@
     "fc": [
       "maskedclamp_slice",
       "process_frame",
-      "maskedclamp8",
-      "maskedclamp16",
       "config_input",
       "config_output",
       "activate",
@@ -29067,9 +27530,6 @@
     "fc": [
       "filter_slice",
       "process_frame",
-      "maskedmerge8",
-      "maskedmerge16",
-      "maskedmerge32",
       "config_input",
       "config_output",
       "activate",
@@ -29079,12 +27539,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_maskedminmax.c": {
     "fc": [
       "maskedmin_init",
-      "maskedmin8",
-      "maskedmax8",
-      "maskedmin16",
-      "maskedmax16",
-      "maskedmin32",
-      "maskedmax32",
       "config_input",
       "maskedminmax_slice",
       "process_frame",
@@ -29110,10 +27564,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_maskfun.c": {
     "fc": [
       "filter_frame",
-      "getsum8",
-      "getsum16",
-      "maskfun8",
-      "maskfun16",
       "fill_frame",
       "set_max_sum",
       "config_input",
@@ -29465,19 +27915,7 @@
       "config_input_overlay",
       "config_output",
       "blend_slice_packed_rgb",
-      "blend_plane_8_8bits",
-      "blend_plane_16_10bits",
-      "alpha_composite_8_8bits",
-      "alpha_composite_16_10bits",
-      "blend_slice_yuv_8_8bits",
-      "blend_slice_yuv_16_10bits",
       "blend_slice_planar_rgb",
-      "blend_slice_rgb",
-      "blend_slice_rgb_pm",
-      "blend_slice_rgba_ss",
-      "blend_slice_rgba_sp",
-      "blend_slice_rgba_ps",
-      "blend_slice_rgba_pp",
       "config_input_main",
       "init_slice_fn",
       "do_blend",
@@ -29606,12 +28044,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_palettegen.c": {
     "fc": [
       "query_formats",
-      "cmp_Lab",
-      "cmp_Lba",
-      "cmp_aLb",
-      "cmp_abL",
-      "cmp_bLa",
-      "cmp_baL",
       "sort3id",
       "cmp_color",
       "compute_box_stats",
@@ -29644,9 +28076,6 @@
       "set_frame",
       "disp_node",
       "disp_tree",
-      "cmp_L",
-      "cmp_a",
-      "cmp_b",
       "get_next_color",
       "colormap_insert",
       "cmp_pal_entry",
@@ -29657,15 +28086,6 @@
       "config_input_palette",
       "load_palette",
       "load_apply_palette",
-      "set_frame_none",
-      "set_frame_bayer",
-      "set_frame_heckbert",
-      "set_frame_floyd_steinberg",
-      "set_frame_sierra2",
-      "set_frame_sierra2_4a",
-      "set_frame_sierra3",
-      "set_frame_burkes",
-      "set_frame_atkinson",
       "dither_value",
       "init",
       "activate",
@@ -29712,12 +28132,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_pixelize.c": {
     "fc": [
-      "pixelize_avg8",
-      "pixelize_avg16",
-      "pixelize_min8",
-      "pixelize_min16",
-      "pixelize_max8",
-      "pixelize_max16",
       "pixelize_slice",
       "config_output",
       "filter_frame"
@@ -29892,8 +28306,6 @@
       "thresholding",
       "periods",
       "dump_code",
-      "read_byte",
-      "read_word",
       "config_input",
       "extract_line",
       "extract_lines",
@@ -29917,10 +28329,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_remap.c": {
     "fc": [
       "query_formats",
-      "remap_planar8_nearest_slice",
-      "remap_planar16_nearest_slice",
-      "remap_packed8_nearest_slice",
-      "remap_packed16_nearest_slice",
       "config_input",
       "process_frame",
       "config_output",
@@ -30160,8 +28568,6 @@
     "fc": [
       "get_rgb_scale",
       "get_cmy_scale",
-      "get_neutrals_scale8",
-      "get_neutrals_scale16",
       "register_range",
       "parse_psfile",
       "config_input",
@@ -30200,10 +28606,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_shear.c": {
     "fc": [
       "init",
-      "filter_slice_nn8",
-      "filter_slice_nn16",
-      "filter_slice_bl8",
-      "filter_slice_bl16",
       "filter_frame",
       "config_output",
       "process_command"
@@ -30256,12 +28658,6 @@
       "make_horizontal_map",
       "make_vertical_map",
       "make_block_map",
-      "shuffle_horizontal8",
-      "shuffle_horizontal16",
-      "shuffle_vertical8",
-      "shuffle_vertical16",
-      "shuffle_block8",
-      "shuffle_block16",
       "config_output",
       "filter_frame",
       "uninit"
@@ -30726,8 +29122,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_unsharp.c": {
     "fc": [
-      "unsharp_slice_16",
-      "unsharp_slice_8",
       "apply_unsharp",
       "set_filter_param",
       "init",
@@ -30768,22 +29162,6 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_v360.c": {
     "fc": [
       "query_formats",
-      "remap1_8bit_line_c",
-      "remap1_16bit_line_c",
-      "remap1_8bit_slice",
-      "remap2_8bit_slice",
-      "remap3_8bit_slice",
-      "remap4_8bit_slice",
-      "remap1_16bit_slice",
-      "remap2_16bit_slice",
-      "remap3_16bit_slice",
-      "remap4_16bit_slice",
-      "remap2_8bit_line_c",
-      "remap3_8bit_line_c",
-      "remap4_8bit_line_c",
-      "remap2_16bit_line_c",
-      "remap3_16bit_line_c",
-      "remap4_16bit_line_c",
       "ff_v360_init",
       "nearest_kernel",
       "bilinear_kernel",
@@ -30925,13 +29303,7 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/vf_varblur.c": {
     "fc": [
-      "compute_sat8",
-      "compute_sat16",
-      "compute_sat32",
       "lerpf",
-      "blur_plane8",
-      "blur_plane16",
-      "blur_plane32",
       "blur_planes",
       "blur_frame",
       "activate",
@@ -31021,8 +29393,6 @@
       "vif_xx_yy_xy",
       "vif_filter1d",
       "compute_vif2",
-      "offset_8bit",
-      "offset_16bit",
       "set_meta",
       "do_vif",
       "config_input_ref",
@@ -31047,8 +29417,6 @@
     "fc": [
       "image_sad",
       "convolution_x",
-      "convolution_y_8bit",
-      "convolution_y_10bit",
       "vmafmotiondsp_init",
       "ff_vmafmotion_process",
       "set_meta",
@@ -31120,79 +29488,15 @@
       "update_cr",
       "update16_cr",
       "lowpass16",
-      "lowpass16_column_mirror",
-      "lowpass16_column",
-      "lowpass16_row_mirror",
-      "lowpass16_row",
       "lowpass",
-      "lowpass_column_mirror",
-      "lowpass_column",
-      "lowpass_row_mirror",
-      "lowpass_row",
       "flat16",
-      "flat16_column_mirror",
-      "flat16_column",
-      "flat16_row_mirror",
-      "flat16_row",
       "flat",
-      "flat_column_mirror",
-      "flat_column",
-      "flat_row_mirror",
-      "flat_row",
-      "aflat16_row",
-      "aflat16_row_mirror",
-      "aflat16_column",
-      "aflat16_column_mirror",
-      "xflat16_row",
-      "xflat16_row_mirror",
-      "xflat16_column",
-      "xflat16_column_mirror",
-      "yflat16_row",
-      "yflat16_row_mirror",
-      "yflat16_column",
-      "yflat16_column_mirror",
-      "aflat_row",
-      "aflat_row_mirror",
-      "aflat_column",
-      "aflat_column_mirror",
-      "xflat_row",
-      "xflat_row_mirror",
-      "xflat_column",
-      "xflat_column_mirror",
-      "yflat_row",
-      "yflat_row_mirror",
-      "yflat_column",
-      "yflat_column_mirror",
       "chroma16",
-      "chroma16_column_mirror",
-      "chroma16_column",
-      "chroma16_row_mirror",
-      "chroma16_row",
       "chroma",
-      "chroma_column_mirror",
-      "chroma_column",
-      "chroma_row_mirror",
-      "chroma_row",
       "color16",
-      "color16_column_mirror",
-      "color16_column",
-      "color16_row_mirror",
-      "color16_row",
       "color",
-      "color_column_mirror",
-      "color_column",
-      "color_row_mirror",
-      "color_row",
       "acolor16",
-      "acolor16_column_mirror",
-      "acolor16_column",
-      "acolor16_row_mirror",
-      "acolor16_row",
       "acolor",
-      "acolor_column_mirror",
-      "acolor_column",
-      "acolor_row_mirror",
-      "acolor_row",
       "blend_vline",
       "blend_vline16",
       "blend_hline",
@@ -31234,9 +29538,6 @@
     "fc": [
       "pixel_diff",
       "xbr_filter",
-      "xbr2x",
-      "xbr3x",
-      "xbr4x",
       "config_output",
       "filter_frame",
       "init"
@@ -31245,129 +29546,11 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_xfade.c": {
     "fc": [
       "uninit",
-      "custom8_transition",
-      "custom16_transition",
       "mix",
       "fract",
       "smoothstep",
-      "fade8_transition",
-      "fade16_transition",
-      "wipeleft8_transition",
-      "wipeleft16_transition",
-      "wiperight8_transition",
-      "wiperight16_transition",
-      "wipeup8_transition",
-      "wipeup16_transition",
-      "wipedown8_transition",
-      "wipedown16_transition",
-      "slideleft8_transition",
-      "slideleft16_transition",
-      "slideright8_transition",
-      "slideright16_transition",
-      "slideup8_transition",
-      "slideup16_transition",
-      "slidedown8_transition",
-      "slidedown16_transition",
-      "circlecrop8_transition",
-      "circlecrop16_transition",
-      "rectcrop8_transition",
-      "rectcrop16_transition",
-      "distance8_transition",
-      "distance16_transition",
-      "fadeblack8_transition",
-      "fadeblack16_transition",
-      "fadewhite8_transition",
-      "fadewhite16_transition",
-      "radial8_transition",
-      "radial16_transition",
-      "smoothleft8_transition",
-      "smoothleft16_transition",
-      "smoothright8_transition",
-      "smoothright16_transition",
-      "smoothup8_transition",
-      "smoothup16_transition",
-      "smoothdown8_transition",
-      "smoothdown16_transition",
-      "circleopen8_transition",
-      "circleopen16_transition",
-      "circleclose8_transition",
-      "circleclose16_transition",
-      "vertopen8_transition",
-      "vertopen16_transition",
-      "vertclose8_transition",
-      "vertclose16_transition",
-      "horzopen8_transition",
-      "horzopen16_transition",
-      "horzclose8_transition",
-      "horzclose16_transition",
       "frand",
-      "dissolve8_transition",
-      "dissolve16_transition",
-      "pixelize8_transition",
-      "pixelize16_transition",
-      "diagtl8_transition",
-      "diagtl16_transition",
-      "diagtr8_transition",
-      "diagtr16_transition",
-      "diagbl8_transition",
-      "diagbl16_transition",
-      "diagbr8_transition",
-      "diagbr16_transition",
-      "hlslice8_transition",
-      "hlslice16_transition",
-      "hrslice8_transition",
-      "hrslice16_transition",
-      "vuslice8_transition",
-      "vuslice16_transition",
-      "vdslice8_transition",
-      "vdslice16_transition",
-      "hblur8_transition",
-      "hblur16_transition",
-      "fadegrays8_transition",
-      "fadegrays16_transition",
-      "wipetl8_transition",
-      "wipetl16_transition",
-      "wipetr8_transition",
-      "wipetr16_transition",
-      "wipebl8_transition",
-      "wipebl16_transition",
-      "wipebr8_transition",
-      "wipebr16_transition",
-      "squeezeh8_transition",
-      "squeezeh16_transition",
-      "squeezev8_transition",
-      "squeezev16_transition",
       "zoom",
-      "zoomin8_transition",
-      "zoomin16_transition",
-      "fadefast8_transition",
-      "fadefast16_transition",
-      "fadeslow8_transition",
-      "fadeslow16_transition",
-      "hlwind8_transition",
-      "hlwind16_transition",
-      "hrwind8_transition",
-      "hrwind16_transition",
-      "vuwind8_transition",
-      "vuwind16_transition",
-      "vdwind8_transition",
-      "vdwind16_transition",
-      "coverleft8_transition",
-      "coverleft16_transition",
-      "coverright8_transition",
-      "coverright16_transition",
-      "coverup8_transition",
-      "coverup16_transition",
-      "coverdown8_transition",
-      "coverdown16_transition",
-      "revealleft8_transition",
-      "revealleft16_transition",
-      "revealright8_transition",
-      "revealright16_transition",
-      "revealup8_transition",
-      "revealup16_transition",
-      "revealdown8_transition",
-      "revealdown16_transition",
       "getpix",
       "a0",
       "a1",
@@ -31411,8 +29594,6 @@
       "init",
       "compare8",
       "compare16",
-      "median_frames8",
-      "median_frames16",
       "update_index",
       "process_frame",
       "config_output",
@@ -31463,11 +29644,7 @@
   "/workspace/test/in/FFmpeg/libavfilter/vf_yaepblur.c": {
     "fc": [
       "uninit",
-      "pre_calculate_row_byte",
-      "pre_calculate_row_word",
       "pre_calculate_col",
-      "filter_slice_byte",
-      "filter_slice_word",
       "filter_frame",
       "config_input"
     ]
@@ -31509,9 +29686,9 @@
   "/workspace/test/in/FFmpeg/libavfilter/video.c": {
     "fc": [
       "ff_null_get_video_buffer",
-      "ff_get_video_buffer",
       "ff_default_get_video_buffer2",
-      "ff_default_get_video_buffer"
+      "ff_default_get_video_buffer",
+      "ff_get_video_buffer"
     ]
   },
   "/workspace/test/in/FFmpeg/libavfilter/vidstabutils.c": {
@@ -31697,12 +29874,6 @@
       "colorchart_config_props",
       "colorchart_fill_picture",
       "colorchart_init",
-      "zoneplate_fill_slice_8",
-      "zoneplate_fill_slice_9",
-      "zoneplate_fill_slice_10",
-      "zoneplate_fill_slice_12",
-      "zoneplate_fill_slice_14",
-      "zoneplate_fill_slice_16",
       "zoneplate_fill_picture",
       "zoneplate_config_props",
       "zoneplate_query_formats"
@@ -31769,11 +29940,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/x86/scene_sad_init.c": {
     "fc": [
-      "scene_sad_sse2",
-      "scene_sad_avx2",
-      "scene_sad16_avx2",
-      "scene_sad_avx512",
-      "scene_sad16_avx512",
       "SCENE_SAD_FUNC"
     ]
   },
@@ -31799,18 +29965,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/x86/vf_colordetect_init.c": {
     "fc": [
-      "detect_range_avx512icl",
-      "detect_range16_avx512icl",
-      "detect_alpha_full_avx512icl",
-      "detect_alpha16_full_avx512icl",
-      "detect_alpha_limited_avx512icl",
-      "detect_alpha16_limited_avx512icl",
-      "detect_range_avx2",
-      "detect_range16_avx2",
-      "detect_alpha_full_avx2",
-      "detect_alpha16_full_avx2",
-      "detect_alpha_limited_avx2",
-      "detect_alpha16_limited_avx2",
       "ff_color_detect_dsp_init_x86"
     ]
   },
@@ -31860,12 +30014,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/x86/vf_idetdsp_init.c": {
     "fc": [
-      "idet_filter_line_sse2",
-      "idet_filter_line_16bit_sse2",
-      "idet_filter_line_avx2",
-      "idet_filter_line_16bit_avx2",
-      "idet_filter_line_avx512icl",
-      "idet_filter_line_16bit_avx512icl",
       "ff_idet_dsp_init_x86"
     ]
   },
@@ -31876,12 +30024,6 @@
   },
   "/workspace/test/in/FFmpeg/libavfilter/x86/vf_lut3d_init.c": {
     "fc": [
-      "interp_tetrahedral_pf32_avx2",
-      "interp_tetrahedral_p16_avx2",
-      "interp_tetrahedral_pf32_avx",
-      "interp_tetrahedral_p16_avx",
-      "interp_tetrahedral_pf32_sse2",
-      "interp_tetrahedral_p16_sse2",
       "ff_lut3d_init_x86"
     ]
   },
@@ -32239,9 +30381,9 @@
   "/workspace/test/in/FFmpeg/libavformat/apetag.c": {
     "fc": [
       "ape_tag_read_field",
+      "ff_ape_parse_tag",
       "string_is_ascii",
-      "ff_ape_write_tag",
-      "ff_ape_parse_tag"
+      "ff_ape_write_tag"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/apm.c": {
@@ -32587,25 +30729,25 @@
       "ff_flush_packet_queue",
       "avformat_free_context",
       "stream_params_copy",
+      "ff_stream_clone",
       "avformat_stream_group_name",
       "av_new_program",
       "av_program_add_stream_index",
+      "av_find_program_from_stream",
       "av_find_default_stream_index",
       "av_find_best_stream",
       "match_stream_specifier",
       "avformat_match_stream_specifier",
+      "av_guess_sample_aspect_ratio",
+      "av_guess_frame_rate",
       "avformat_transfer_internal_stream_timing_info",
+      "av_stream_get_codec_timebase",
       "avpriv_set_pts_info",
       "ff_find_decoder",
       "ff_copy_whiteblacklists",
       "ff_is_intra_only",
       "ff_format_set_url",
-      "ff_format_io_close",
-      "ff_stream_clone",
-      "av_find_program_from_stream",
-      "av_guess_sample_aspect_ratio",
-      "av_guess_frame_rate",
-      "av_stream_get_codec_timebase"
+      "ff_format_io_close"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/avidec.c": {
@@ -32680,6 +30822,7 @@
       "ffurl_read2",
       "ffurl_read_complete",
       "ffurl_write2",
+      "ffurl_seek2",
       "ffurl_closep",
       "ffurl_close",
       "avio_close",
@@ -32692,14 +30835,13 @@
       "avio_read_dir",
       "avio_close_dir",
       "avio_free_directory_entry",
+      "ffurl_size",
       "ffurl_get_file_handle",
       "ffurl_get_multi_file_handle",
       "ffurl_get_short_seek",
       "ffurl_shutdown",
       "ff_check_interrupt",
-      "ff_rename",
-      "ffurl_seek2",
-      "ffurl_size"
+      "ff_rename"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/aviobuf.c": {
@@ -32707,6 +30849,7 @@
       "ffio_init_context",
       "ffio_init_read_context",
       "ffio_init_write_context",
+      "avio_alloc_context",
       "avio_context_free",
       "writeout",
       "flush_buffer",
@@ -32715,13 +30858,13 @@
       "avio_write",
       "avio_flush",
       "avio_seek",
+      "avio_skip",
+      "avio_size",
       "avio_feof",
       "avio_wl32",
       "avio_wb32",
       "avio_put_str",
       "put_str16",
-      "avio_put_str16le",
-      "avio_put_str16be",
       "avio_wl64",
       "avio_wb64",
       "avio_wl16",
@@ -32744,6 +30887,7 @@
       "avio_rl16",
       "avio_rl24",
       "avio_rl32",
+      "avio_rl64",
       "avio_rb16",
       "avio_rb24",
       "avio_rb32",
@@ -32751,9 +30895,11 @@
       "ff_get_chomp_line",
       "read_string_to_bprint",
       "read_string_to_bprint_overwrite",
+      "ff_read_line_to_bprint_overwrite",
+      "ff_read_string_to_bprint_overwrite",
       "avio_get_str",
-      "avio_get_str16le",
-      "avio_get_str16be",
+      "GET_STR16",
+      "ffio_read_varlen",
       "ffio_read_leb",
       "ffio_write_leb",
       "ffio_write_lines",
@@ -32769,6 +30915,7 @@
       "avio_printf",
       "avio_print_string_array",
       "avio_pause",
+      "avio_seek_time",
       "avio_read_to_bprint",
       "dyn_buf_write",
       "dyn_packet_buf_write",
@@ -32782,16 +30929,7 @@
       "ffio_free_dyn_buf",
       "null_buf_write",
       "ffio_open_null_buf",
-      "ffio_close_null_buf",
-      "avio_alloc_context",
-      "avio_skip",
-      "avio_size",
-      "avio_rl64",
-      "ff_read_line_to_bprint_overwrite",
-      "ff_read_string_to_bprint_overwrite",
-      "GET_STR16",
-      "ffio_read_varlen",
-      "avio_seek_time"
+      "ffio_close_null_buf"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/avisynth.c": {
@@ -33238,6 +31376,7 @@
   "/workspace/test/in/FFmpeg/libavformat/demux.c": {
     "fc": [
       "wrap_timestamp",
+      "ff_wrap_timestamp",
       "find_probe_decoder",
       "set_codec_from_probe_data",
       "init_input",
@@ -33285,14 +31424,14 @@
       "extract_extradata_init",
       "extract_extradata",
       "parameters_from_context",
-      "avformat_find_stream_info",
-      "ff_wrap_timestamp"
+      "avformat_find_stream_info"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/demux_utils.c": {
     "fc": [
       "av_stream_get_parser",
       "avpriv_stream_set_need_parsing",
+      "avpriv_new_chapter",
       "avformat_queue_attached_pictures",
       "ff_add_attached_pic",
       "ff_add_param_change",
@@ -33300,8 +31439,7 @@
       "av_read_pause",
       "ff_generate_avci_extradata",
       "ff_get_extradata",
-      "ff_find_stream_index",
-      "avpriv_new_chapter"
+      "ff_find_stream_index"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/derf.c": {
@@ -33436,6 +31574,7 @@
       "dv_extract_video_info",
       "dv_extract_timecode",
       "dv_init_demux",
+      "avpriv_dv_init_demux",
       "avpriv_dv_get_packet",
       "avpriv_dv_produce_packet",
       "dv_frame_offset",
@@ -33447,8 +31586,7 @@
       "dv_probe",
       "avpriv_dv_init_demux",
       "avpriv_dv_get_packet",
-      "avpriv_dv_produce_packet",
-      "avpriv_dv_init_demux"
+      "avpriv_dv_produce_packet"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/dvbsub.c": {
@@ -33709,10 +31847,10 @@
   },
   "/workspace/test/in/FFmpeg/libavformat/flic.c": {
     "fc": [
-      "flic_read_packet",
-      "flic_read_seek",
       "flic_probe",
-      "flic_read_header"
+      "flic_read_header",
+      "flic_read_packet",
+      "flic_read_seek"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/flvdec.c": {
@@ -34578,9 +32716,9 @@
       "imf_marker_virtual_track_free",
       "imf_trackfile_virtual_track_free",
       "imf_cpl_init",
+      "ff_imf_cpl_alloc",
       "ff_imf_cpl_free",
-      "ff_imf_parse_cpl",
-      "ff_imf_cpl_alloc"
+      "ff_imf_parse_cpl"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/imfdec.c": {
@@ -36133,9 +34271,9 @@
       "mpegts_read_close",
       "mpegts_get_pcr",
       "mpegts_get_dts",
+      "avpriv_mpegts_parse_open",
       "avpriv_mpegts_parse_packet",
-      "avpriv_mpegts_parse_close",
-      "avpriv_mpegts_parse_open"
+      "avpriv_mpegts_parse_close"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/mpegtsenc.c": {
@@ -36364,8 +34502,6 @@
       "mxf_read_strong_ref_array",
       "mxf_read_us_ascii_string",
       "mxf_read_utf16_string",
-      "mxf_read_utf16be_string",
-      "mxf_read_utf16le_string",
       "mxf_read_content_storage",
       "mxf_read_source_clip",
       "mxf_read_timecode_component",
@@ -36615,12 +34751,12 @@
   "/workspace/test/in/FFmpeg/libavformat/nut.c": {
     "fc": [
       "ff_nut_reset_ts",
+      "ff_lsb2full",
       "ff_nut_sp_pos_cmp",
       "ff_nut_sp_pts_cmp",
       "ff_nut_add_sp",
       "enu_free",
-      "ff_nut_free_sp",
-      "ff_lsb2full"
+      "ff_nut_free_sp"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/nutdec.c": {
@@ -36832,6 +34968,7 @@
       "get_category",
       "io_open_default",
       "io_close2_default",
+      "avformat_alloc_context",
       "avformat_get_class",
       "av_stream_get_class",
       "avformat_new_stream",
@@ -36843,8 +34980,7 @@
       "avformat_stream_group_add_stream",
       "option_is_disposition",
       "av_disposition_from_string",
-      "av_disposition_to_string",
-      "avformat_alloc_context"
+      "av_disposition_to_string"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/os_support.c": {
@@ -37152,6 +35288,7 @@
       "get_str8",
       "rm_read_extradata",
       "rm_read_metadata",
+      "ff_rm_alloc_rmstream",
       "ff_rm_free_rmstream",
       "rm_read_audio_stream_info",
       "ff_rm_read_mdpr_codecdata",
@@ -37173,8 +35310,7 @@
       "rm_read_seek",
       "ivr_probe",
       "ivr_read_header",
-      "ivr_read_packet",
-      "ff_rm_alloc_rmstream"
+      "ivr_read_packet"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/rmenc.c": {
@@ -37250,10 +35386,10 @@
       "dh_compute_key",
       "ff_dh_free",
       "dh_is_valid_public_key",
+      "ff_dh_init",
       "ff_dh_generate_public_key",
       "ff_dh_write_public_key",
-      "ff_dh_compute_shared_secret_key",
-      "ff_dh_init"
+      "ff_dh_compute_shared_secret_key"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/rtmpdigest.c": {
@@ -37392,6 +35528,7 @@
       "ff_rtp_send_punch_packets",
       "find_missing_packets",
       "ff_rtp_send_rtcp_feedback",
+      "ff_rtp_parse_open",
       "ff_rtp_parse_set_dynamic_protocol",
       "ff_rtp_parse_set_crypto",
       "rtp_set_prft",
@@ -37401,14 +35538,13 @@
       "ff_rtp_reset_packet_queue",
       "enqueue_packet",
       "has_next_packet",
+      "ff_rtp_queued_packet_time",
       "rtp_parse_queued_packet",
       "rtp_parse_one_packet",
       "ff_rtp_parse_packet",
       "ff_rtp_parse_close",
       "ff_parse_fmtp",
-      "ff_rtp_finalize_packet",
-      "ff_rtp_parse_open",
-      "ff_rtp_queued_packet_time"
+      "ff_rtp_finalize_packet"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/rtpdec_ac3.c": {
@@ -37454,12 +35590,7 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/rtpdec_g726.c": {
-    "fc": [
-      "g726_16_init",
-      "g726_24_init",
-      "g726_32_init",
-      "g726_40_init"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libavformat/rtpdec_h261.c": {
     "fc": [
@@ -38037,6 +36168,7 @@
       "read_timestamp",
       "ff_seek_frame_binary",
       "ff_find_last_ts",
+      "ff_gen_search",
       "seek_frame_byte",
       "seek_frame_generic",
       "seek_frame_internal",
@@ -38044,8 +36176,7 @@
       "avformat_seek_file",
       "ff_read_frame_flush",
       "avformat_flush",
-      "ff_rescale_interval",
-      "ff_gen_search"
+      "ff_rescale_interval"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/segafilm.c": {
@@ -38290,10 +36421,13 @@
     "fc": [
       "ff_text_init_avio",
       "ff_text_init_buf",
+      "ff_text_pos",
       "ff_text_r8",
       "ff_text_read",
       "ff_text_eof",
       "ff_text_peek_r8",
+      "ff_subtitles_queue_insert",
+      "ff_subtitles_queue_insert_bprint",
       "cmp_pkt_sub_ts_pos",
       "cmp_pkt_sub_pos_ts",
       "drop_dups",
@@ -38310,9 +36444,6 @@
       "is_eol",
       "ff_subtitles_read_text_chunk",
       "ff_subtitles_read_chunk",
-      "ff_text_pos",
-      "ff_subtitles_queue_insert",
-      "ff_subtitles_queue_insert_bprint",
       "ff_subtitles_read_line"
     ]
   },
@@ -38788,11 +36919,6 @@
   },
   "/workspace/test/in/FFmpeg/libavformat/uncodedframecrcenc.c": {
     "fc": [
-      "cksum_line_u8",
-      "cksum_line_s16",
-      "cksum_line_s32",
-      "cksum_line_flt",
-      "cksum_line_dbl",
       "video_frame_cksum",
       "audio_frame_cksum",
       "write_header",
@@ -38851,7 +36977,9 @@
       "av_codec_get_tag2",
       "av_codec_get_id",
       "ff_alloc_extradata",
+      "ff_ntp_time",
       "ff_get_formatted_ntp_time",
+      "ff_parse_ntp_time",
       "ff_bprint_get_frame_filename",
       "get_frame_filename",
       "av_get_frame_filename2",
@@ -38867,9 +36995,7 @@
       "ff_bprint_to_codecpar_extradata",
       "ff_dict_set_timestamp",
       "find_opt",
-      "ff_parse_opts_from_query_string",
-      "ff_ntp_time",
-      "ff_parse_ntp_time"
+      "ff_parse_opts_from_query_string"
     ]
   },
   "/workspace/test/in/FFmpeg/libavformat/vag.c": {
@@ -39469,6 +37595,7 @@
   "/workspace/test/in/FFmpeg/libavutil/audio_fifo.c": {
     "fc": [
       "av_audio_fifo_free",
+      "av_audio_fifo_alloc",
       "av_audio_fifo_realloc",
       "av_audio_fifo_write",
       "av_audio_fifo_peek",
@@ -39477,8 +37604,7 @@
       "av_audio_fifo_drain",
       "av_audio_fifo_reset",
       "av_audio_fifo_size",
-      "av_audio_fifo_space",
-      "av_audio_fifo_alloc"
+      "av_audio_fifo_space"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/avsscanf.c": {
@@ -39506,6 +37632,9 @@
       "av_stristart",
       "av_stristr",
       "av_strnstr",
+      "av_strlcpy",
+      "av_strlcat",
+      "av_strlcatf",
       "av_asprintf",
       "av_get_token",
       "av_strtok",
@@ -39518,10 +37647,7 @@
       "av_escape",
       "av_match_name",
       "av_utf8_decode",
-      "av_match_list",
-      "av_strlcpy",
-      "av_strlcat",
-      "av_strlcatf"
+      "av_match_list"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/base64.c": {
@@ -39558,8 +37684,11 @@
   "/workspace/test/in/FFmpeg/libavutil/buffer.c": {
     "fc": [
       "buffer_create",
+      "av_buffer_create",
       "av_buffer_default_free",
       "av_buffer_alloc",
+      "av_buffer_allocz",
+      "av_buffer_ref",
       "buffer_replace",
       "av_buffer_unref",
       "av_buffer_is_writable",
@@ -39568,18 +37697,15 @@
       "av_buffer_make_writable",
       "av_buffer_realloc",
       "av_buffer_replace",
+      "av_buffer_pool_init2",
+      "av_buffer_pool_init",
       "buffer_pool_flush",
       "buffer_pool_free",
       "av_buffer_pool_uninit",
       "pool_release_buffer",
       "pool_alloc_buffer",
-      "av_buffer_pool_buffer_get_opaque",
-      "av_buffer_create",
-      "av_buffer_allocz",
-      "av_buffer_ref",
-      "av_buffer_pool_init2",
-      "av_buffer_pool_init",
-      "av_buffer_pool_get"
+      "av_buffer_pool_get",
+      "av_buffer_pool_buffer_get_opaque"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/camellia.c": {
@@ -39636,8 +37762,8 @@
       "av_channel_layout_compare",
       "av_channel_layout_default",
       "av_channel_layout_standard",
-      "av_channel_layout_retype",
-      "av_channel_layout_subset"
+      "av_channel_layout_subset",
+      "av_channel_layout_retype"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/container_fifo.c": {
@@ -39645,17 +37771,17 @@
       "container_fifo_init_entry",
       "container_fifo_reset_entry",
       "container_fifo_free_entry",
+      "av_container_fifo_alloc",
       "av_container_fifo_free",
       "av_container_fifo_read",
       "av_container_fifo_peek",
       "av_container_fifo_drain",
       "av_container_fifo_write",
+      "av_container_fifo_can_read",
       "frame_alloc",
       "frame_reset",
       "frame_free",
       "frame_transfer",
-      "av_container_fifo_alloc",
-      "av_container_fifo_can_read",
       "av_container_fifo_alloc_avframe"
     ]
   },
@@ -39667,20 +37793,12 @@
       "av_parse_cpu_caps",
       "av_cpu_count",
       "av_cpu_force_count",
-      "ff_getauxval",
-      "av_cpu_max_align"
+      "av_cpu_max_align",
+      "ff_getauxval"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/crc.c": {
     "fc": [
-      "AV_CRC_8_ATM_init_table_once",
-      "AV_CRC_8_EBU_init_table_once",
-      "AV_CRC_16_ANSI_init_table_once",
-      "AV_CRC_16_CCITT_init_table_once",
-      "AV_CRC_24_IEEE_init_table_once",
-      "AV_CRC_32_IEEE_init_table_once",
-      "AV_CRC_32_IEEE_LE_init_table_once",
-      "AV_CRC_16_ANSI_LE_init_table_once",
       "av_crc_init",
       "av_crc_get_table",
       "av_crc"
@@ -39725,12 +37843,6 @@
       "av_csp_trc_func_inv_from_id",
       "eotf_linear",
       "eotf_linear_inv",
-      "oetf_gamma22",
-      "oetf_gamma28",
-      "oetf_iec61966_2_1",
-      "eotf_gamma22",
-      "eotf_gamma28",
-      "eotf_iec61966_2_1",
       "eotf_bt1886",
       "eotf_bt1886_inv",
       "eotf_smpte_st2084",
@@ -39751,11 +37863,11 @@
       "key_shift_left",
       "gen_roundkeys",
       "des_encdec",
+      "av_des_alloc",
       "av_des_init",
       "av_des_crypt_mac",
       "av_des_crypt",
-      "av_des_mac",
-      "av_des_alloc"
+      "av_des_mac"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/detection_bbox.c": {
@@ -39768,14 +37880,14 @@
     "fc": [
       "av_dict_count",
       "av_dict_iterate",
+      "av_dict_get",
       "av_dict_set",
       "av_dict_set_int",
       "parse_key_value_pair",
       "av_dict_parse_string",
       "av_dict_free",
       "av_dict_copy",
-      "av_dict_get_string",
-      "av_dict_get"
+      "av_dict_get_string"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/display.c": {
@@ -39800,12 +37912,12 @@
   "/workspace/test/in/FFmpeg/libavutil/encryption_info.c": {
     "fc": [
       "av_encryption_info_alloc",
-      "av_encryption_info_free",
-      "av_encryption_init_info_free",
       "av_encryption_info_clone",
+      "av_encryption_info_free",
       "av_encryption_info_get_side_data",
       "av_encryption_info_add_side_data",
       "av_encryption_init_info_alloc",
+      "av_encryption_init_info_free",
       "av_encryption_init_info_get_side_data",
       "av_encryption_init_info_add_side_data"
     ]
@@ -39846,9 +37958,9 @@
       "run_one_task",
       "executor_worker_task",
       "executor_free",
+      "av_executor_alloc",
       "av_executor_free",
-      "av_executor_execute",
-      "av_executor_alloc"
+      "av_executor_execute"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/fifo.c": {
@@ -39890,8 +38002,8 @@
   "/workspace/test/in/FFmpeg/libavutil/film_grain_params.c": {
     "fc": [
       "av_film_grain_params_alloc",
-      "av_film_grain_params_select",
-      "av_film_grain_params_create_side_data"
+      "av_film_grain_params_create_side_data",
+      "av_film_grain_params_select"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/fixed_dsp.c": {
@@ -39935,6 +38047,7 @@
   "/workspace/test/in/FFmpeg/libavutil/frame.c": {
     "fc": [
       "get_frame_defaults",
+      "av_frame_alloc",
       "av_frame_free",
       "get_video_buffer",
       "get_audio_buffer",
@@ -39942,23 +38055,22 @@
       "frame_copy_props",
       "av_frame_ref",
       "av_frame_replace",
+      "av_frame_clone",
       "av_frame_unref",
       "av_frame_move_ref",
       "av_frame_is_writable",
       "av_frame_make_writable",
       "av_frame_copy_props",
+      "av_frame_get_plane_buffer",
+      "av_frame_new_side_data_from_buf",
+      "av_frame_new_side_data",
+      "av_frame_get_side_data",
       "frame_copy_video",
       "frame_copy_audio",
       "av_frame_copy",
       "av_frame_remove_side_data",
       "calc_cropping_offsets",
-      "av_frame_apply_cropping",
-      "av_frame_alloc",
-      "av_frame_clone",
-      "av_frame_get_plane_buffer",
-      "av_frame_new_side_data_from_buf",
-      "av_frame_new_side_data",
-      "av_frame_get_side_data"
+      "av_frame_apply_cropping"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/half2float.c": {
@@ -39985,9 +38097,9 @@
   "/workspace/test/in/FFmpeg/libavutil/hdr_dynamic_metadata.c": {
     "fc": [
       "av_dynamic_hdr_plus_alloc",
+      "av_dynamic_hdr_plus_create_side_data",
       "av_dynamic_hdr_plus_from_t35",
-      "av_dynamic_hdr_plus_to_t35",
-      "av_dynamic_hdr_plus_create_side_data"
+      "av_dynamic_hdr_plus_to_t35"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/hdr_dynamic_vivid_metadata.c": {
@@ -39998,21 +38110,12 @@
   },
   "/workspace/test/in/FFmpeg/libavutil/hmac.c": {
     "fc": [
-      "md5_init",
-      "sha160_init",
-      "sha224_init",
-      "sha256_init",
-      "sha512384_init",
-      "sha512512_init",
-      "md5_update",
-      "sha_update",
-      "sha512_update",
+      "DEFINE_ALGO_INIT",
       "av_hmac_free",
       "av_hmac_init",
       "av_hmac_update",
       "av_hmac_final",
-      "av_hmac_calc",
-      "DEFINE_ALGO_INIT"
+      "av_hmac_calc"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/hwcontext.c": {
@@ -40022,8 +38125,10 @@
       "av_hwdevice_iterate_types",
       "hwdevice_ctx_get_name",
       "hwdevice_ctx_free",
+      "av_hwdevice_ctx_alloc",
       "av_hwdevice_ctx_init",
       "hwframe_ctx_free",
+      "av_hwframe_ctx_alloc",
       "hwframe_pool_prealloc",
       "av_hwframe_ctx_init",
       "av_hwframe_transfer_get_formats",
@@ -40031,6 +38136,7 @@
       "av_hwframe_transfer_data",
       "av_hwframe_get_buffer",
       "av_hwdevice_hwconfig_alloc",
+      "av_hwdevice_get_hwframe_constraints",
       "av_hwframe_constraints_free",
       "av_hwdevice_ctx_create",
       "av_hwdevice_ctx_create_derived_opts",
@@ -40039,10 +38145,7 @@
       "ff_hwframe_map_create",
       "av_hwframe_map",
       "av_hwframe_ctx_create_derived",
-      "ff_hwframe_map_replace",
-      "av_hwdevice_ctx_alloc",
-      "av_hwframe_ctx_alloc",
-      "av_hwdevice_get_hwframe_constraints"
+      "ff_hwframe_map_replace"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/hwcontext_amf.c": {
@@ -40369,6 +38472,7 @@
       "vt_frames_get_constraints",
       "av_map_videotoolbox_format_to_pixfmt",
       "vt_format_from_pixfmt",
+      "av_map_videotoolbox_format_from_pixfmt",
       "av_map_videotoolbox_format_from_pixfmt2",
       "vt_pool_alloc",
       "videotoolbox_buffer_release",
@@ -40379,8 +38483,11 @@
       "vt_transfer_get_formats",
       "vt_unmap",
       "vt_pixbuf_set_par",
-      "vt_pixbuf_set_chromaloc",
       "av_map_videotoolbox_chroma_loc_from_av",
+      "vt_pixbuf_set_chromaloc",
+      "av_map_videotoolbox_color_matrix_from_av",
+      "av_map_videotoolbox_color_primaries_from_av",
+      "av_map_videotoolbox_color_trc_from_av",
       "vt_cv_buffer_copy_attachments",
       "vt_pixbuf_set_colorspace",
       "vt_pixbuf_set_attachments",
@@ -40389,11 +38496,7 @@
       "vt_transfer_data_from",
       "vt_transfer_data_to",
       "vt_map_from",
-      "vt_device_create",
-      "av_map_videotoolbox_format_from_pixfmt",
-      "av_map_videotoolbox_color_matrix_from_av",
-      "av_map_videotoolbox_color_primaries_from_av",
-      "av_map_videotoolbox_color_trc_from_av"
+      "vt_device_create"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/hwcontext_vulkan.c": {
@@ -40481,18 +38584,14 @@
       "audio_element_child_iterate",
       "av_iamf_audio_element_get_class",
       "av_iamf_audio_element_alloc",
-      "av_iamf_audio_element_add_layer",
       "av_iamf_audio_element_free",
       "submix_element_child_next",
       "submix_element_child_iterate",
-      "av_iamf_submix_add_element",
-      "av_iamf_submix_add_layout",
       "submix_presentation_child_next",
       "submix_presentation_child_iterate",
       "mix_presentation_child_iterate",
       "av_iamf_mix_presentation_get_class",
       "av_iamf_mix_presentation_alloc",
-      "av_iamf_mix_presentation_add_submix",
       "av_iamf_mix_presentation_free"
     ]
   },
@@ -40526,15 +38625,15 @@
   "/workspace/test/in/FFmpeg/libavutil/integer.c": {
     "fc": [
       "av_add_i",
-      "av_log2_i",
-      "av_cmp_i",
-      "av_mod_i",
-      "av_i2int",
       "av_sub_i",
+      "av_log2_i",
       "av_mul_i",
+      "av_cmp_i",
       "av_shr_i",
+      "av_mod_i",
       "av_div_i",
-      "av_int2i"
+      "av_int2i",
+      "av_i2int"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/intmath.c": {
@@ -40617,8 +38716,8 @@
   "/workspace/test/in/FFmpeg/libavutil/mastering_display_metadata.c": {
     "fc": [
       "get_defaults",
-      "av_mastering_display_metadata_alloc_size",
       "av_mastering_display_metadata_alloc",
+      "av_mastering_display_metadata_alloc_size",
       "av_mastering_display_metadata_create_side_data",
       "av_content_light_metadata_alloc",
       "av_content_light_metadata_create_side_data"
@@ -40628,15 +38727,15 @@
     "fc": [
       "av_gcd",
       "av_rescale_rnd",
-      "av_compare_ts",
-      "eval_poly",
-      "av_bessel_i0",
       "av_rescale",
       "av_rescale_q_rnd",
       "av_rescale_q",
+      "av_compare_ts",
       "av_compare_mod",
       "av_rescale_delta",
-      "av_add_stable"
+      "av_add_stable",
+      "eval_poly",
+      "av_bessel_i0"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/md5.c": {
@@ -40747,13 +38846,6 @@
       "opt_set_elem",
       "opt_set_array",
       "av_opt_set",
-      "av_opt_eval_flags",
-      "av_opt_eval_int",
-      "av_opt_eval_uint",
-      "av_opt_eval_int64",
-      "av_opt_eval_float",
-      "av_opt_eval_double",
-      "av_opt_eval_q",
       "set_number",
       "av_opt_set_int",
       "av_opt_set_double",
@@ -40832,9 +38924,9 @@
       "date_get_num",
       "date_get_month",
       "av_small_strptime",
+      "av_timegm",
       "av_parse_time",
-      "av_find_info_tag",
-      "av_timegm"
+      "av_find_info_tag"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/pca.c": {
@@ -40887,11 +38979,6 @@
   "/workspace/test/in/FFmpeg/libavutil/pixelutils.c": {
     "fc": [
       "sad_wxh",
-      "block_sad_2x2_c",
-      "block_sad_4x4_c",
-      "block_sad_8x8_c",
-      "block_sad_16x16_c",
-      "block_sad_32x32_c",
       "av_pixelutils_get_sad_fn"
     ]
   },
@@ -40934,13 +39021,13 @@
     "fc": [
       "av_reduce",
       "av_mul_q",
+      "av_div_q",
       "av_add_q",
+      "av_sub_q",
+      "av_d2q",
       "av_nearer_q",
       "av_find_nearest_q_idx",
       "av_q2intfloat",
-      "av_div_q",
-      "av_sub_q",
-      "av_d2q",
       "av_gcd_q"
     ]
   },
@@ -41065,12 +39152,12 @@
       "av_frame_side_data_remove_by_props",
       "av_frame_side_data_free",
       "add_side_data_from_buf_ext",
-      "replace_side_data_from_buf",
-      "av_frame_side_data_clone",
-      "av_frame_side_data_get_c",
       "ff_frame_side_data_add_from_buf",
+      "replace_side_data_from_buf",
       "av_frame_side_data_new",
-      "av_frame_side_data_add"
+      "av_frame_side_data_add",
+      "av_frame_side_data_clone",
+      "av_frame_side_data_get_c"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/slicethread.c": {
@@ -41096,15 +39183,15 @@
   "/workspace/test/in/FFmpeg/libavutil/stereo3d.c": {
     "fc": [
       "get_defaults",
+      "av_stereo3d_alloc",
       "av_stereo3d_alloc_size",
+      "av_stereo3d_create_side_data",
       "av_stereo3d_type_name",
       "av_stereo3d_from_name",
       "av_stereo3d_view_name",
       "av_stereo3d_view_from_name",
       "av_stereo3d_primary_eye_name",
-      "av_stereo3d_primary_eye_from_name",
-      "av_stereo3d_alloc",
-      "av_stereo3d_create_side_data"
+      "av_stereo3d_primary_eye_from_name"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/tdrdi.c": {
@@ -41371,11 +39458,6 @@
   },
   "/workspace/test/in/FFmpeg/libavutil/tests/pixfmt_best.c": {
     "fc": [
-      "find_best_base",
-      "find_best_seminplanar",
-      "find_best_packed",
-      "find_best_subsampled",
-      "find_best_depthchroma",
       "test",
       "main"
     ]
@@ -41471,14 +39553,16 @@
   "/workspace/test/in/FFmpeg/libavutil/time.c": {
     "fc": [
       "av_gettime",
+      "av_gettime_relative",
       "av_gettime_relative_is_monotonic",
-      "av_usleep",
-      "av_gettime_relative"
+      "av_usleep"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/timecode.c": {
     "fc": [
       "av_timecode_adjust_ntsc_framenum2",
+      "av_timecode_get_smpte_from_framenum",
+      "av_timecode_get_smpte",
       "av_timecode_make_string",
       "av_timecode_make_smpte_tc_string2",
       "av_timecode_make_smpte_tc_string",
@@ -41489,9 +39573,7 @@
       "av_timecode_check_frame_rate",
       "av_timecode_init",
       "av_timecode_init_from_components",
-      "av_timecode_init_from_string",
-      "av_timecode_get_smpte_from_framenum",
-      "av_timecode_get_smpte"
+      "av_timecode_init_from_string"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/timecode_internal.c": {
@@ -41574,43 +39656,9 @@
       "TX_TAB",
       "TX_TAB",
       "fft3",
-      "fft5",
-      "fft5_m1",
-      "fft5_m2",
-      "fft5_m3",
       "fft7",
       "fft9",
       "fft15",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
-      "TX_NAME",
       "TX_NAME",
       "TX_NAME",
       "TX_NAME",
@@ -41653,8 +39701,8 @@
       "av_get_picture_type_char",
       "av_int_list_length_for_size",
       "av_fourcc_make_string",
-      "av_assert0_fpu",
-      "av_get_time_base_q"
+      "av_get_time_base_q",
+      "av_assert0_fpu"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/uuid.c": {
@@ -41689,12 +39737,13 @@
   "/workspace/test/in/FFmpeg/libavutil/vulkan.c": {
     "fc": [
       "ff_vk_ret2str",
-      "ff_vk_map_usage_to_feats",
-      "ff_vk_map_feats_to_usage",
       "load_enabled_qfs",
       "ff_vk_load_props",
+      "ff_vk_qf_find",
       "ff_vk_exec_pool_free",
       "ff_vk_exec_pool_init",
+      "ff_vk_exec_get_query",
+      "ff_vk_exec_get",
       "ff_vk_exec_wait",
       "ff_vk_exec_start",
       "ff_vk_exec_discard_deps",
@@ -41721,6 +39770,7 @@
       "ff_vk_host_map_buffer",
       "ff_vk_shader_add_push_const",
       "ff_vk_init_sampler",
+      "ff_vk_aspect_flag",
       "ff_vk_mt_is_np_rgb",
       "ff_vk_set_perm",
       "ff_vk_shader_rep_fmt",
@@ -41750,11 +39800,7 @@
       "ff_vk_exec_bind_shader",
       "ff_vk_shader_free",
       "ff_vk_uninit",
-      "ff_vk_init",
-      "ff_vk_qf_find",
-      "ff_vk_exec_get_query",
-      "ff_vk_exec_get",
-      "ff_vk_aspect_flag"
+      "ff_vk_init"
     ]
   },
   "/workspace/test/in/FFmpeg/libavutil/vulkan_glslang.c": {
@@ -41818,8 +39864,6 @@
   },
   "/workspace/test/in/FFmpeg/libavutil/x86/tx_float_init.c": {
     "fc": [
-      "b8_i0",
-      "b8_i2",
       "factor_init",
       "m_inv_init",
       "fft_pfa_init"
@@ -41858,8 +39902,6 @@
   },
   "/workspace/test/in/FFmpeg/libswresample/aarch64/resample_init.c": {
     "fc": [
-      "ff_resample_common_float_neon",
-      "ff_resample_common_s16_neon",
       "swri_resample_dsp_aarch64_init"
     ]
   },
@@ -41878,56 +39920,18 @@
   },
   "/workspace/test/in/FFmpeg/libswresample/arm/resample_init.c": {
     "fc": [
-      "ff_resample_common_float_neon",
-      "ff_resample_common_s16_neon",
       "swri_resample_dsp_arm_init"
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/audioconvert.c": {
     "fc": [
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
-      "CONV_FUNC_NAME",
       "cpy1",
       "cpy2",
       "cpy4",
       "cpy8",
+      "swri_audio_convert_alloc",
       "swri_audio_convert_free",
-      "swri_audio_convert",
-      "swri_audio_convert_alloc"
+      "swri_audio_convert"
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/dither.c": {
@@ -41938,7 +39942,7 @@
   },
   "/workspace/test/in/FFmpeg/libswresample/dither_template.c": {
     "fc": [
-      "swri_noise_shaping_int16"
+      "RENAME"
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/log2_tab.c": {
@@ -41970,11 +39974,11 @@
   },
   "/workspace/test/in/FFmpeg/libswresample/rematrix_template.c": {
     "fc": [
-      "sum2_s32",
-      "copy_s32",
-      "mix6to2_s32",
-      "mix8to2_s32",
-      "get_mix_any_func_s32"
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME",
+      "RENAME"
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/resample.c": {
@@ -41998,9 +40002,9 @@
   },
   "/workspace/test/in/FFmpeg/libswresample/resample_template.c": {
     "fc": [
-      "resample_one_int16",
-      "resample_common_int16",
-      "resample_linear_int16"
+      "RENAME",
+      "RENAME",
+      "RENAME"
     ]
   },
   "/workspace/test/in/FFmpeg/libswresample/soxr_resample.c": {
@@ -42035,9 +40039,9 @@
       "swr_convert",
       "swr_drop_output",
       "swr_inject_silence",
+      "swr_get_delay",
       "swr_get_out_samples",
       "swr_set_compensation",
-      "swr_get_delay",
       "swr_next_pts"
     ]
   },
@@ -42103,14 +40107,6 @@
       "ff_hscale16to19_4_neon",
       "ff_hscale16to19_X8_neon",
       "ff_hscale16to19_X4_neon",
-      "yuv2planeX_9BE_neon",
-      "yuv2planeX_9LE_neon",
-      "yuv2planeX_10BE_neon",
-      "yuv2planeX_10LE_neon",
-      "yuv2planeX_12BE_neon",
-      "yuv2planeX_12LE_neon",
-      "yuv2planeX_14BE_neon",
-      "yuv2planeX_14LE_neon",
       "ff_yuv2nv12cX_neon",
       "ff_sws_init_range_convert_aarch64",
       "ff_sws_init_xyzdsp_aarch64",
@@ -42191,14 +40187,14 @@
       "ff_sws_matrix3x3_apply",
       "cie_X",
       "cie_Z",
-      "apply_chromatic_adaptation",
-      "ff_sws_ipt_rgb2lms",
-      "test_point_line",
-      "test_point_gamut",
       "ff_sws_rgb2xyz",
       "ff_sws_xyz2rgb",
+      "apply_chromatic_adaptation",
       "ff_sws_get_adaptation",
+      "ff_sws_ipt_rgb2lms",
       "ff_sws_ipt_lms2rgb",
+      "test_point_line",
+      "test_point_gamut",
       "ff_prim_superset"
     ]
   },
@@ -42207,8 +40203,10 @@
       "sws_isSupportedInput",
       "sws_isSupportedOutput",
       "sws_isSupportedEndiannessConversion",
+      "ff_fmt_from_frame",
       "infer_prim_ref",
       "infer_trc_ref",
+      "ff_infer_colors",
       "sws_test_format",
       "sws_test_colorspace",
       "sws_test_primaries",
@@ -42236,9 +40234,7 @@
       "fmt_dither",
       "linear_mat3",
       "ff_sws_decode_colors",
-      "ff_sws_encode_colors",
-      "ff_fmt_from_frame",
-      "ff_infer_colors"
+      "ff_sws_encode_colors"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/gamma.c": {
@@ -42250,6 +40246,7 @@
   "/workspace/test/in/FFmpeg/libswscale/graph.c": {
     "fc": [
       "pass_alloc_output",
+      "ff_sws_graph_add_pass",
       "pass_append",
       "run_copy",
       "run_rgb0",
@@ -42276,8 +40273,7 @@
       "opts_equal",
       "ff_sws_graph_reinit",
       "ff_sws_graph_update_metadata",
-      "ff_sws_graph_run",
-      "ff_sws_graph_add_pass"
+      "ff_sws_graph_run"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/half2float.c": {
@@ -42327,9 +40323,6 @@
       "yuy2ToY_c",
       "yuy2ToUV_c",
       "yvy2ToUV_c",
-      "y210le_UV_c",
-      "y212le_UV_c",
-      "y216le_UV_c",
       "bswap16Y_c",
       "bswap16UV_c",
       "read_ya16le_gray_c",
@@ -42340,8 +40333,6 @@
       "read_ayuv64be_Y_c",
       "ayuv64le_UV_c",
       "ayuv64be_UV_c",
-      "read_ayuv64le_UV_c",
-      "read_xv48le_UV_c",
       "read_ayuv64le_A_c",
       "read_ayuv64be_A_c",
       "read_vuyx_UV_c",
@@ -42368,12 +40359,6 @@
       "nvXXtoUV_c",
       "nv12ToUV_c",
       "nv21ToUV_c",
-      "nv20LEToY_c",
-      "p010LEToY_c",
-      "p012LEToY_c",
-      "p016LEToUV_c",
-      "shf16_10LEToY_c",
-      "shf16_12LEToY_c",
       "bgr24ToY_c",
       "bgr24ToUV_c",
       "bgr24ToUV_half_c",
@@ -42391,12 +40376,6 @@
       "grayf32ToY16_c",
       "read_yaf32_gray_c",
       "read_yaf32_alpha_c",
-      "planar_rgb10le_to_a",
-      "planar_rgb12le_to_a",
-      "planar_rgb14le_to_a",
-      "planar_rgb16le_to_a",
-      "planar_rgbf32le_to_y",
-      "planar_rgbf32be_to_y",
       "planar_rgbf16_to_a",
       "planar_rgbf16_to_uv",
       "planar_rgbf16_to_y",
@@ -42410,8 +40389,6 @@
       "rgbf16ToUV_half_endian",
       "rgbf16ToUV_endian",
       "rgbf16ToY_endian",
-      "planar_rgbf16le_to_y",
-      "planar_rgbf16be_to_y",
       "ff_sws_init_input_funcs"
     ]
   },
@@ -42437,38 +40414,10 @@
       "yuv2rgb_X_template_lasx",
       "yuv2rgb_2_template_lasx",
       "yuv2rgb_1_template_lasx",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
       "yuv2rgb_write_full",
       "yuv2rgb_full_X_template_lasx",
       "yuv2rgb_full_2_template_lasx",
       "yuv2rgb_full_1_template_lasx",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
       "ff_sws_init_output_lasx"
     ]
   },
@@ -42478,38 +40427,10 @@
       "yuv2rgb_X_template_lsx",
       "yuv2rgb_2_template_lsx",
       "yuv2rgb_1_template_lsx",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
       "yuv2rgb_write_full",
       "yuv2rgb_full_X_template_lsx",
       "yuv2rgb_full_2_template_lsx",
       "yuv2rgb_full_1_template_lsx",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
       "ff_sws_init_output_lsx"
     ]
   },
@@ -42541,29 +40462,16 @@
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/loongarch/yuv2rgb_lasx.c": {
-    "fc": [
-      "yuv420_rgb24_lasx",
-      "yuv420_bgr24_lasx",
-      "yuv420_rgba32_lasx",
-      "yuv420_bgra32_lasx",
-      "yuv420_argb32_lasx",
-      "yuv420_abgr32_lasx"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/loongarch/yuv2rgb_lsx.c": {
-    "fc": [
-      "yuv420_rgb24_lsx",
-      "yuv420_bgr24_lsx",
-      "yuv420_rgba32_lsx",
-      "yuv420_bgra32_lsx",
-      "yuv420_argb32_lsx",
-      "yuv420_abgr32_lsx"
-    ]
+    "fc": []
   },
   "/workspace/test/in/FFmpeg/libswscale/lut3d.c": {
     "fc": [
       "ff_sws_lut3d_alloc",
       "ff_sws_lut3d_free",
+      "ff_sws_lut3d_test_fmt",
       "ff_sws_lut3d_pick_pixfmt",
       "barycentric",
       "tetrahedral",
@@ -42574,25 +40482,28 @@
       "apply_tone_map",
       "ff_sws_lut3d_generate",
       "ff_sws_lut3d_update",
-      "ff_sws_lut3d_apply",
-      "ff_sws_lut3d_test_fmt"
+      "ff_sws_lut3d_apply"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/ops.c": {
     "fc": [
       "ff_sws_pixel_type_name",
       "ff_sws_pixel_type_size",
+      "ff_sws_pixel_type_is_int",
       "av_min_q",
       "av_max_q",
       "ff_sws_apply_op_q",
       "merge_comp_flags",
       "ff_sws_op_list_update_comps",
       "op_uninit",
+      "ff_sws_op_list_alloc",
       "ff_sws_op_list_free",
+      "ff_sws_op_list_duplicate",
       "ff_sws_op_list_remove_at",
       "ff_sws_op_list_insert_at",
       "ff_sws_op_list_append",
       "ff_sws_op_list_max_size",
+      "ff_sws_linear_mask",
       "describe_lin_mask",
       "describe_comp_flags",
       "print_q",
@@ -42605,11 +40516,7 @@
       "op_pass_run",
       "rw_planes",
       "rw_pixel_bits",
-      "ff_sws_compile_pass",
-      "ff_sws_pixel_type_is_int",
-      "ff_sws_op_list_alloc",
-      "ff_sws_op_list_duplicate",
-      "ff_sws_linear_mask"
+      "ff_sws_compile_pass"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_backend.c": {
@@ -42652,120 +40559,36 @@
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_tmpl_common.c": {
     "fc": [
-      "DECL_PATTERN",
-      "DECL_PATTERN",
-      "DECL_PATTERN",
-      "DECL_PATTERN",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_PATTERN",
       "WRAP_CONVERT_UINT",
-      "WRAP_CLEAR"
+      "WRAP_CLEAR",
+      "DECL_PATTERN",
+      "DECL_PATTERN"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_tmpl_float.c": {
     "fc": [
       "DECL_SETUP",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_SETUP",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
       "DECL_FUNC",
+      "DECL_SETUP",
       "DECL_FUNC"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/ops_tmpl_int.c": {
     "fc": [
       "DECL_READ",
-      "DECL_WRITE",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_READ",
-      "DECL_IMPL_READ",
-      "DECL_IMPL_READ",
-      "DECL_WRITE",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_PATTERN",
-      "DECL_PATTERN",
-      "DECL_PATTERN",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_IMPL",
-      "DECL_PATTERN",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
-      "fn",
       "DECL_READ",
       "DECL_WRITE",
+      "DECL_WRITE",
       "WRAP_READ",
+      "DECL_READ",
       "WRAP_READ",
+      "DECL_WRITE",
       "WRAP_WRITE",
-      "WRAP_PACK_UNPACK"
+      "DECL_PATTERN",
+      "DECL_PATTERN",
+      "WRAP_PACK_UNPACK",
+      "DECL_PATTERN",
+      "DECL_PATTERN"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/options.c": {
@@ -42783,32 +40606,10 @@
       "yuv2plane1_float_bswap_c_template",
       "yuv2planeX_float_c_template",
       "yuv2planeX_float_bswap_c_template",
-      "yuv2plane1_floatBE_c",
-      "yuv2plane1_floatLE_c",
-      "yuv2planeX_floatBE_c",
-      "yuv2planeX_floatLE_c",
-      "yuv2plane1_floatLE_c",
-      "yuv2plane1_floatBE_c",
-      "yuv2planeX_floatLE_c",
-      "yuv2planeX_floatBE_c",
       "yuv2plane1_10_c_template",
       "yuv2planeX_10_c_template",
-      "yuv2plane1_9BE_c",
-      "yuv2plane1_9LE_c",
-      "yuv2plane1_10BE_c",
-      "yuv2plane1_10LE_c",
-      "yuv2plane1_12BE_c",
-      "yuv2plane1_12LE_c",
-      "yuv2plane1_14BE_c",
-      "yuv2plane1_14LE_c",
-      "yuv2plane1_16BE_c",
-      "yuv2plane1_16LE_c",
       "yuv2msbplane1_10_c_template",
       "yuv2msbplaneX_10_c_template",
-      "yuv2msbplane1_10BE_c",
-      "yuv2msbplane1_10LE_c",
-      "yuv2msbplane1_12BE_c",
-      "yuv2msbplane1_12LE_c",
       "yuv2nv12cX_16LE_c",
       "yuv2nv12cX_16BE_c",
       "yuv2planeX_8_c",
@@ -42817,20 +40618,12 @@
       "yuv2p01xl1_c",
       "yuv2p01xlX_c",
       "yuv2p01xcX_c",
-      "yuv2p010l1_LE_c",
-      "yuv2p012l1_LE_c",
-      "yuv2nv20l1_LE_c",
       "yuv2mono_X_c_template",
       "yuv2mono_2_c_template",
       "yuv2mono_1_c_template",
-      "yuv2monowhite_X_c",
-      "yuv2monoblack_X_c",
       "yuv2422_X_c_template",
       "yuv2422_2_c_template",
       "yuv2422_1_c_template",
-      "yuv2yuyv422_X_c",
-      "yuv2yvyu422_X_c",
-      "yuv2uyvy422_X_c",
       "yuv2ya16_X_c_template",
       "yuv2ya16_2_c_template",
       "yuv2ya16_1_c_template",
@@ -42844,46 +40637,10 @@
       "yuv2rgb_X_c_template",
       "yuv2rgb_2_c_template",
       "yuv2rgb_1_c_template",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
       "yuv2rgb_write_full",
       "yuv2rgb_full_X_c_template",
       "yuv2rgb_full_2_c_template",
       "yuv2rgb_full_1_c_template",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
-      "YUV2RGBWRAPPERX2",
       "yuv2gbrp_full_X_c",
       "yuv2gbrpmsb_full_X_c",
       "yuv2gbrp16_full_X_c",
@@ -42892,24 +40649,11 @@
       "yuv2ya8_2_c",
       "yuv2ya8_X_c",
       "yuv2ayuv64_X_c",
-      "yuv2ayuv64le_X_c",
-      "yuv2ayuv64be_X_c",
-      "yuv2xv48le_X_c",
-      "yuv2xv48be_X_c",
       "yuv2v30_X_c_template",
-      "yuv2xv30le_X_c",
-      "yuv2v30xle_X_c",
       "yuv2xv36_X_c",
-      "yuv2xv36le_X_c",
-      "yuv2xv36be_X_c",
       "yuv2ayuv_1_c_template",
       "yuv2ayuv_2_c_template",
       "yuv2ayuv_X_c_template",
-      "yuv2vuyX_X_c",
-      "yuv2ayuv_X_c",
-      "yuv2uyva_X_c",
-      "yuv2y210le_X_c",
-      "yuv2y212le_X_c",
       "yuv2y216le_X_c",
       "yuv2vyu444_1_c",
       "yuv2vyu444_2_c",
@@ -42923,10 +40667,6 @@
       "yuv2plane1_float_bswap_u",
       "yuv2plane1_float_altivec",
       "yuv2plane1_float_bswap_altivec",
-      "yuv2plane1_floatBE_altivec",
-      "yuv2plane1_floatLE_altivec",
-      "yuv2plane1_floatLE_altivec",
-      "yuv2plane1_floatBE_altivec",
       "ff_sws_init_swscale_ppc"
     ]
   },
@@ -42950,52 +40690,15 @@
       "yuv2plane1_16_vsx",
       "yuv2planeX_16_u",
       "yuv2planeX_16_vsx",
-      "yuv2plane1_16BE_vsx",
-      "yuv2plane1_16LE_vsx",
-      "yuv2planeX_16BE_vsx",
-      "yuv2planeX_16LE_vsx",
       "yuv2rgb_full_X_vsx_template",
       "yuv2rgb_full_2_vsx_template",
       "yuv2rgb_2_vsx_template",
       "yuv2rgb_full_1_vsx_template",
       "yuv2rgb_1_vsx_template",
-      "yuv2bgrx32_1_vsx",
-      "yuv2rgbx32_1_vsx",
-      "yuv2xrgb32_1_vsx",
-      "yuv2xbgr32_1_vsx",
-      "yuv2rgb24_1_vsx",
-      "yuv2bgr24_1_vsx",
-      "yuv2bgrx32_2_vsx",
-      "yuv2rgbx32_2_vsx",
-      "yuv2xrgb32_2_vsx",
-      "yuv2xbgr32_2_vsx",
-      "yuv2rgb24_2_vsx",
-      "yuv2bgr24_2_vsx",
-      "yuv2bgrx32_full_1_vsx",
-      "yuv2rgbx32_full_1_vsx",
-      "yuv2xrgb32_full_1_vsx",
-      "yuv2xbgr32_full_1_vsx",
-      "yuv2rgb24_full_1_vsx",
-      "yuv2bgr24_full_1_vsx",
-      "yuv2bgrx32_full_2_vsx",
-      "yuv2rgbx32_full_2_vsx",
-      "yuv2xrgb32_full_2_vsx",
-      "yuv2xbgr32_full_2_vsx",
-      "yuv2rgb24_full_2_vsx",
-      "yuv2bgr24_full_2_vsx",
-      "yuv2bgrx32_full_X_vsx",
-      "yuv2rgbx32_full_X_vsx",
-      "yuv2xrgb32_full_X_vsx",
-      "yuv2xbgr32_full_X_vsx",
-      "yuv2rgb24_full_X_vsx",
-      "yuv2bgr24_full_X_vsx",
       "write422",
       "yuv2422_X_vsx_template",
       "yuv2422_2_vsx_template",
       "yuv2422_1_vsx_template",
-      "YUV2PACKEDWRAPPER2",
-      "YUV2PACKEDWRAPPER2",
-      "YUV2PACKEDWRAPPER2",
       "hyscale_fast_vsx",
       "hcscale_fast_vsx",
       "hScale16To19_vsx",
@@ -43007,22 +40710,10 @@
     "fc": [
       "cvtyuvtoRGB",
       "vec_xl",
-      "altivec_yuv2_abgr",
-      "altivec_yuv2_bgra",
-      "altivec_yuv2_rgba",
-      "altivec_yuv2_argb",
-      "altivec_yuv2_rgb24",
-      "altivec_yuv2_bgr24",
       "altivec_uyvy_rgb32",
+      "ff_yuv2rgb_init_ppc",
       "ff_yuv2rgb_init_tables_ppc",
-      "yuv2packedX_altivec",
-      "ff_yuv2abgr_X_altivec",
-      "ff_yuv2bgra_X_altivec",
-      "ff_yuv2argb_X_altivec",
-      "ff_yuv2rgba_X_altivec",
-      "ff_yuv2rgb24_X_altivec",
-      "ff_yuv2bgr24_X_altivec",
-      "ff_yuv2rgb_init_ppc"
+      "yuv2packedX_altivec"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/ppc/yuv2yuv_altivec.c": {
@@ -43046,25 +40737,7 @@
       "rgb15to24",
       "rgb15tobgr16",
       "rgb15tobgr15",
-      "rgb12tobgr12",
-      "rgb48tobgr48_nobswap",
-      "rgb48tobgr48_bswap",
-      "rgb64tobgr48_nobswap",
-      "rgb64tobgr48_bswap",
-      "rgb64to48_nobswap",
-      "rgb64to48_bswap",
-      "rgb48tobgr64_nobswap",
-      "rgb48tobgr64_bswap",
-      "rgb48to64_nobswap",
-      "rgb48to64_bswap",
-      "x2rgb10to48_nobswap",
-      "x2rgb10to48_bswap",
-      "x2rgb10to64_nobswap",
-      "x2rgb10to64_bswap",
-      "x2rgb10tobgr48_nobswap",
-      "x2rgb10tobgr48_bswap",
-      "x2rgb10tobgr64_nobswap",
-      "x2rgb10tobgr64_bswap"
+      "rgb12tobgr12"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/rgb2rgb_template.c": {
@@ -43087,13 +40760,6 @@
       "rgb16to32_c",
       "shuffle_bytes_2103_c",
       "shuffle_bytes_0321_c",
-      "shuffle_bytes_1230_c",
-      "shuffle_bytes_3012_c",
-      "shuffle_bytes_3210_c",
-      "shuffle_bytes_3102_c",
-      "shuffle_bytes_2013_c",
-      "shuffle_bytes_2130_c",
-      "shuffle_bytes_1203_c",
       "rgb24tobgr24_c",
       "yuvPlanartoyuy2_c",
       "yv12toyuy2_c",
@@ -43311,14 +40977,17 @@
       "range_override_needed",
       "sws_setColorspaceDetails",
       "sws_getColorspaceDetails",
+      "sws_alloc_context",
       "alloc_gamma_tbl",
       "alphaless_fmt",
       "ff_sws_init_single_context",
       "context_init_threaded",
       "sws_init_context",
+      "sws_getContext",
       "isnan_vec",
       "makenan_vec",
       "sws_allocVec",
+      "sws_getGaussianVec",
       "sws_getConstVec",
       "sws_getIdentityVec",
       "sws_dcVec",
@@ -43331,14 +41000,11 @@
       "sws_printVec2",
       "sws_freeVec",
       "sws_freeFilter",
+      "sws_getDefaultFilter",
       "sws_freeContext",
       "sws_free_context",
-      "ff_range_add",
-      "sws_alloc_context",
-      "sws_getContext",
-      "sws_getGaussianVec",
-      "sws_getDefaultFilter",
-      "sws_getCachedContext"
+      "sws_getCachedContext",
+      "ff_range_add"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/version.c": {
@@ -43421,17 +41087,12 @@
       "uyvytoyuv422_mmxext",
       "rgb2rgb_init_mmxext",
       "interleave_bytes_sse2",
-      "deinterleave_bytes_sse2",
-      "deinterleave_bytes_avx",
       "rgb2rgb_init_x86"
     ]
   },
   "/workspace/test/in/FFmpeg/libswscale/x86/swscale.c": {
     "fc": [
       "ff_updateMMXDitherTables",
-      "yuv2yuvX_mmxext",
-      "yuv2yuvX_sse3",
-      "yuv2yuvX_avx2",
       "ff_sws_init_range_convert_x86",
       "ff_sws_init_swscale_x86"
     ]
@@ -43483,8 +41144,7 @@
   },
   "/workspace/test/in/FFmpeg/libswscale/yuv2rgb.c": {
     "fc": [
-      "sws_getCoefficients",
-      "yuv2rgb_c_1_ordered_dither"
+      "sws_getCoefficients"
     ]
   },
   "/workspace/test/in/FFmpeg/tests/api/api-band-test.c": {
@@ -43684,15 +41344,10 @@
       "checkasm_fail_func",
       "checkasm_set_signal_handler_state",
       "checkasm_handle_signal",
+      "checkasm_get_perf_context",
       "checkasm_report",
       "check_err",
-      "checkasm_check_uint8_t",
-      "checkasm_check_uint16_t",
-      "checkasm_check_uint32_t",
-      "checkasm_check_int16_t",
-      "checkasm_check_int32_t",
-      "checkasm_check_float_ulp",
-      "checkasm_get_perf_context"
+      "checkasm_check_float_ulp"
     ]
   },
   "/workspace/test/in/FFmpeg/tests/checkasm/crc.c": {
@@ -43790,10 +41445,6 @@
   },
   "/workspace/test/in/FFmpeg/tests/checkasm/h264dsp.c": {
     "fc": [
-      "dct4x4_16",
-      "dct4x4_32",
-      "dct8x8_16",
-      "dct8x8_32",
       "dct4x4",
       "dct8x8",
       "check_idct",
@@ -44073,10 +41724,6 @@
   "/workspace/test/in/FFmpeg/tests/checkasm/sw_scale.c": {
     "fc": [
       "yuv2planeX_8_ref",
-      "cmp_off_by_n_8",
-      "cmp_off_by_n_16",
-      "print_data_8",
-      "print_data_16",
       "check_yuv2yuv1",
       "check_yuv2yuvX",
       "check_yuv2nv12cX",
@@ -44350,11 +41997,11 @@
       "ssim_end1",
       "ssim_end4",
       "ssim_plane",
+      "ssd_plane",
       "ssd_to_psnr",
       "ssim_db",
       "print_results",
-      "main",
-      "ssd_plane"
+      "main"
     ]
   },
   "/workspace/test/in/FFmpeg/tests/utils.c": {
@@ -44392,11 +42039,6 @@
     "fc": [
       "fatal_error",
       "run_lavu_md5",
-      "run_lavu_sha1",
-      "run_lavu_sha256",
-      "run_lavu_sha512",
-      "run_lavu_ripemd128",
-      "run_lavu_ripemd160",
       "run_lavu_aes128",
       "run_lavu_blowfish",
       "run_lavu_camellia",
@@ -44405,46 +42047,16 @@
       "run_lavu_twofish",
       "run_lavu_rc4",
       "run_lavu_xtea",
-      "run_crypto_md5",
-      "run_crypto_sha1",
-      "run_crypto_sha256",
-      "run_crypto_sha512",
-      "run_crypto_ripemd160",
       "run_crypto_aes128",
       "run_crypto_blowfish",
       "run_crypto_camellia",
       "run_crypto_cast128",
       "run_crypto_des",
       "run_crypto_rc4",
-      "run_gcrypt_md5",
-      "run_gcrypt_sha1",
-      "run_gcrypt_sha256",
-      "run_gcrypt_sha512",
-      "run_gcrypt_ripemd160",
-      "run_gcrypt_aes128",
-      "run_gcrypt_blowfish",
-      "run_gcrypt_camellia",
-      "run_gcrypt_cast128",
-      "run_gcrypt_des",
-      "run_gcrypt_twofish",
-      "run_gcrypt_rc4",
-      "run_mbedcrypto_md5",
-      "run_mbedcrypto_ripemd160",
-      "run_mbedcrypto_sha1",
-      "run_mbedcrypto_sha256",
-      "run_mbedcrypto_sha512",
-      "run_mbedcrypto_aes128",
-      "run_mbedcrypto_camellia",
       "run_mbedcrypto_blowfish",
       "run_mbedcrypto_des",
       "run_mbedcrypto_rc4",
       "run_mbedcrypto_xtea",
-      "run_tomcrypt_md5",
-      "run_tomcrypt_sha1",
-      "run_tomcrypt_sha256",
-      "run_tomcrypt_sha512",
-      "run_tomcrypt_ripemd128",
-      "run_tomcrypt_ripemd160",
       "run_tomcrypt_aes128",
       "run_tomcrypt_blowfish",
       "run_tomcrypt_camellia",
