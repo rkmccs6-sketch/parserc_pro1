@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -641,6 +642,31 @@ def ensure_parent(path):
     parent.mkdir(parents=True, exist_ok=True)
 
 
+def resolve_parser_binary(script_path):
+    override = os.environ.get("PARSERCFC_PARSER")
+    if override:
+        return Path(override).expanduser().resolve()
+
+    if script_path.parent.name in ("bin", "src"):
+        repo_root = script_path.parent.parent
+    else:
+        repo_root = script_path.parent
+
+    candidate = (repo_root / "build" / "cfc_parser").resolve()
+    if candidate.exists():
+        return candidate
+
+    sibling = (script_path.parent / "cfc_parser").resolve()
+    if sibling.exists():
+        return sibling
+
+    found = shutil.which("cfc_parser")
+    if found:
+        return Path(found).resolve()
+
+    return None
+
+
 def main():
     default_w = default_workers()
     parser = argparse.ArgumentParser(
@@ -685,14 +711,13 @@ def main():
         return 2
 
     script_path = Path(__file__).resolve()
-    if script_path.parent.name in ("bin", "src"):
-        root_dir = script_path.parent.parent
-    else:
-        root_dir = script_path.parent
-
-    parser_bin = (root_dir / "build" / "cfc_parser").resolve()
-    if not parser_bin.exists():
-        print("error: parser binary not found, run `make` first.", file=sys.stderr)
+    parser_bin = resolve_parser_binary(script_path)
+    if not parser_bin or not parser_bin.exists():
+        print(
+            "error: parser binary not found. Run `make`, or set PARSERCFC_PARSER, "
+            "or install cfc_parser on PATH.",
+            file=sys.stderr,
+        )
         return 2
 
     files = find_c_files(target_dir)
