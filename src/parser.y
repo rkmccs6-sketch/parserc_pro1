@@ -2,6 +2,7 @@
 typedef struct ArgList ArgList;
 void record_function(const char *name);
 void parser_reset_state(void);
+void macro_register_definition(const char *line);
 int macro_lookup_token(const char *name);
 }
 
@@ -626,7 +627,7 @@ static int parse_macro_definition(const char *line, char **name_out, char ***par
     return 1;
 }
 
-static void macro_register_definition(const char *line) {
+void macro_register_definition(const char *line) {
     char *name = NULL;
     char **params = NULL;
     size_t param_count = 0;
@@ -851,7 +852,7 @@ element:
     ;
 
 macro_definition:
-    PP_DEFINE { set_array_rename_prefix($1); macro_register_definition($1); free($1); }
+    PP_DEFINE { set_array_rename_prefix($1); free($1); }
     ;
 
 func_definition:

@@ -45,19 +45,38 @@ static char *dup_text(const char *text) {
 %%
 
 ^[ \t]*#[ \t]*define[^\n]*\\\n { pp_reset(); pp_append(yytext); BEGIN(PREPROC_DEFINE); }
-^[ \t]*#[ \t]*define[^\n]*\n { yylval.str = dup_text(yytext); return PP_DEFINE; }
+^[ \t]*#[ \t]*define[^\n]*\n {
+                            yylval.str = dup_text(yytext);
+                            if (yylval.str) {
+                                macro_register_definition(yylval.str);
+                            }
+                            return PP_DEFINE;
+                         }
 ^[ \t]*#[^\n]*\\\n    { BEGIN(PREPROC); }
 ^[ \t]*#[^\n]*\n      { /* skip preprocessor line */ }
 <PREPROC>.*\\\n       { /* skip continued preprocessor line */ }
 <PREPROC>.*\n         { BEGIN(INITIAL); }
 <PREPROC><<EOF>>      { BEGIN(INITIAL); }
 <PREPROC_DEFINE>.*\\\n { pp_append(yytext); }
-<PREPROC_DEFINE>.*\n   { pp_append(yytext); yylval.str = pp_buffer; pp_buffer = NULL; pp_buf_len = 0; BEGIN(INITIAL); return PP_DEFINE; }
+<PREPROC_DEFINE>.*\n   {
+                          pp_append(yytext);
+                          yylval.str = pp_buffer;
+                          pp_buffer = NULL;
+                          pp_buf_len = 0;
+                          if (yylval.str) {
+                              macro_register_definition(yylval.str);
+                          }
+                          BEGIN(INITIAL);
+                          return PP_DEFINE;
+                      }
 <PREPROC_DEFINE><<EOF>> {
                           if (pp_buffer) {
                               yylval.str = pp_buffer;
                               pp_buffer = NULL;
                               pp_buf_len = 0;
+                              if (yylval.str) {
+                                  macro_register_definition(yylval.str);
+                              }
                               BEGIN(INITIAL);
                               return PP_DEFINE;
                           }
