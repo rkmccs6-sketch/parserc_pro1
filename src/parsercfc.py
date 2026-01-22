@@ -107,7 +107,22 @@ def resolve_function_list(path, parser_names, stderr_message=None):
 
     filtered_parser_names = [name for name in parser_names if name not in macro_used_names]
     macro_generated = macro_named_defs + macro_template_defs
-    skip_counts = Counter(macro_generated)
+    dedupe_names = []
+    if macros:
+        dedupe_macros = {"FUN", "DEFINE_OPT_SHOW_SECTION", "ARRAY_RENAME"}
+        for macro in macros:
+            if macro.get("name") not in dedupe_macros:
+                continue
+            parts = macro.get("name_parts") or macro.get("expansion_parts")
+            if not parts:
+                continue
+            for args in find_macro_invocations(text, macro["name"], len(macro["params"])):
+                arg_map = build_arg_map(macro["params"], args)
+                name = render_macro_name(parts, arg_map)
+                if name:
+                    dedupe_names.append(name)
+
+    skip_counts = Counter(dedupe_names)
     if skip_counts:
         deduped_parser = []
         for name in filtered_parser_names:
