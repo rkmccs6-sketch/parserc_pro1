@@ -995,6 +995,10 @@ macro_arg_list
         $3 = NULL;
         $$ = $1;
     }
+    | macro_arg_list ',' {
+        arg_list_add($1, strdup(""));
+        $$ = $1;
+    }
     ;
 
 macro_arg_tokens
