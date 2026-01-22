@@ -91,43 +91,6 @@ def find_c_files(root_dir):
     return files
 
 
-def resolve_function_list(path, parser_names, stderr_message=None):
-    try:
-        text = Path(path).read_text(encoding="utf-8", errors="ignore")
-    except OSError as exc:
-        err = stderr_message or ""
-        err = err + "; " + f"macro scan failed: {exc}" if err else f"macro scan failed: {exc}"
-        return (parser_names, err)
-
-    macros = parse_macro_definitions(text)
-    ordered_defs, macro_named_defs, macro_template_defs, macro_used_names = (
-        scan_function_definitions(text, macros)
-    )
-
-    filtered_parser_names = [name for name in parser_names if name not in macro_used_names]
-    target_names = filtered_parser_names + macro_named_defs + macro_template_defs
-
-    counts = {}
-    for name in target_names:
-        counts[name] = counts.get(name, 0) + 1
-
-    merged = []
-    for name in ordered_defs:
-        remaining = counts.get(name, 0)
-        if remaining > 0:
-            merged.append(name)
-            counts[name] = remaining - 1
-
-    if any(counts.values()):
-        for name in target_names:
-            remaining = counts.get(name, 0)
-            if remaining > 0:
-                merged.append(name)
-                counts[name] = remaining - 1
-
-    return (merged, None)
-
-
 def parse_one_file(args):
     parser_bin, path = args
     try:
@@ -152,8 +115,7 @@ def parse_one_file(args):
     except Exception as exc:
         return (path, [], f"invalid output: {exc}")
 
-    merged, err = resolve_function_list(path, names, result.stderr.strip())
-    return (path, merged, err)
+    return (path, names, None)
 
 
 def parse_batch_files(args):
@@ -197,10 +159,9 @@ def parse_batch_files(args):
             err = parse_error
         elif path not in output_map:
             err = "missing batch output"
-        merged, merge_err = resolve_function_list(path, parser_names, stderr_message)
-        if merge_err:
-            err = merge_err if not err else f"{err}; {merge_err}"
-        results.append((path, merged, err))
+        if stderr_message:
+            err = stderr_message if not err else f"{err}; {stderr_message}"
+        results.append((path, parser_names, err))
 
     return results
 
