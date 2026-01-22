@@ -36,9 +36,9 @@ def parse_one_file(args):
     except OSError as exc:
         return (path, [], f"spawn failed: {exc}")
 
+    err = None
     if result.returncode != 0:
         err = result.stderr.strip() or f"exit code {result.returncode}"
-        return (path, [], err)
 
     output = result.stdout.strip() or "[]"
     try:
@@ -48,7 +48,7 @@ def parse_one_file(args):
     except Exception as exc:
         return (path, [], f"invalid output: {exc}")
 
-    return (path, names, None)
+    return (path, names, err)
 
 
 def parse_batch_files(args):

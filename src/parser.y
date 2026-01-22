@@ -7,83 +7,35 @@ void parser_reset_state(void);
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 int yylex(void);
 void yyerror(const char *s);
 void record_function(const char *name);
 
-static char *last_identifier = NULL;
-static char *paren_candidate = NULL;
-static char *pending_name = NULL;
-static int paren_depth = 0;
-static int bracket_depth = 0;
-
 static char array_rename_prefix[64] = "write_float_";
-static int array_rename_capture = 0;
-static int array_rename_depth = 0;
-static char *array_rename_arg = NULL;
 
-enum MacroMode {
-    MACRO_NONE = 0,
-    MACRO_FUN,
-    MACRO_DEFINE_OPT_SHOW
-};
-static enum MacroMode macro_mode = MACRO_NONE;
-static int macro_depth = 0;
-static int macro_arg_index = 0;
-static char *macro_first_arg = NULL;
-
-static char *concat2(const char *a, const char *b) {
-    size_t la = a ? strlen(a) : 0;
-    size_t lb = b ? strlen(b) : 0;
-    char *out = (char *)malloc(la + lb + 1);
-    if (!out) {
+static char *concat(const char *s1, const char *s2) {
+    if (!s1) {
+        return s2 ? strdup(s2) : NULL;
+    }
+    if (!s2) {
+        return s1 ? strdup(s1) : NULL;
+    }
+    char *result = malloc(strlen(s1) + strlen(s2) + 1);
+    if (!result) {
         return NULL;
     }
-    if (a) {
-        memcpy(out, a, la);
-    }
-    if (b) {
-        memcpy(out + la, b, lb);
-    }
-    out[la + lb] = '\0';
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
+
+static char *concat_with_space(const char *s1, const char *s2) {
+    char *temp = concat(s1, " ");
+    char *out = concat(temp, s2);
+    free(temp);
     return out;
-}
-
-static void clear_string(char **ptr) {
-    if (*ptr) {
-        free(*ptr);
-        *ptr = NULL;
-    }
-}
-
-static void append_to_buffer(char **buf, const char *text) {
-    char *out = NULL;
-    if (!text) {
-        return;
-    }
-    if (!*buf) {
-        *buf = strdup(text);
-        return;
-    }
-    out = concat2(*buf, text);
-    free(*buf);
-    *buf = out;
-}
-
-static void reset_candidate_state(void) {
-    clear_string(&last_identifier);
-    clear_string(&paren_candidate);
-    clear_string(&pending_name);
-    paren_depth = 0;
-    bracket_depth = 0;
-}
-
-static void reset_macro_state(void) {
-    macro_mode = MACRO_NONE;
-    macro_depth = 0;
-    macro_arg_index = 0;
-    clear_string(&macro_first_arg);
 }
 
 static void set_array_rename_prefix(const char *line) {
@@ -100,163 +52,166 @@ static void set_array_rename_prefix(const char *line) {
     }
 }
 
-static void finalize_array_rename(void) {
-    char *name = NULL;
-    if (!array_rename_arg) {
+static char *trim_spaces(const char *s) {
+    size_t len = strlen(s);
+    char *out = malloc(len + 1);
+    size_t i = 0;
+    size_t j = 0;
+    int space_flag = 0;
+    if (!out) {
+        return NULL;
+    }
+    for (i = 0; i < len; i++) {
+        unsigned char c = (unsigned char)s[i];
+        if (isspace(c)) {
+            if (!space_flag && j > 0) {
+                out[j++] = ' ';
+                space_flag = 1;
+            }
+        } else {
+            out[j++] = (char)c;
+            space_flag = 0;
+        }
+    }
+    if (j > 0 && out[j - 1] == ' ') {
+        j--;
+    }
+    out[j] = '\0';
+    return out;
+}
+
+static char *first_macro_arg(const char *clean, const char *macro) {
+    const char *p = strstr(clean, macro);
+    const char *start = NULL;
+    const char *end = NULL;
+    char *out = NULL;
+    size_t i = 0;
+    size_t j = 0;
+    if (!p) {
+        return NULL;
+    }
+    p = strchr(p, '(');
+    if (!p) {
+        return NULL;
+    }
+    p++;
+    while (*p && isspace((unsigned char)*p)) {
+        p++;
+    }
+    start = p;
+    while (*p && *p != ',' && *p != ')') {
+        p++;
+    }
+    end = p;
+    while (end > start && isspace((unsigned char)*(end - 1))) {
+        end--;
+    }
+    out = malloc((size_t)(end - start) + 1);
+    if (!out) {
+        return NULL;
+    }
+    for (i = 0, j = 0; start + i < end; i++) {
+        if (!isspace((unsigned char)start[i])) {
+            out[j++] = start[i];
+        }
+    }
+    out[j] = '\0';
+    return out;
+}
+
+static void check_and_record(char *full_sig) {
+    if (!full_sig) {
         return;
     }
-    clear_string(&last_identifier);
-    name = concat2(array_rename_prefix, array_rename_arg);
-    last_identifier = name;
-    clear_string(&array_rename_arg);
-}
 
-static void record_macro_first_arg(void) {
-    if (!macro_first_arg) {
+    char *clean = trim_spaces(full_sig);
+    if (!clean) {
         return;
     }
-    if (macro_mode == MACRO_FUN) {
-        record_function(macro_first_arg);
-    } else if (macro_mode == MACRO_DEFINE_OPT_SHOW) {
-        char *name = concat2("opt_show_", macro_first_arg);
-        if (name) {
-            record_function(name);
-            free(name);
-        }
-    }
-    clear_string(&macro_first_arg);
-}
 
-static void handle_identifier(const char *name) {
-    if (array_rename_capture && array_rename_depth > 0) {
-        append_to_buffer(&array_rename_arg, name);
+    char *p = strchr(clean, '(');
+    if (!p) {
+        free(clean);
         return;
     }
-    if (macro_mode != MACRO_NONE && macro_arg_index == 0) {
-        append_to_buffer(&macro_first_arg, name);
+
+    char *end = p - 1;
+    while (end >= clean && isspace((unsigned char)*end)) {
+        end--;
+    }
+    char *start = end;
+    while (start >= clean && (isalnum((unsigned char)*start) || *start == '_')) {
+        start--;
+    }
+    start++;
+
+    if (start > end) {
+        free(clean);
         return;
     }
-    clear_string(&last_identifier);
-    last_identifier = strdup(name);
-}
 
-static void handle_constant(const char *value) {
-    if (array_rename_capture && array_rename_depth > 0) {
-        append_to_buffer(&array_rename_arg, value);
-    } else if (macro_mode != MACRO_NONE && macro_arg_index == 0) {
-        append_to_buffer(&macro_first_arg, value);
+    size_t word_len = (size_t)(end - start + 1);
+    if ((word_len == 2 && strncmp(start, "if", 2) == 0) ||
+        (word_len == 3 && strncmp(start, "for", 3) == 0) ||
+        (word_len == 5 && strncmp(start, "while", 5) == 0) ||
+        (word_len == 6 && strncmp(start, "switch", 6) == 0) ||
+        (word_len == 6 && strncmp(start, "return", 6) == 0) ||
+        (word_len == 4 && strncmp(start, "else", 4) == 0)) {
+        free(clean);
+        return;
     }
-}
 
-static void handle_decl_token(void) {
-    if (paren_depth == 0 && bracket_depth == 0) {
-        clear_string(&paren_candidate);
-        clear_string(&pending_name);
+    char *name = strndup(start, word_len);
+    if (!name) {
+        free(clean);
+        return;
     }
-}
 
-static void handle_lparen(void) {
-    int started_array = 0;
-    int started_macro = 0;
-
-    if (paren_depth == 0 && last_identifier) {
-        if (strcmp(last_identifier, "ARRAY_RENAME") == 0) {
-            array_rename_capture = 1;
-            array_rename_depth = 1;
-            clear_string(&array_rename_arg);
-            started_array = 1;
-        } else if (strcmp(last_identifier, "FUN") == 0) {
-            reset_macro_state();
-            macro_mode = MACRO_FUN;
-            macro_depth = 1;
-            macro_arg_index = 0;
-            started_macro = 1;
-        } else if (strcmp(last_identifier, "DEFINE_OPT_SHOW_SECTION") == 0) {
-            reset_macro_state();
-            macro_mode = MACRO_DEFINE_OPT_SHOW;
-            macro_depth = 1;
-            macro_arg_index = 0;
-            started_macro = 1;
-        } else if (!pending_name && paren_depth == 0) {
-            clear_string(&paren_candidate);
-            paren_candidate = strdup(last_identifier);
+    if (strcmp(name, "FUN") == 0) {
+        char *arg = first_macro_arg(clean, "FUN");
+        if (arg && *arg) {
+            record_function(arg);
         }
+        free(arg);
+        free(name);
+        free(clean);
+        return;
     }
 
-    paren_depth++;
-    if (array_rename_capture && !started_array) {
-        array_rename_depth++;
-    }
-    if (macro_mode != MACRO_NONE && !started_macro) {
-        macro_depth++;
-    }
-}
-
-static void handle_rparen(void) {
-    if (paren_depth > 0) {
-        paren_depth--;
-        if (paren_depth == 0 && !pending_name && paren_candidate) {
-            pending_name = paren_candidate;
-            paren_candidate = NULL;
+    if (strcmp(name, "DEFINE_OPT_SHOW_SECTION") == 0) {
+        char *arg = first_macro_arg(clean, "DEFINE_OPT_SHOW_SECTION");
+        if (arg && *arg) {
+            char *full = concat("opt_show_", arg);
+            if (full) {
+                record_function(full);
+                free(full);
+            }
         }
+        free(arg);
+        free(name);
+        free(clean);
+        return;
     }
-    if (array_rename_capture && array_rename_depth > 0) {
-        array_rename_depth--;
-        if (array_rename_depth == 0) {
-            array_rename_capture = 0;
-            finalize_array_rename();
+
+    if (strcmp(name, "ARRAY_RENAME") == 0) {
+        char *arg = first_macro_arg(clean, "ARRAY_RENAME");
+        if (arg && *arg) {
+            char *full = concat(array_rename_prefix, arg);
+            if (full) {
+                record_function(full);
+                free(full);
+            }
         }
+        free(arg);
+        free(name);
+        free(clean);
+        return;
     }
-    if (macro_mode != MACRO_NONE && macro_depth > 0) {
-        macro_depth--;
-        if (macro_depth == 0) {
-            reset_macro_state();
-        }
-    }
-}
 
-static void handle_lbracket(void) {
-    bracket_depth++;
+    record_function(name);
+    free(name);
+    free(clean);
 }
-
-static void handle_rbracket(void) {
-    if (bracket_depth > 0) {
-        bracket_depth--;
-    }
-}
-
-static void handle_comma(void) {
-    if (macro_mode != MACRO_NONE && macro_depth == 1 && macro_arg_index == 0) {
-        record_macro_first_arg();
-        macro_arg_index++;
-    } else if (paren_depth == 0 && bracket_depth == 0) {
-        reset_candidate_state();
-    }
-}
-
-static void handle_semi(void) {
-    if (paren_depth == 0 && bracket_depth == 0) {
-        reset_candidate_state();
-        reset_macro_state();
-    }
-}
-
-static void handle_assign(void) {
-    if (paren_depth == 0 && bracket_depth == 0) {
-        reset_candidate_state();
-    }
-}
-
-static void handle_block(void) {
-    if (paren_depth == 0 && bracket_depth == 0) {
-        if (pending_name) {
-            record_function(pending_name);
-        }
-        reset_candidate_state();
-        reset_macro_state();
-    }
-}
-
 %}
 
 %union {
@@ -276,73 +231,236 @@ static void handle_block(void) {
 %token BLOCK
 %token OTHER
 
+%type <str> signature sig_element token_chunk nested_parentheses any_token_in_paren array_index
+%type <str> macro_arg macro_arg_tokens macro_arg_token macro_skip macro_skip_token
+
 %destructor { free($$); } <str>
 
 %%
 
-translation_unit
-    : /* empty */
-    | translation_unit token
+program:
+    /* empty */
+    | program element
     ;
 
-token
-    : IDENTIFIER { handle_identifier($1); free($1); }
-    | CONSTANT { handle_constant($1); free($1); }
-    | STRING_LITERAL { free($1); }
-    | PP_DEFINE { set_array_rename_prefix($1); free($1); }
-    | TYPEDEF { handle_decl_token(); }
-    | EXTERN { handle_decl_token(); }
-    | STATIC { handle_decl_token(); }
-    | AUTO { handle_decl_token(); }
-    | REGISTER { handle_decl_token(); }
-    | THREAD_LOCAL { handle_decl_token(); }
-    | VOID { handle_decl_token(); }
-    | CHAR { handle_decl_token(); }
-    | SHORT { handle_decl_token(); }
-    | INT { handle_decl_token(); }
-    | LONG { handle_decl_token(); }
-    | FLOAT { handle_decl_token(); }
-    | DOUBLE { handle_decl_token(); }
-    | SIGNED { handle_decl_token(); }
-    | UNSIGNED { handle_decl_token(); }
-    | BOOL { handle_decl_token(); }
-    | COMPLEX { handle_decl_token(); }
-    | IMAGINARY { handle_decl_token(); }
-    | STRUCT { handle_decl_token(); }
-    | UNION { handle_decl_token(); }
-    | ENUM { handle_decl_token(); }
-    | CONST { handle_decl_token(); }
-    | VOLATILE { handle_decl_token(); }
-    | RESTRICT { handle_decl_token(); }
-    | ATOMIC { handle_decl_token(); }
-    | INLINE { handle_decl_token(); }
-    | NORETURN { handle_decl_token(); }
-    | ALIGNAS { handle_decl_token(); }
-    | TYPEOF { handle_decl_token(); }
-    | ATTRIBUTE { /* ignore */ }
-    | DECLSPEC { /* ignore */ }
-    | ASM { /* ignore */ }
-    | ELLIPSIS { /* ignore */ }
-    | '(' { handle_lparen(); }
-    | ')' { handle_rparen(); }
-    | '[' { handle_lbracket(); }
-    | ']' { handle_rbracket(); }
-    | ',' { handle_comma(); }
-    | ';' { handle_semi(); }
-    | '=' { handle_assign(); }
-    | '*' { /* ignore */ }
-    | BLOCK { handle_block(); }
-    | OTHER { /* ignore */ }
+element:
+    func_definition
+    | macro_fun
+    | macro_define_opt_show
+    | macro_definition
+    | global_statement
+    | error ';' { yyerrok; }
+    | error BLOCK { yyerrok; }
+    ;
+
+macro_definition:
+    PP_DEFINE { set_array_rename_prefix($1); free($1); }
+    ;
+
+func_definition:
+    signature BLOCK {
+        check_and_record($1);
+        free($1);
+    }
+    ;
+
+macro_fun
+    : IDENTIFIER '(' macro_arg ',' macro_skip ',' macro_skip ')' {
+        if ($1 && strcmp($1, "FUN") == 0 && $3) {
+            record_function($3);
+        }
+        free($1);
+        free($3);
+    }
+    ;
+
+macro_define_opt_show
+    : IDENTIFIER '(' macro_arg ',' macro_skip ')' {
+        if ($1 && strcmp($1, "DEFINE_OPT_SHOW_SECTION") == 0 && $3) {
+            char *name = concat("opt_show_", $3);
+            if (name) {
+                record_function(name);
+                free(name);
+            }
+        }
+        free($1);
+        free($3);
+    }
+    ;
+
+global_statement:
+    signature ';' { free($1); }
+    | signature '=' initializer ';' { free($1); }
+    | ';' { }
+    ;
+
+signature:
+    sig_element { $$ = $1; }
+    | signature sig_element {
+        $$ = concat_with_space($1, $2);
+        free($1);
+        free($2);
+    }
+    | signature '(' nested_parentheses ')' {
+        char *temp = concat($1, "(");
+        char *temp2 = concat(temp, $3);
+        $$ = concat(temp2, ")");
+        free($1);
+        free($3);
+        free(temp);
+        free(temp2);
+    }
+    | signature '[' array_index ']' {
+        char *temp = concat($1, "[");
+        char *temp2 = concat(temp, $3);
+        $$ = concat(temp2, "]");
+        free($1);
+        free($3);
+        free(temp);
+        free(temp2);
+    }
+    ;
+
+sig_element:
+    token_chunk { $$ = $1; }
+    | '*' { $$ = strdup("*"); }
+    ;
+
+array_index:
+    /* empty */ { $$ = strdup(""); }
+    | array_index token_chunk {
+        $$ = concat($1, $2);
+        free($1);
+        free($2);
+    }
+    | array_index '*' {
+        $$ = concat($1, "*");
+        free($1);
+    }
+    | array_index '+' {
+        $$ = concat($1, "+");
+        free($1);
+    }
+    | array_index '-' {
+        $$ = concat($1, "-");
+        free($1);
+    }
+    ;
+
+nested_parentheses:
+    /* empty */ { $$ = strdup(""); }
+    | nested_parentheses any_token_in_paren {
+        $$ = concat_with_space($1, $2);
+        free($1);
+        free($2);
+    }
+    ;
+
+any_token_in_paren:
+    token_chunk { $$ = $1; }
+    | ',' { $$ = strdup(","); }
+    | '*' { $$ = strdup("*"); }
+    | '=' { $$ = strdup("="); }
+    | '[' { $$ = strdup("["); }
+    | ']' { $$ = strdup("]"); }
+    | '.' { $$ = strdup("."); }
+    | '&' { $$ = strdup("&"); }
+    | '-' { $$ = strdup("-"); }
+    | '+' { $$ = strdup("+"); }
+    | '(' nested_parentheses ')' {
+        char *temp = concat("(", $2);
+        $$ = concat(temp, ")");
+        free($2);
+        free(temp);
+    }
+    ;
+
+initializer:
+    token_chunk { free($1); }
+    | initializer token_chunk { free($2); }
+    | BLOCK
+    | initializer ',' { }
+    | initializer '*' { }
+    ;
+
+macro_arg
+    : macro_arg_tokens { $$ = $1; }
+    ;
+
+macro_arg_tokens
+    : macro_arg_token { $$ = $1; $1 = NULL; }
+    | macro_arg_tokens macro_arg_token {
+        $$ = concat($1, $2);
+        free($1);
+        free($2);
+    }
+    ;
+
+macro_arg_token
+    : IDENTIFIER { $$ = $1; $1 = NULL; }
+    | CONSTANT { $$ = $1; $1 = NULL; }
+    ;
+
+macro_skip
+    : /* empty */ { $$ = NULL; }
+    | macro_skip macro_skip_token { $$ = NULL; }
+    | macro_skip_token { $$ = NULL; }
+    ;
+
+macro_skip_token
+    : token_chunk { free($1); $$ = NULL; }
+    | '(' macro_skip ')' { $$ = NULL; }
+    | '[' macro_skip ']' { $$ = NULL; }
+    | ',' { $$ = NULL; }
+    | '*' { $$ = NULL; }
+    | '=' { $$ = NULL; }
+    | '+' { $$ = NULL; }
+    | '-' { $$ = NULL; }
+    ;
+
+token_chunk:
+    IDENTIFIER
+    | CONSTANT
+    | STRING_LITERAL
+    | TYPEDEF { $$ = strdup("typedef"); }
+    | EXTERN { $$ = strdup("extern"); }
+    | STATIC { $$ = strdup("static"); }
+    | AUTO { $$ = strdup("auto"); }
+    | REGISTER { $$ = strdup("register"); }
+    | THREAD_LOCAL { $$ = strdup("_Thread_local"); }
+    | VOID { $$ = strdup("void"); }
+    | CHAR { $$ = strdup("char"); }
+    | SHORT { $$ = strdup("short"); }
+    | INT { $$ = strdup("int"); }
+    | LONG { $$ = strdup("long"); }
+    | FLOAT { $$ = strdup("float"); }
+    | DOUBLE { $$ = strdup("double"); }
+    | SIGNED { $$ = strdup("signed"); }
+    | UNSIGNED { $$ = strdup("unsigned"); }
+    | BOOL { $$ = strdup("_Bool"); }
+    | COMPLEX { $$ = strdup("_Complex"); }
+    | IMAGINARY { $$ = strdup("_Imaginary"); }
+    | STRUCT { $$ = strdup("struct"); }
+    | UNION { $$ = strdup("union"); }
+    | ENUM { $$ = strdup("enum"); }
+    | CONST { $$ = strdup("const"); }
+    | VOLATILE { $$ = strdup("volatile"); }
+    | RESTRICT { $$ = strdup("restrict"); }
+    | ATOMIC { $$ = strdup("_Atomic"); }
+    | INLINE { $$ = strdup("inline"); }
+    | NORETURN { $$ = strdup("_Noreturn"); }
+    | ALIGNAS { $$ = strdup("_Alignas"); }
+    | TYPEOF { $$ = strdup("typeof"); }
+    | ATTRIBUTE { $$ = strdup("__attribute__"); }
+    | DECLSPEC { $$ = strdup("__declspec"); }
+    | ASM { $$ = strdup("asm"); }
+    | ELLIPSIS { $$ = strdup("..."); }
+    | OTHER { $$ = strdup(""); }
     ;
 
 %%
 
 void parser_reset_state(void) {
-    reset_candidate_state();
-    reset_macro_state();
-    clear_string(&array_rename_arg);
-    array_rename_capture = 0;
-    array_rename_depth = 0;
     strcpy(array_rename_prefix, "write_float_");
 }
 
