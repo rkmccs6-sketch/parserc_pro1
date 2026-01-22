@@ -4,7 +4,6 @@ void parser_reset_state(void);
 }
 
 %{
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,21 +32,6 @@ static enum MacroMode macro_mode = MACRO_NONE;
 static int macro_depth = 0;
 static int macro_arg_index = 0;
 static char *macro_first_arg = NULL;
-
-static char *xstrdup(const char *s) {
-    size_t len = 0;
-    char *out = NULL;
-    if (!s) {
-        return NULL;
-    }
-    len = strlen(s);
-    out = (char *)malloc(len + 1);
-    if (!out) {
-        return NULL;
-    }
-    memcpy(out, s, len + 1);
-    return out;
-}
 
 static char *concat2(const char *a, const char *b) {
     size_t la = a ? strlen(a) : 0;
@@ -79,7 +63,7 @@ static void append_to_buffer(char **buf, const char *text) {
         return;
     }
     if (!*buf) {
-        *buf = xstrdup(text);
+        *buf = strdup(text);
         return;
     }
     out = concat2(*buf, text);
@@ -117,11 +101,13 @@ static void set_array_rename_prefix(const char *line) {
 }
 
 static void finalize_array_rename(void) {
+    char *name = NULL;
     if (!array_rename_arg) {
         return;
     }
     clear_string(&last_identifier);
-    last_identifier = concat2(array_rename_prefix, array_rename_arg);
+    name = concat2(array_rename_prefix, array_rename_arg);
+    last_identifier = name;
     clear_string(&array_rename_arg);
 }
 
@@ -151,7 +137,7 @@ static void handle_identifier(const char *name) {
         return;
     }
     clear_string(&last_identifier);
-    last_identifier = xstrdup(name);
+    last_identifier = strdup(name);
 }
 
 static void handle_constant(const char *value) {
@@ -193,9 +179,10 @@ static void handle_lparen(void) {
             started_macro = 1;
         } else if (!pending_name && paren_depth == 0) {
             clear_string(&paren_candidate);
-            paren_candidate = xstrdup(last_identifier);
+            paren_candidate = strdup(last_identifier);
         }
     }
+
     paren_depth++;
     if (array_rename_capture && !started_array) {
         array_rename_depth++;
@@ -270,15 +257,6 @@ static void handle_block(void) {
     }
 }
 
-void parser_reset_state(void) {
-    reset_candidate_state();
-    reset_macro_state();
-    clear_string(&array_rename_arg);
-    array_rename_capture = 0;
-    array_rename_depth = 0;
-    strcpy(array_rename_prefix, "write_float_");
-}
-
 %}
 
 %union {
@@ -310,7 +288,7 @@ translation_unit
 token
     : IDENTIFIER { handle_identifier($1); free($1); }
     | CONSTANT { handle_constant($1); free($1); }
-    | STRING_LITERAL { /* ignore */ free($1); }
+    | STRING_LITERAL { free($1); }
     | PP_DEFINE { set_array_rename_prefix($1); free($1); }
     | TYPEDEF { handle_decl_token(); }
     | EXTERN { handle_decl_token(); }
@@ -358,6 +336,15 @@ token
     ;
 
 %%
+
+void parser_reset_state(void) {
+    reset_candidate_state();
+    reset_macro_state();
+    clear_string(&array_rename_arg);
+    array_rename_capture = 0;
+    array_rename_depth = 0;
+    strcpy(array_rename_prefix, "write_float_");
+}
 
 void yyerror(const char *s) {
     (void)s;
