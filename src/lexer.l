@@ -6,6 +6,28 @@
 #include <string.h>
 
 static int brace_depth = 0;
+static char *pp_buffer = NULL;
+static size_t pp_buf_len = 0;
+
+int macro_lookup_token(const char *name);
+
+static void pp_reset(void) {
+    free(pp_buffer);
+    pp_buffer = NULL;
+    pp_buf_len = 0;
+}
+
+static void pp_append(const char *text) {
+    size_t len = strlen(text);
+    char *next = (char *)realloc(pp_buffer, pp_buf_len + len + 1);
+    if (!next) {
+        return;
+    }
+    memcpy(next + pp_buf_len, text, len);
+    pp_buf_len += len;
+    next[pp_buf_len] = '\0';
+    pp_buffer = next;
+}
 
 static char *dup_text(const char *text) {
     size_t len = strlen(text);
@@ -18,17 +40,29 @@ static char *dup_text(const char *text) {
 }
 %}
 
-%x BRACE BRACE_COMMENT BRACE_STRING BRACE_CHAR COMMENT PREPROC
+%x BRACE BRACE_COMMENT BRACE_STRING BRACE_CHAR COMMENT PREPROC PREPROC_DEFINE
 
 %%
 
-^[ \t]*#[ \t]*define[^\n]*\\\n { BEGIN(PREPROC); }
+^[ \t]*#[ \t]*define[^\n]*\\\n { pp_reset(); pp_append(yytext); BEGIN(PREPROC_DEFINE); }
 ^[ \t]*#[ \t]*define[^\n]*\n { yylval.str = dup_text(yytext); return PP_DEFINE; }
 ^[ \t]*#[^\n]*\\\n    { BEGIN(PREPROC); }
 ^[ \t]*#[^\n]*\n      { /* skip preprocessor line */ }
 <PREPROC>.*\\\n       { /* skip continued preprocessor line */ }
 <PREPROC>.*\n         { BEGIN(INITIAL); }
 <PREPROC><<EOF>>      { BEGIN(INITIAL); }
+<PREPROC_DEFINE>.*\\\n { pp_append(yytext); }
+<PREPROC_DEFINE>.*\n   { pp_append(yytext); yylval.str = pp_buffer; pp_buffer = NULL; pp_buf_len = 0; BEGIN(INITIAL); return PP_DEFINE; }
+<PREPROC_DEFINE><<EOF>> {
+                          if (pp_buffer) {
+                              yylval.str = pp_buffer;
+                              pp_buffer = NULL;
+                              pp_buf_len = 0;
+                              BEGIN(INITIAL);
+                              return PP_DEFINE;
+                          }
+                          BEGIN(INITIAL);
+                        }
 [ \t\r\n]+            { /* skip whitespace */ }
 "//".*                { /* skip line comment */ }
 "/*"                  { BEGIN(COMMENT); }
@@ -65,8 +99,6 @@ static char *dup_text(const char *text) {
 <BRACE_CHAR>.|\n      { /* skip */ }
 
 "typedef"             { return TYPEDEF; }
-"FUN"                 { return FUN_MACRO; }
-"DEFINE_OPT_SHOW_SECTION" { return DEFINE_OPT_SHOW_SECTION; }
 "ARRAY_RENAME"        { return ARRAY_RENAME; }
 "extern"              { return EXTERN; }
 "static"              { return STATIC; }
@@ -131,6 +163,11 @@ static char *dup_text(const char *text) {
 [0-9]*\\.[0-9]+([eE][+-]?[0-9]+)?[fFlL]* { yylval.str = dup_text(yytext); return CONSTANT; }
 
 [a-zA-Z_][a-zA-Z0-9_]* {
+    int token = macro_lookup_token(yytext);
+    if (token != 0) {
+        yylval.str = dup_text(yytext);
+        return token;
+    }
     yylval.str = dup_text(yytext);
     return IDENTIFIER;
 }
@@ -150,5 +187,6 @@ static char *dup_text(const char *text) {
 
 void lexer_reset(void) {
     brace_depth = 0;
+    pp_reset();
     BEGIN(INITIAL);
 }
