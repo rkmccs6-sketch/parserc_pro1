@@ -4,28 +4,28 @@ Found 3332 .c files
 Output fc.json: /workspace/test/out/fc.json
 Output null_fc.json: /workspace/test/out/null_fc.json
 [166/3332] 5.0% elapsed 0.1s
-[332/3332] 10.0% elapsed 0.1s
+[332/3332] 10.0% elapsed 0.2s
 [498/3332] 14.9% elapsed 0.2s
-[664/3332] 19.9% elapsed 0.2s
-[830/3332] 24.9% elapsed 0.2s
-[996/3332] 29.9% elapsed 0.3s
-[1162/3332] 34.9% elapsed 0.3s
-[1328/3332] 39.9% elapsed 0.3s
-[1494/3332] 44.8% elapsed 0.4s
-[1660/3332] 49.8% elapsed 0.4s
-[1826/3332] 54.8% elapsed 0.4s
-[1992/3332] 59.8% elapsed 0.5s
-[2158/3332] 64.8% elapsed 0.5s
-[2324/3332] 69.7% elapsed 0.5s
-[2490/3332] 74.7% elapsed 0.6s
-[2656/3332] 79.7% elapsed 0.6s
-[2822/3332] 84.7% elapsed 0.6s
-[2988/3332] 89.7% elapsed 0.6s
-[3154/3332] 94.7% elapsed 0.7s
-[3320/3332] 99.6% elapsed 0.7s
-[3332/3332] 100.0% elapsed 0.7s
+[664/3332] 19.9% elapsed 0.3s
+[830/3332] 24.9% elapsed 0.3s
+[996/3332] 29.9% elapsed 0.5s
+[1162/3332] 34.9% elapsed 0.6s
+[1328/3332] 39.9% elapsed 0.6s
+[1494/3332] 44.8% elapsed 0.7s
+[1660/3332] 49.8% elapsed 0.8s
+[1826/3332] 54.8% elapsed 0.9s
+[1992/3332] 59.8% elapsed 1.0s
+[2158/3332] 64.8% elapsed 1.1s
+[2324/3332] 69.7% elapsed 1.2s
+[2490/3332] 74.7% elapsed 1.2s
+[2656/3332] 79.7% elapsed 1.3s
+[2822/3332] 84.7% elapsed 1.4s
+[2988/3332] 89.7% elapsed 1.4s
+[3154/3332] 94.7% elapsed 1.5s
+[3320/3332] 99.6% elapsed 1.7s
+[3332/3332] 100.0% elapsed 1.8s
 Done.
-Elapsed: 0.71s
+Elapsed: 1.79s
 Total files: 3332
-Total functions: 30288
-Files with no functions: 163
+Total functions: 30465
+Files with no functions: 161
