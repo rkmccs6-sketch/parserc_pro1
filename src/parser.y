@@ -1,4 +1,5 @@
 %code requires {
+typedef struct ArgList ArgList;
 void record_function(const char *name);
 void parser_reset_state(void);
 int macro_lookup_token(const char *name);
@@ -16,7 +17,7 @@ void record_function(const char *name);
 
 static char array_rename_prefix[64] = "write_float_";
 
-typedef struct {
+typedef struct ArgList {
     char **items;
     size_t count;
     size_t capacity;
@@ -193,13 +194,6 @@ static MacroDef *macro_find(const char *name) {
     return NULL;
 }
 
-int macro_lookup_token(const char *name) {
-    MacroDef *macro = macro_find(name);
-    if (macro && macro->name_parts && macro->name_parts->count > 0) {
-        return MACRO_TEMPLATE;
-    }
-    return 0;
-}
 
 static char *concat(const char *s1, const char *s2) {
     if (!s1) {
@@ -1059,6 +1053,14 @@ token_chunk:
     ;
 
 %%
+
+int macro_lookup_token(const char *name) {
+    MacroDef *macro = macro_find(name);
+    if (macro && macro->name_parts && macro->name_parts->count > 0) {
+        return MACRO_TEMPLATE;
+    }
+    return 0;
+}
 
 void parser_reset_state(void) {
     macro_list_reset();
