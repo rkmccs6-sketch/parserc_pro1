@@ -16,16 +16,16 @@ static char *dup_text(const char *text) {
     memcpy(out, text, len + 1);
     return out;
 }
-
-void lexer_reset(void) {
-    brace_depth = 0;
-    BEGIN(INITIAL);
-}
 %}
 
 %x BRACE BRACE_COMMENT BRACE_STRING BRACE_CHAR COMMENT PREPROC
 
 %%
+
+void lexer_reset(void) {
+    brace_depth = 0;
+    BEGIN(INITIAL);
+}
 
 ^[ \t]*#[^\n]*\\\n    { BEGIN(PREPROC); }
 ^[ \t]*#[^\n]*\n      { /* skip preprocessor line */ }
