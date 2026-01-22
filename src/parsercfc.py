@@ -405,6 +405,15 @@ def normalize_macro_arg(arg):
 
 
 def render_macro_name(parts, arg_map):
+    c_keywords = {
+        "auto", "break", "case", "char", "const", "continue", "default",
+        "do", "double", "else", "enum", "extern", "float", "for", "goto",
+        "if", "inline", "int", "long", "register", "restrict", "return",
+        "short", "signed", "sizeof", "static", "struct", "switch", "typedef",
+        "union", "unsigned", "void", "volatile", "while",
+        "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic",
+        "_Imaginary", "_Noreturn", "_Static_assert", "_Thread_local",
+    }
     output = []
     for kind, value in parts:
         if kind == "param":
@@ -413,6 +422,8 @@ def render_macro_name(parts, arg_map):
             output.append(value)
     name = "".join(output)
     if name and re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
+        if name in c_keywords:
+            return None
         return name
     return None
 
