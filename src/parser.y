@@ -8,6 +8,7 @@ enum token_kind {
     TOK_SEMI,
     TOK_ASSIGN,
     TOK_BLOCK,
+    TOK_DECL,
     TOK_OTHER
 };
 
@@ -53,35 +54,35 @@ token
     : IDENTIFIER { process_identifier($1); }
     | CONSTANT { process_token(TOK_OTHER); }
     | STRING_LITERAL { process_token(TOK_OTHER); }
-    | TYPEDEF { process_token(TOK_OTHER); }
-    | EXTERN { process_token(TOK_OTHER); }
-    | STATIC { process_token(TOK_OTHER); }
-    | AUTO { process_token(TOK_OTHER); }
-    | REGISTER { process_token(TOK_OTHER); }
-    | THREAD_LOCAL { process_token(TOK_OTHER); }
-    | VOID { process_token(TOK_OTHER); }
-    | CHAR { process_token(TOK_OTHER); }
-    | SHORT { process_token(TOK_OTHER); }
-    | INT { process_token(TOK_OTHER); }
-    | LONG { process_token(TOK_OTHER); }
-    | FLOAT { process_token(TOK_OTHER); }
-    | DOUBLE { process_token(TOK_OTHER); }
-    | SIGNED { process_token(TOK_OTHER); }
-    | UNSIGNED { process_token(TOK_OTHER); }
-    | BOOL { process_token(TOK_OTHER); }
-    | COMPLEX { process_token(TOK_OTHER); }
-    | IMAGINARY { process_token(TOK_OTHER); }
-    | STRUCT { process_token(TOK_OTHER); }
-    | UNION { process_token(TOK_OTHER); }
-    | ENUM { process_token(TOK_OTHER); }
-    | CONST { process_token(TOK_OTHER); }
-    | VOLATILE { process_token(TOK_OTHER); }
-    | RESTRICT { process_token(TOK_OTHER); }
-    | ATOMIC { process_token(TOK_OTHER); }
-    | INLINE { process_token(TOK_OTHER); }
-    | NORETURN { process_token(TOK_OTHER); }
-    | ALIGNAS { process_token(TOK_OTHER); }
-    | TYPEOF { process_token(TOK_OTHER); }
+    | TYPEDEF { process_token(TOK_DECL); }
+    | EXTERN { process_token(TOK_DECL); }
+    | STATIC { process_token(TOK_DECL); }
+    | AUTO { process_token(TOK_DECL); }
+    | REGISTER { process_token(TOK_DECL); }
+    | THREAD_LOCAL { process_token(TOK_DECL); }
+    | VOID { process_token(TOK_DECL); }
+    | CHAR { process_token(TOK_DECL); }
+    | SHORT { process_token(TOK_DECL); }
+    | INT { process_token(TOK_DECL); }
+    | LONG { process_token(TOK_DECL); }
+    | FLOAT { process_token(TOK_DECL); }
+    | DOUBLE { process_token(TOK_DECL); }
+    | SIGNED { process_token(TOK_DECL); }
+    | UNSIGNED { process_token(TOK_DECL); }
+    | BOOL { process_token(TOK_DECL); }
+    | COMPLEX { process_token(TOK_DECL); }
+    | IMAGINARY { process_token(TOK_DECL); }
+    | STRUCT { process_token(TOK_DECL); }
+    | UNION { process_token(TOK_DECL); }
+    | ENUM { process_token(TOK_DECL); }
+    | CONST { process_token(TOK_DECL); }
+    | VOLATILE { process_token(TOK_DECL); }
+    | RESTRICT { process_token(TOK_DECL); }
+    | ATOMIC { process_token(TOK_DECL); }
+    | INLINE { process_token(TOK_DECL); }
+    | NORETURN { process_token(TOK_DECL); }
+    | ALIGNAS { process_token(TOK_DECL); }
+    | TYPEOF { process_token(TOK_DECL); }
     | ATTRIBUTE { process_token(TOK_OTHER); }
     | DECLSPEC { process_token(TOK_OTHER); }
     | ASM { process_token(TOK_OTHER); }

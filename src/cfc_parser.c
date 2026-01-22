@@ -95,6 +95,12 @@ static void reset_candidate_state(void) {
 
 void process_token(enum token_kind kind) {
     switch (kind) {
+    case TOK_DECL:
+        if (paren_depth == 0 && bracket_depth == 0) {
+            clear_string(&paren_candidate);
+            clear_string(&pending_name);
+        }
+        break;
     case TOK_LPAREN:
         if (!pending_name && paren_depth == 0) {
             clear_string(&paren_candidate);
