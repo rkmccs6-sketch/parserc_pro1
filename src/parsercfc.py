@@ -56,7 +56,10 @@ def parse_one_file(args):
         return (str(path), names, err)
 
     filtered = [name for name in names if name not in macro_used_names]
-    merged = dedupe_preserve_order(filtered + macro_names)
+    merged = list(filtered)
+    for macro_name in macro_names:
+        if macro_name not in merged:
+            merged.append(macro_name)
     return (str(path), merged, None)
 
 
