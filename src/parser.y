@@ -40,6 +40,7 @@ typedef struct {
     char **params;
     size_t param_count;
     NamePartList *name_parts;
+    NamePartList *expansion_parts;
 } MacroDef;
 
 typedef struct {
@@ -149,10 +150,12 @@ static void macro_free(MacroDef *macro) {
     }
     free(macro->params);
     name_parts_free(macro->name_parts);
+    name_parts_free(macro->expansion_parts);
     macro->name = NULL;
     macro->params = NULL;
     macro->param_count = 0;
     macro->name_parts = NULL;
+    macro->expansion_parts = NULL;
 }
 
 static void macro_list_reset(void) {
@@ -523,6 +526,47 @@ static NamePartList *extract_function_name_template(const char *body, char **par
     return NULL;
 }
 
+static NamePartList *extract_macro_expansion_parts(const char *body, char **params, size_t param_count) {
+    size_t idx = 0;
+    NamePartList *parts = NULL;
+    int pending_paste = 0;
+
+    while (1) {
+        char *ident = NULL;
+        MacroTok tok = macro_next_token(body, &idx, &ident);
+        if (tok == MACRO_TOK_EOF) {
+            break;
+        }
+        if (tok == MACRO_TOK_PASTE) {
+            pending_paste = 1;
+            continue;
+        }
+        if (tok == MACRO_TOK_IDENT) {
+            NamePartList *piece = name_parts_from_ident(ident, params, param_count);
+            free(ident);
+            if (!parts) {
+                parts = piece;
+            } else if (pending_paste) {
+                name_parts_append(parts, piece);
+                name_parts_free(piece);
+            } else {
+                name_parts_free(parts);
+                name_parts_free(piece);
+                return NULL;
+            }
+            pending_paste = 0;
+            continue;
+        }
+        name_parts_free(parts);
+        return NULL;
+    }
+    if (pending_paste) {
+        name_parts_free(parts);
+        return NULL;
+    }
+    return parts;
+}
+
 static int parse_macro_definition(const char *line, char **name_out, char ***params_out, size_t *param_count, char **body_out) {
     const char *define_pos = strstr(line, "define");
     if (!define_pos) {
@@ -644,23 +688,23 @@ void macro_register_definition(const char *line) {
         free(body);
         return;
     }
-    NamePartList *parts = extract_function_name_template(body, params, param_count);
+    NamePartList *name_parts = extract_function_name_template(body, params, param_count);
+    NamePartList *expansion_parts = extract_macro_expansion_parts(body, params, param_count);
     free(body);
-    if (!parts || parts->count == 0) {
-        name_parts_free(parts);
-        free(name);
-        for (size_t i = 0; i < param_count; i++) {
-            free(params[i]);
-        }
-        free(params);
-        return;
+    if (name_parts && name_parts->count == 0) {
+        name_parts_free(name_parts);
+        name_parts = NULL;
     }
-
+    if (expansion_parts && expansion_parts->count == 0) {
+        name_parts_free(expansion_parts);
+        expansion_parts = NULL;
+    }
     MacroDef macro = {0};
     macro.name = name;
     macro.params = params;
     macro.param_count = param_count;
-    macro.name_parts = parts;
+    macro.name_parts = name_parts;
+    macro.expansion_parts = expansion_parts;
     macro_list_add(&macro);
 }
 
@@ -679,9 +723,8 @@ static const char *macro_arg_for_param(const MacroDef *macro, const ArgList *arg
     return "";
 }
 
-static char *render_macro_name(const char *macro_name, const ArgList *args) {
-    MacroDef *macro = macro_find(macro_name);
-    if (!macro || !macro->name_parts) {
+static char *render_macro_parts(const MacroDef *macro, const ArgList *args, const NamePartList *parts) {
+    if (!macro || !parts) {
         return NULL;
     }
     if (!args || args->count != macro->param_count) {
@@ -694,8 +737,8 @@ static char *render_macro_name(const char *macro_name, const ArgList *args) {
         return NULL;
     }
     out[0] = '\0';
-    for (size_t i = 0; i < macro->name_parts->count; i++) {
-        NamePart *part = &macro->name_parts->items[i];
+    for (size_t i = 0; i < parts->count; i++) {
+        NamePart *part = &parts->items[i];
         const char *text = part->is_param ? macro_arg_for_param(macro, args, part->text) : part->text;
         if (!text) {
             text = "";
@@ -723,6 +766,16 @@ static char *render_macro_name(const char *macro_name, const ArgList *args) {
         return NULL;
     }
     return out;
+}
+
+static char *render_macro_name(const char *macro_name, const ArgList *args) {
+    MacroDef *macro = macro_find(macro_name);
+    return render_macro_parts(macro, args, macro ? macro->name_parts : NULL);
+}
+
+static char *render_macro_expansion(const char *macro_name, const ArgList *args) {
+    MacroDef *macro = macro_find(macro_name);
+    return render_macro_parts(macro, args, macro ? macro->expansion_parts : NULL);
 }
 
 static char *trim_spaces(const char *s) {
@@ -814,7 +867,7 @@ static void check_and_record(char *full_sig) {
 
 %token <str> IDENTIFIER
 %token <str> CONSTANT STRING_LITERAL PP_DEFINE
-%token <str> MACRO_TEMPLATE
+%token <str> MACRO_TEMPLATE MACRO_RENAME MACRO_CALL
 %token ARRAY_RENAME
 %token TYPEDEF EXTERN STATIC AUTO REGISTER THREAD_LOCAL
 %token VOID CHAR SHORT INT LONG FLOAT DOUBLE SIGNED UNSIGNED BOOL COMPLEX IMAGINARY
@@ -830,7 +883,7 @@ static void check_and_record(char *full_sig) {
 %type <str> signature sig_element token_chunk nested_parentheses any_token_in_paren array_index
 %type <str> macro_arg macro_arg_parts macro_arg_piece macro_arg_group macro_arg_group_piece
 %type <args> macro_arg_list macro_arg_list_opt
-%type <str> array_rename_invocation
+%type <str> array_rename_invocation macro_rename_invocation
 
 %destructor { free($$); } <str>
 %destructor { arg_list_free($$); } <args>
@@ -845,6 +898,7 @@ program:
 element:
     func_definition
     | macro_template_invocation
+    | macro_call
     | macro_definition
     | global_statement
     | error ';' { yyerrok; }
@@ -870,6 +924,11 @@ macro_template_invocation
             free(name);
         }
     }
+    ;
+
+macro_call
+    : MACRO_CALL '(' macro_arg_list_opt ')' { }
+    | MACRO_CALL '(' macro_arg_list_opt ')' ';' { }
     ;
 
 global_statement:
@@ -907,8 +966,20 @@ signature:
 
 sig_element:
     token_chunk { $$ = $1; }
+    | macro_rename_invocation { $$ = $1; }
     | array_rename_invocation { $$ = $1; }
     | '*' { $$ = strdup("*"); }
+    ;
+
+macro_rename_invocation
+    : MACRO_RENAME '(' macro_arg_list_opt ')' {
+        char *expanded = render_macro_expansion($1, $3);
+        if (expanded) {
+            $$ = expanded;
+        } else {
+            $$ = strdup($1);
+        }
+    }
     ;
 
 array_index:
@@ -1094,10 +1165,16 @@ token_chunk:
 
 int macro_lookup_token(const char *name) {
     MacroDef *macro = macro_find(name);
-    if (macro && macro->name_parts && macro->name_parts->count > 0) {
+    if (!macro) {
+        return 0;
+    }
+    if (macro->name_parts && macro->name_parts->count > 0) {
         return MACRO_TEMPLATE;
     }
-    return 0;
+    if (macro->expansion_parts && macro->expansion_parts->count > 0) {
+        return MACRO_RENAME;
+    }
+    return MACRO_CALL;
 }
 
 void parser_reset_state(void) {
