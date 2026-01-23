@@ -1,0 +1,10 @@
+__pycache__/
+/build/
+/bin/
+/test/in/FFmpeg/
+*.o
+*.a
+*.so
+*.tab.c
+*.tab.h
+lex.yy.c
